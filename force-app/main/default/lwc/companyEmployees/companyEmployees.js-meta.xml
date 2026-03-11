@@ -4,7 +4,15 @@
     <isExposed>true</isExposed>
     <masterLabel>Company Employees</masterLabel>
     <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__RecordPage</target>
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
     </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="heading" type="String" label="Heading" default="Company Employees"/>
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>

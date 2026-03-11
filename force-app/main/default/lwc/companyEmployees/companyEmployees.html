@@ -1,3 +1,25 @@
 <template>
-    <h1>Company Employees</h1>
+    <section class="company-employees">
+        <div class="header">
+            <div class="heading">{heading}</div>
+            <div class="description">Employee list</div>
+        </div>
+
+        <template lwc:if={hasEmployees}>
+            <div class="list">
+                <template for:each={employees} for:item="employee">
+                    <article key={employee.id} class="card">
+                        <div class="employee-name">{employee.name}</div>
+                        <div class="employee-position">{employee.position}</div>
+                    </article>
+                </template>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <div class="empty-state">
+                <div class="empty-state-message">Empty list</div>
+            </div>
+        </template>
+    </section>
 </template>
