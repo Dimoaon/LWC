@@ -9,6 +9,58 @@
     margin-bottom: 1rem;
 }
 
+.company-section {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background: #fafafa;
+}
+
+.company-section__header {
+    margin-bottom: 1rem;
+}
+
+.company-section__title {
+    margin: 0 0 0.35rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.company-section__description {
+    color: #5c6b7a;
+    font-size: 0.95rem;
+}
+
+.company-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.company-field {
+    padding: 0.9rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.65rem;
+    background: #ffffff;
+}
+
+.company-field__label {
+    margin-bottom: 0.35rem;
+    color: #6b7280;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.company-field__value {
+    color: #111827;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
 .heading {
     margin: 0 0 0.5rem;
     font-size: 1.5rem;
@@ -37,4 +89,20 @@
 .employee-name {
     margin: 0 0 0.25rem;
     font-size: 1rem;
+}
+
+/* TABLET */
+
+@media (max-width: 1023.98px) {
+    .company-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 767.98px) {
+    .company-grid {
+        grid-template-columns: 1fr;
+    }
 }

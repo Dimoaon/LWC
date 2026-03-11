@@ -1,17 +1,82 @@
 <template>
-    <section class="company-employees">
+    <div class="company-employees">
         <div class="header">
             <div class="heading">{heading}</div>
             <div class="description">Employee list</div>
         </div>
 
+        <div class="company-section">
+            <div class="company-section__header">
+                <div class="company-section__title">Company</div>
+                <div class="company-section__description">
+                    Base company block for State A / State B.
+                </div>
+            </div>
+
+            <div class="company-grid">
+                <div class="company-field">
+                    <div class="company-field__label">Company name</div>
+                    <div class="company-field__value">Acme Corporation</div>
+                </div>
+
+                <div class="company-field">
+                    <div class="company-field__label">Industry</div>
+                    <div class="company-field__value">Technology</div>
+                </div>
+
+                <div class="company-field">
+                    <div class="company-field__label">HQ / Location</div>
+                    <div class="company-field__value">Warsaw, Poland</div>
+                </div>
+
+                <div class="company-field">
+                    <div class="company-field__label">Employee count</div>
+                    <div class="company-field__value">24</div>
+                </div>
+
+                <div class="company-field">
+                    <div class="company-field__label">Website</div>
+                    <div class="company-field__value">www.acme.com</div>
+                </div>
+
+                <div class="company-field">
+                    <div class="company-field__label">Tax ID / VAT ID</div>
+                    <div class="company-field__value">PL1234567890</div>
+                </div>
+
+                <div class="company-field">
+                    <div class="company-field__label">Account manager</div>
+                    <div class="company-field__value">Jane Smith</div>
+                </div>
+
+                <div class="company-field">
+                    <div class="company-field__label">Company phone</div>
+                    <div class="company-field__value">+48 123 456 789</div>
+                </div>
+
+                <div class="company-field">
+                    <div class="company-field__label">Billing address</div>
+                    <div class="company-field__value">
+                        10 Main Street, Warsaw, 00-001, Poland
+                    </div>
+                </div>
+
+                <div class="company-field">
+                    <div class="company-field__label">Shipping address</div>
+                    <div class="company-field__value">
+                        10 Main Street, Warsaw, 00-001, Poland
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <template lwc:if={hasEmployees}>
             <div class="list">
                 <template for:each={employees} for:item="employee">
-                    <article key={employee.id} class="card">
+                    <div key={employee.id} class="card">
                         <div class="employee-name">{employee.name}</div>
                         <div class="employee-position">{employee.position}</div>
-                    </article>
+                    </div>
                 </template>
             </div>
         </template>
@@ -21,5 +86,5 @@
                 <div class="empty-state-message">Empty list</div>
             </div>
         </template>
-    </section>
+    </div>
 </template>
