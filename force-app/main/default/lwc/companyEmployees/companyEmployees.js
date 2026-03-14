@@ -11,6 +11,10 @@ const MAX_LENGTHS = {
     notes: 240
 };
 
+const LABELS = {
+    phoneValidationMessage: 'Phone can contain only +, spaces, -, (), and digits.'
+};
+
 const PHONE_PATTERN = /^[+\s\-()0-9]+$/;
 
 export default class CompanyEmployees extends LightningElement {
@@ -59,6 +63,7 @@ export default class CompanyEmployees extends LightningElement {
 
     maxLength = MAX_LENGTHS;
 
+    @track isFirstRender = true;
     @track employees = [];
     @track isAddEmployeeOpen = false;
     @track employeeForm = {
@@ -157,8 +162,36 @@ export default class CompanyEmployees extends LightningElement {
     }
 
     // LIFECYCLES
+    renderedCallback() {
+        if (this.isFirstRender) {
+            this.isFirstRender = false;
+            this.addCustomCssStyles();
+        }
+    }
 
     // INIT METHODS
+    addCustomCssStyles() {
+        const customCssContainer = this.template.querySelector('.custom-css-container');
+
+        if (!customCssContainer || customCssContainer.childElementCount > 0) {
+            return;
+        }
+
+        const style = document.createElement('style');
+
+        let customCssStyles = `
+            c-company-employees lightning-input .slds-input {
+                min-height: 3rem;
+            }
+
+            c-company-employees lightning-textarea .slds-textarea {
+                min-height: 8rem;
+            }
+        `;
+
+        style.innerText = customCssStyles.replace(/ +(?= )|\n/g, ' ');
+        customCssContainer.appendChild(style);
+    }
 
     // HANDLERS
     handleOpenAddEmployee() {
@@ -225,7 +258,7 @@ export default class CompanyEmployees extends LightningElement {
         const isPhoneValid = !phoneValue || PHONE_PATTERN.test(phoneValue);
 
         field.setCustomValidity(
-            isPhoneValid ? '' : 'Phone can contain only +, spaces, -, (), and digits.'
+            isPhoneValid ? '' : LABELS.phoneValidationMessage
         );
     }
 

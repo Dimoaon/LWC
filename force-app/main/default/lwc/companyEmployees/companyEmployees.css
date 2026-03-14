@@ -102,16 +102,6 @@
     gap: 0.35rem;
 }
 
-
-/* TODO */
-.slds-input {
-    min-height: 3rem !important;
-}
-
-.slds-textarea {
-    min-height: 8rem !important;
-}
-
 .employee-form__field--full {
     grid-column: 1 / -1;
 }
