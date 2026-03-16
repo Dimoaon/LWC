@@ -187,6 +187,12 @@ export default class CompanyEmployees extends LightningElement {
             c-company-employees lightning-textarea .slds-textarea {
                 min-height: 8rem;
             }
+
+            c-company-employees .slds-truncate {
+                white-space: normal;
+                word-break: break-word;
+                overflow-wrap: anywhere;
+            }
         `;
 
         style.innerText = customCssStyles.replace(/ +(?= )|\n/g, ' ');
