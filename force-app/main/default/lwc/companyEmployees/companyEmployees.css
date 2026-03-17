@@ -11,6 +11,17 @@
     margin-bottom: 1rem;
 }
 
+.heading {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+}
+
+.description,
+.empty-state-message {
+    margin: 0;
+    color: #5c6b7a;
+}
+
 .company-section {
     margin-bottom: 1rem;
     padding: 1rem;
@@ -40,9 +51,21 @@
 
 .company-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    
+    grid-template-columns: repeat(2, 1fr);
+
     gap: 0.75rem;
+}
+
+@media (max-width: 1023.98px) {
+    .company-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .company-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .company-field {
@@ -70,11 +93,6 @@
     line-height: 1.4;
 }
 
-.heading {
-    margin: 0 0 0.5rem;
-    font-size: 1.5rem;
-}
-
 .employees-toolbar__title {
     font-size: 1.25rem;
     font-weight: 700;
@@ -91,6 +109,15 @@
     border-bottom: 1px solid #d8dde6;
 }
 
+@media (max-width: 767.98px) {
+    .employees-card__header {
+        align-items: stretch;
+        flex-direction: column;
+
+        gap: 0.75rem;
+    }
+}
+
 .employee-form {
     margin-bottom: 1rem;
     padding: 1rem;
@@ -104,14 +131,20 @@
 .employee-form__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    
+
     gap: 0.75rem;
+}
+
+@media (max-width: 1023.98px) {
+    .employee-form__grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .employee-form__field {
     display: flex;
     flex-direction: column;
-    
+
     gap: 0.35rem;
 }
 
@@ -127,23 +160,14 @@
     margin-top: 1rem;
 }
 
-.description,
-.empty-state-message {
-    margin: 0;
-    color: #5c6b7a;
+@media (max-width: 767.98px) {
+    .employee-form__actions {
+        flex-direction: column;
+    }
 }
 
 .employees-table {
     background: #ffffff;
-}
-
-.employees-table__empty-row {
-    background: #fafafa;
-}
-
-.employees-table__empty-cell {
-    padding: 1.5rem 1rem;
-    text-align: center;
 }
 
 .employees-table th,
@@ -157,6 +181,15 @@
     padding-right: 0.75rem;
 }
 
+.employees-table__empty-row {
+    background: #fafafa;
+}
+
+.employees-table__empty-cell {
+    padding: 1.5rem 1rem;
+    text-align: center;
+}
+
 .employees-table__notes {
     max-width: 16rem;
 }
@@ -164,7 +197,7 @@
 .employees-table__actions {
     width: 6.5rem;
     min-width: 6.5rem;
-    
+
     text-align: center;
     white-space: nowrap;
 }
@@ -173,41 +206,12 @@
     margin-left: 0.35rem;
 }
 
-/* TABLET */
-
-@media (max-width: 1023.98px) {
-    .company-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .employee-form__grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* MOBILE */
-
 @media (max-width: 767.98px) {
-    .employees-card__header {
-        align-items: stretch;
-        flex-direction: column;
-        
-        gap: 0.75rem;
-    }
-
-    .company-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .employee-form__actions {
-        flex-direction: column;
-    }
-
     .employees-table .slds-max-medium-table_stacked-horizontal {
         border-top: 0;
         border-right: 0;
-        border-left: 0;
         border-bottom: 0;
+        border-left: 0;
     }
 
     .employees-table .slds-max-medium-table_stacked-horizontal tbody tr {
@@ -226,8 +230,8 @@
     .employees-table .slds-max-medium-table_stacked-horizontal tbody td {
         border-top: 0;
         border-right: 0;
-        border-left: 0;
         border-bottom: 0;
+        border-left: 0;
         padding-top: 0.65rem;
         padding-bottom: 0.65rem;
     }
@@ -240,7 +244,7 @@
         min-width: 5.75rem;
         margin: 0;
         padding-right: 0.75rem;
-        text-align: center;
+        text-align: left;
     }
 
     .employees-table .slds-max-medium-table_stacked-horizontal tbody .employees-table__empty-cell {
@@ -255,14 +259,23 @@
     }
 
     .employees-table .slds-max-medium-table_stacked-horizontal tbody tr > * + * {
+        display: flex;
+        align-items: center;
+
         border-top: 1px solid #e5e7eb;
     }
 
     .employees-table .slds-max-medium-table_stacked-horizontal tbody tr > :first-child {
+        display: flex;
+        align-items: center;
+
         padding-top: 1rem;
     }
 
     .employees-table .slds-max-medium-table_stacked-horizontal tbody tr > :last-child {
+        display: flex;
+        align-items: center;
+        
         padding-bottom: 1rem;
     }
 

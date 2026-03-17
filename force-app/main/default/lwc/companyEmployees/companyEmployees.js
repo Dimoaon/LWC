@@ -156,13 +156,13 @@ export default class CompanyEmployees extends LightningElement {
 
     get hasRequiredFields() {
         return (
-            this.employeeForm.fullName.trim() &&
-            this.employeeForm.email.trim() &&
-            this.employeeForm.roleTitle.trim() &&
-            this.employeeForm.department.trim() &&
-            this.employeeForm.startDate.trim() &&
-            this.employeeForm.phone.trim() &&
-            this.employeeForm.status.trim()
+            this.employeeForm.fullName.trim()
+            && this.employeeForm.email.trim()
+            && this.employeeForm.roleTitle.trim()
+            && this.employeeForm.department.trim()
+            && this.employeeForm.startDate.trim()
+            && this.employeeForm.phone.trim()
+            && this.employeeForm.status.trim()
         );
     }
 
