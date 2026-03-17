@@ -12,7 +12,9 @@ const MAX_LENGTHS = {
 };
 
 const LABELS = {
-    phoneValidationMessage: 'Phone can contain only +, spaces, -, (), and digits.'
+    phoneValidationMessage: 'Phone can contain only +, spaces, -, (), and digits.',
+    editActionTitle: 'Edit',
+    deleteActionTitle: 'Delete'
 };
 
 const PHONE_PATTERN = /^[+\s\-()0-9]+$/;
@@ -66,6 +68,7 @@ export default class CompanyEmployees extends LightningElement {
     @track isFirstRender = true;
     @track employees = [];
     @track isAddEmployeeOpen = false;
+    @track editingEmployeeId = null;
     @track employeeForm = {
         fullName: '',
         email: '',
@@ -201,12 +204,28 @@ export default class CompanyEmployees extends LightningElement {
 
     // HANDLERS
     handleOpenAddEmployee() {
+        this.editingEmployeeId = null;
+        this.resetEmployeeForm();
         this.isAddEmployeeOpen = true;
     }
 
     handleCloseAddEmployee() {
         this.isAddEmployeeOpen = false;
+        this.editingEmployeeId = null;
         this.resetEmployeeForm();
+    }
+
+    handleEditEmployee(event) {
+        const employeeId = event.currentTarget.dataset.id;
+        const employee = this.employees.find((item) => item.id === employeeId);
+
+        if (!employee) {
+            return;
+        }
+
+        this.editingEmployeeId = employeeId;
+        this.employeeForm = this.createEmployeeForm(employee);
+        this.isAddEmployeeOpen = true;
     }
 
     handleEmployeeFieldChange(event) {
@@ -232,7 +251,10 @@ export default class CompanyEmployees extends LightningElement {
             return;
         }
 
-        this.employees = [...this.employees, employee];
+        this.employees = this.editingEmployeeId
+            ? this.employees.map((item) => (item.id === this.editingEmployeeId ? employee : item))
+            : [...this.employees, employee];
+
         this.showSuccessToast();
         this.handleCloseAddEmployee();
     }
@@ -283,7 +305,7 @@ export default class CompanyEmployees extends LightningElement {
         }
 
         return {
-            id: `${Date.now()}`,
+            id: this.editingEmployeeId || `${Date.now()}`,
             fullName,
             email,
             roleTitle,
@@ -295,17 +317,21 @@ export default class CompanyEmployees extends LightningElement {
         };
     }
 
-    resetEmployeeForm() {
-        this.employeeForm = {
-            fullName: '',
-            email: '',
-            roleTitle: '',
-            department: '',
-            startDate: '',
-            phone: '',
-            status: '',
-            notes: ''
+    createEmployeeForm(employee = {}) {
+        return {
+            fullName: employee.fullName || '',
+            email: employee.email || '',
+            roleTitle: employee.roleTitle || '',
+            department: employee.department || '',
+            startDate: employee.startDate || '',
+            phone: employee.phone || '',
+            status: employee.status || '',
+            notes: employee.notes || ''
         };
+    }
+
+    resetEmployeeForm() {
+        this.employeeForm = this.createEmployeeForm();
     }
 
     showSuccessToast() {

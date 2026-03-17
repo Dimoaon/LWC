@@ -207,6 +207,14 @@
                                         </td>
                                         <td data-label="Actions" class="employees-table__actions">
                                             <lightning-button-icon
+                                                icon-name="utility:edit"
+                                                alternative-text="Edit"
+                                                title="Edit"
+                                                variant="border-filled"
+                                                data-id={employee.id}
+                                                onclick={handleEditEmployee}
+                                            ></lightning-button-icon>
+                                            <lightning-button-icon
                                                 icon-name="utility:delete"
                                                 alternative-text="Delete"
                                                 title="Delete"
