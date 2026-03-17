@@ -148,9 +148,9 @@
                     ></lightning-button>
                 </div>
 
-                <template lwc:if={hasEmployees}>
-                    <div class="employees-table">
-                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_fixed-layout slds-max-medium-table_stacked-horizontal">
+                <div class="employees-table">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_fixed-layout slds-max-medium-table_stacked-horizontal">
+                        <template lwc:if={hasEmployees}>
                             <thead>
                                 <tr class="slds-line-height_reset">
                                     <th scope="col">
@@ -179,7 +179,9 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                        </template>
+                        <tbody>
+                            <template lwc:if={hasEmployees}>
                                 <template for:each={employees} for:item="employee">
                                     <tr key={employee.id}>
                                         <td data-label={fullNameLabel}>
@@ -215,16 +217,18 @@
                                         </td>
                                     </tr>
                                 </template>
-                            </tbody>
-                        </table>
-                    </div>
-                </template>
+                            </template>
 
-                <template lwc:else>
-                    <div class="empty-state">
-                        <div class="empty-state-message">{emptyStateTitle}</div>
-                    </div>
-                </template>
+                            <template lwc:else>
+                                <tr class="employees-table__empty-row">
+                                    <td class="employees-table__empty-cell">
+                                        <div class="empty-state-message">{emptyStateTitle}</div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </template>
     </div>
