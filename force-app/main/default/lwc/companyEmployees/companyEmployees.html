@@ -150,7 +150,6 @@
 
                 <div class="employees-table">
                     <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_fixed-layout slds-max-medium-table_stacked-horizontal">
-                        <template lwc:if={hasEmployees}>
                             <thead>
                                 <tr class="slds-line-height_reset">
                                     <th scope="col">
@@ -179,7 +178,6 @@
                                     </th>
                                 </tr>
                             </thead>
-                        </template>
                         <tbody>
                             <template lwc:if={hasEmployees}>
                                 <template for:each={employees} for:item="employee">
@@ -229,7 +227,7 @@
 
                             <template lwc:else>
                                 <tr class="employees-table__empty-row">
-                                    <td class="employees-table__empty-cell">
+                                    <td colspan="8" class="employees-table__empty-cell">
                                         <div class="empty-state-message">{emptyStateTitle}</div>
                                     </td>
                                 </tr>

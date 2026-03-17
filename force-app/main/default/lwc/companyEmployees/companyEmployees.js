@@ -60,8 +60,10 @@ export default class CompanyEmployees extends LightningElement {
     @api phoneLabel = null;
     @api statusLabel = null;
     @api notesLabel = null;
-    @api successToastTitle = null;
-    @api successToastMessage = null;
+    @api addSuccessToastTitle = null;
+    @api addSuccessToastMessage = null;
+    @api editSuccessToastTitle = null;
+    @api editSuccessToastMessage = null;
 
     maxLength = MAX_LENGTHS;
 
@@ -245,6 +247,7 @@ export default class CompanyEmployees extends LightningElement {
             return;
         }
 
+        const isEditing = Boolean(this.editingEmployeeId);
         const employee = this.buildEmployee();
 
         if (!employee) {
@@ -255,7 +258,7 @@ export default class CompanyEmployees extends LightningElement {
             ? this.employees.map((item) => (item.id === this.editingEmployeeId ? employee : item))
             : [...this.employees, employee];
 
-        this.showSuccessToast();
+        this.showSuccessToast(isEditing);
         this.handleCloseAddEmployee();
     }
 
@@ -334,11 +337,11 @@ export default class CompanyEmployees extends LightningElement {
         this.employeeForm = this.createEmployeeForm();
     }
 
-    showSuccessToast() {
+    showSuccessToast(isEditing) {
         Toast.show(
             {
-                label: this.successToastTitle,
-                message: this.successToastMessage,
+                label: isEditing ? this.editSuccessToastTitle : this.addSuccessToastTitle,
+                message: isEditing ? this.editSuccessToastMessage : this.addSuccessToastMessage,
                 variant: 'success'
             },
             this

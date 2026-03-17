@@ -51,8 +51,10 @@
             <property name="notesLabel" type="String" label="Notes Label" default="Notes"/>
             <property name="cancelButtonLabel" type="String" label="Cancel Button Label" default="Cancel"/>
             <property name="saveButtonLabel" type="String" label="Save Button Label" default="Save"/>
-            <property name="successToastTitle" type="String" label="Success Toast Title" default="Employee added"/>
-            <property name="successToastMessage" type="String" label="Success Toast Message" default="Employee was added successfully."/>
+            <property name="addSuccessToastTitle" type="String" label="Add Success Toast Title" default="Employee added"/>
+            <property name="addSuccessToastMessage" type="String" label="Add Success Toast Message" default="Employee was added successfully."/>
+            <property name="editSuccessToastTitle" type="String" label="Edit Success Toast Title" default="Employee updated"/>
+            <property name="editSuccessToastMessage" type="String" label="Edit Success Toast Message" default="Employee was updated successfully."/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

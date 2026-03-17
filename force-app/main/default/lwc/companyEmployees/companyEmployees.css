@@ -143,12 +143,18 @@
 
 .employees-table__empty-cell {
     padding: 1.5rem 1rem;
-    text-align: left;
+    text-align: center;
 }
 
 .employees-table th,
 .employees-table td {
     vertical-align: top;
+}
+
+.employees-table .slds-table td,
+.employees-table .slds-table th {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
 }
 
 .employees-table__notes {
@@ -226,11 +232,26 @@
         padding-bottom: 0.65rem;
     }
 
+    .employees-table .slds-max-medium-table_stacked-horizontal tbody th::before,
+    .employees-table .slds-max-medium-table_stacked-horizontal tbody td::before {
+        float: left;
+        display: block;
+        width: 5.75rem;
+        min-width: 5.75rem;
+        margin: 0;
+        padding-right: 0.75rem;
+        text-align: center;
+    }
+
     .employees-table .slds-max-medium-table_stacked-horizontal tbody .employees-table__empty-cell {
         display: table-cell;
         padding: 1.5rem 1rem;
         text-align: center;
         background: #fafafa;
+    }
+
+    .employees-table .slds-max-medium-table_stacked-horizontal tbody .employees-table__empty-row > td:last-child {
+        text-align: center;
     }
 
     .employees-table .slds-max-medium-table_stacked-horizontal tbody tr > * + * {
