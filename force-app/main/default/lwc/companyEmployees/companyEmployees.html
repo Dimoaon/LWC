@@ -149,8 +149,8 @@
                 </div>
 
                 <template lwc:if={hasEmployees}>
-                    <div class="employees-table slds-scrollable_x">
-                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_fixed-layout">
+                    <div class="employees-table">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_fixed-layout slds-max-medium-table_stacked-horizontal">
                             <thead>
                                 <tr class="slds-line-height_reset">
                                     <th scope="col">
@@ -182,28 +182,28 @@
                             <tbody>
                                 <template for:each={employees} for:item="employee">
                                     <tr key={employee.id}>
-                                        <th scope="row">
+                                        <td data-label={fullNameLabel}>
                                             <div class="slds-truncate" title={employee.fullName}>{employee.fullName}</div>
-                                        </th>
-                                        <td>
+                                        </td>
+                                        <td data-label={roleTitleLabel}>
                                             <div class="slds-truncate" title={employee.roleTitle}>{employee.roleTitle}</div>
                                         </td>
-                                        <td>
+                                        <td data-label={departmentLabel}>
                                             <div class="slds-truncate" title={employee.department}>{employee.department}</div>
                                         </td>
-                                        <td>
+                                        <td data-label={emailLabel}>
                                             <div class="slds-truncate" title={employee.email}>{employee.email}</div>
                                         </td>
-                                        <td>
+                                        <td data-label={phoneLabel}>
                                             <div class="slds-truncate" title={employee.phone}>{employee.phone}</div>
                                         </td>
-                                        <td>
+                                        <td data-label={statusLabel}>
                                             <div class="slds-truncate" title={employee.status}>{employee.status}</div>
                                         </td>
-                                        <td>
+                                        <td data-label={notesLabel}>
                                             <div class="employees-table__notes slds-truncate" title={employee.notes}>{employee.notes}</div>
                                         </td>
-                                        <td class="employees-table__actions">
+                                        <td data-label="Actions" class="employees-table__actions">
                                             <lightning-button-icon
                                                 icon-name="utility:delete"
                                                 alternative-text="Delete"
