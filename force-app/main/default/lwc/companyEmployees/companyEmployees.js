@@ -13,6 +13,7 @@ const MAX_LENGTHS = {
 
 const LABELS = {
     phoneValidationMessage: 'Phone can contain only +, spaces, -, (), and digits.',
+    actionsTitle: 'Actions',
     editActionTitle: 'Edit',
     deleteActionTitle: 'Delete'
 };
@@ -66,6 +67,7 @@ export default class CompanyEmployees extends LightningElement {
     @api editSuccessToastMessage = null;
 
     maxLength = MAX_LENGTHS;
+    labels = LABELS;
 
     @track isFirstRender = true;
     @track employees = [];

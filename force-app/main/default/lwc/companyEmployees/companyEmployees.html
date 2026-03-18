@@ -174,7 +174,7 @@
                                         <div class="slds-truncate" title={notesLabel}>{notesLabel}</div>
                                     </th>
                                     <th scope="col" class="employees-table__actions">
-                                        <div title="Actions">Actions</div>
+                                        <div title={labels.actionsTitle}>{labels.actionsTitle}</div>
                                     </th>
                                 </tr>
                             </thead>
@@ -203,23 +203,25 @@
                                         <td data-label={notesLabel}>
                                             <div class="employees-table__notes slds-truncate" title={employee.notes}>{employee.notes}</div>
                                         </td>
-                                        <td data-label="Actions" class="employees-table__actions">
-                                            <lightning-button-icon
+                                        <td data-label={labels.actionsTitle} class="employees-table__actions">
+                                            <div class="action__wrapper">
+                                                <lightning-button-icon
                                                 icon-name="utility:edit"
-                                                alternative-text="Edit"
-                                                title="Edit"
+                                                alternative-text={labels.editActionTitle}
+                                                title={labels.editActionTitle}
                                                 variant="border-filled"
                                                 data-id={employee.id}
                                                 onclick={handleEditEmployee}
                                             ></lightning-button-icon>
                                             <lightning-button-icon
                                                 icon-name="utility:delete"
-                                                alternative-text="Delete"
-                                                title="Delete"
+                                                alternative-text={labels.deleteActionTitle}
+                                                title={labels.deleteActionTitle}
                                                 variant="border-filled"
                                                 data-id={employee.id}
                                                 onclick={handleDeleteEmployee}
                                             ></lightning-button-icon>
+                                            </div>
                                         </td>
                                     </tr>
                                 </template>
