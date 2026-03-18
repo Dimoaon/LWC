@@ -1,16 +1,16 @@
 <template>
-    <div class="company-employees">
-        <div lwc:dom="manual" class="custom-css-container"></div>
+    <div class="company-employees company-employees__wrapper">
+        <div lwc:dom="manual" class="company-employees__custom-css-container"></div>
 
-        <div class="header">
-            <div class="heading">{heading}</div>
-            <div class="description">{description}</div>
+        <div class="company-employees__header">
+            <div class="company-employees__heading">{heading}</div>
+            <div class="company-employees__description">{description}</div>
         </div>
 
         <template lwc:if={isAddEmployeeOpen}>
-            <div class="employee-form">
-                <div class="employee-form__grid">
-                    <div class="employee-form__field">
+            <div class="company-employees__employee-form">
+                <div class="company-employees__employee-form-grid">
+                    <div class="company-employees__employee-form-field">
                         <lightning-input
                             type="text"
                             label={fullNameLabel}
@@ -22,7 +22,7 @@
                         ></lightning-input>
                     </div>
 
-                    <div class="employee-form__field">
+                    <div class="company-employees__employee-form-field">
                         <lightning-input
                             type="email"
                             label={emailLabel}
@@ -34,7 +34,7 @@
                         ></lightning-input>
                     </div>
 
-                    <div class="employee-form__field">
+                    <div class="company-employees__employee-form-field">
                         <lightning-input
                             type="text"
                             label={roleTitleLabel}
@@ -46,7 +46,7 @@
                         ></lightning-input>
                     </div>
 
-                    <div class="employee-form__field">
+                    <div class="company-employees__employee-form-field">
                         <lightning-input
                             type="text"
                             label={departmentLabel}
@@ -58,7 +58,7 @@
                         ></lightning-input>
                     </div>
 
-                    <div class="employee-form__field">
+                    <div class="company-employees__employee-form-field">
                         <lightning-input
                             type="date"
                             label={startDateLabel}
@@ -70,7 +70,7 @@
                         ></lightning-input>
                     </div>
 
-                    <div class="employee-form__field">
+                    <div class="company-employees__employee-form-field">
                         <lightning-input
                             type="tel"
                             label={phoneLabel}
@@ -82,7 +82,7 @@
                         ></lightning-input>
                     </div>
 
-                    <div class="employee-form__field">
+                    <div class="company-employees__employee-form-field">
                         <lightning-input
                             type="text"
                             label={statusLabel}
@@ -94,7 +94,7 @@
                         ></lightning-input>
                     </div>
 
-                    <div class="employee-form__field employee-form__field--full">
+                    <div class="company-employees__employee-form-field company-employees__employee-form-field--full">
                         <lightning-textarea
                             label={notesLabel}
                             name="notes"
@@ -105,7 +105,7 @@
                     </div>
                 </div>
 
-                <div class="employee-form__actions">
+                <div class="company-employees__employee-form-actions">
                     <lightning-button
                         label={cancelButtonLabel}
                         variant="neutral"
@@ -122,25 +122,25 @@
         </template>
 
         <template lwc:else>
-            <div class="company-section">
-                <div class="company-section__header">
-                    <div class="company-section__title">{companySectionTitle}</div>
-                    <div class="company-section__description">{companySectionDescription}</div>
+            <div class="company-employees__company-section">
+                <div class="company-employees__company-section-header">
+                    <div class="company-employees__company-section-title">{companySectionTitle}</div>
+                    <div class="company-employees__company-section-description">{companySectionDescription}</div>
                 </div>
 
-                <div class="company-grid">
+                <div class="company-employees__company-grid">
                     <template for:each={companyFields} for:item="field">
-                        <div key={field.id} class="company-field">
-                            <div class="company-field__label">{field.label}</div>
-                            <div class="company-field__value">{field.value}</div>
+                        <div key={field.id} class="company-employees__company-field">
+                            <div class="company-employees__company-field-label">{field.label}</div>
+                            <div class="company-employees__company-field-value">{field.value}</div>
                         </div>
                     </template>
                 </div>
             </div>
 
-            <div class="employees-card slds-card">
-                <div class="employees-card__header slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
-                    <div class="employees-toolbar__title">{employeesSectionTitle}</div>
+            <div class="company-employees__employees-card slds-card">
+                <div class="company-employees__employees-card-header slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                    <div class="company-employees__employees-toolbar-title">{employeesSectionTitle}</div>
                     <lightning-button
                         label={addEmployeeButtonLabel}
                         variant="brand"
@@ -148,7 +148,7 @@
                     ></lightning-button>
                 </div>
 
-                <div class="employees-table">
+                <div class="company-employees__employees-table">
                     <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_fixed-layout slds-max-medium-table_stacked-horizontal">
                             <thead>
                                 <tr class="slds-line-height_reset">
@@ -173,7 +173,7 @@
                                     <th scope="col">
                                         <div class="slds-truncate" title={notesLabel}>{notesLabel}</div>
                                     </th>
-                                    <th scope="col" class="employees-table__actions">
+                                    <th scope="col" class="company-employees__employees-table-actions">
                                         <div title={labels.actionsTitle}>{labels.actionsTitle}</div>
                                     </th>
                                 </tr>
@@ -201,11 +201,11 @@
                                             <div class="slds-truncate" title={employee.status}>{employee.status}</div>
                                         </td>
                                         <td data-label={notesLabel}>
-                                            <div class="employees-table__notes slds-truncate" title={employee.notes}>{employee.notes}</div>
+                                            <div class="company-employees__employees-table-notes slds-truncate" title={employee.notes}>{employee.notes}</div>
                                         </td>
-                                        <td data-label={labels.actionsTitle} class="employees-table__actions">
-                                            <div class="action__wrapper">
-                                                <div class="action__icon-buttons">
+                                        <td data-label={labels.actionsTitle} class="company-employees__employees-table-actions">
+                                            <div class="company-employees__actions-wrapper">
+                                                <div class="company-employees__action-icon-buttons">
                                                     <lightning-button-icon
                                                         icon-name="utility:edit"
                                                         alternative-text={labels.editActionTitle}
@@ -224,7 +224,7 @@
                                                     ></lightning-button-icon>
                                                 </div>
 
-                                                <div class="action__text-buttons">
+                                                <div class="company-employees__action-text-buttons">
                                                     <lightning-button
                                                         label={labels.editActionTitle}
                                                         variant="neutral"
@@ -245,9 +245,9 @@
                             </template>
 
                             <template lwc:else>
-                                <tr class="employees-table__empty-row">
-                                    <td colspan="8" class="employees-table__empty-cell">
-                                        <div class="empty-state-message">{emptyStateTitle}</div>
+                                <tr class="company-employees__employees-table-empty-row">
+                                    <td colspan="8" class="company-employees__employees-table-empty-cell">
+                                        <div class="company-employees__empty-state-message">{emptyStateTitle}</div>
                                     </td>
                                 </tr>
                             </template>

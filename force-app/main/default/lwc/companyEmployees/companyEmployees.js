@@ -178,13 +178,13 @@ export default class CompanyEmployees extends LightningElement {
 
     // INIT METHODS
     addCustomCssStyles() {
-        const customCssContainer = this.template.querySelector('.custom-css-container');
+        let customCssContainer = this.template.querySelector('.company-employees__custom-css-container');
 
         if (!customCssContainer || customCssContainer.childElementCount > 0) {
             return;
         }
 
-        const style = document.createElement('style');
+        let style = document.createElement('style');
 
         let customCssStyles = `
             c-company-employees lightning-input .slds-input {
@@ -233,7 +233,7 @@ export default class CompanyEmployees extends LightningElement {
     }
 
     handleEmployeeFieldChange(event) {
-        const { name, value } = event.target;
+        let { name, value } = event.target;
 
         this.employeeForm = {
             ...this.employeeForm,
@@ -249,8 +249,8 @@ export default class CompanyEmployees extends LightningElement {
             return;
         }
 
-        const isEditing = Boolean(this.editingEmployeeId);
-        const employee = this.buildEmployee();
+        let isEditing = Boolean(this.editingEmployeeId);
+        let employee = this.buildEmployee();
 
         if (!employee) {
             return;
@@ -265,14 +265,14 @@ export default class CompanyEmployees extends LightningElement {
     }
 
     handleDeleteEmployee(event) {
-        const employeeId = event.currentTarget.dataset.id;
+        let employeeId = event.currentTarget.dataset.id;
 
         this.employees = this.employees.filter((employee) => employee.id !== employeeId);
     }
 
     // MAIN METHODS
     validateForm() {
-        const fields = this.template.querySelectorAll('lightning-input, lightning-textarea');
+        let fields = this.template.querySelectorAll('lightning-input, lightning-textarea');
 
         return [...fields].every((field) => {
             this.applyFieldValidity(field);
@@ -287,8 +287,8 @@ export default class CompanyEmployees extends LightningElement {
             return;
         }
 
-        const phoneValue = field.value ? field.value.trim() : '';
-        const isPhoneValid = !phoneValue || PHONE_PATTERN.test(phoneValue);
+        let phoneValue = field.value ? field.value.trim() : '';
+        let isPhoneValid = !phoneValue || PHONE_PATTERN.test(phoneValue);
 
         field.setCustomValidity(
             isPhoneValid ? '' : LABELS.phoneValidationMessage
@@ -296,14 +296,14 @@ export default class CompanyEmployees extends LightningElement {
     }
 
     buildEmployee() {
-        const fullName = this.employeeForm.fullName.trim();
-        const email = this.employeeForm.email.trim();
-        const roleTitle = this.employeeForm.roleTitle.trim();
-        const department = this.employeeForm.department.trim();
-        const startDate = this.employeeForm.startDate.trim();
-        const phone = this.employeeForm.phone.trim();
-        const status = this.employeeForm.status.trim();
-        const notes = this.employeeForm.notes.trim();
+        let fullName = this.employeeForm.fullName.trim();
+        let email = this.employeeForm.email.trim();
+        let roleTitle = this.employeeForm.roleTitle.trim();
+        let department = this.employeeForm.department.trim();
+        let startDate = this.employeeForm.startDate.trim();
+        let phone = this.employeeForm.phone.trim();
+        let status = this.employeeForm.status.trim();
+        let notes = this.employeeForm.notes.trim();
 
         if (!fullName || !email || !roleTitle || !department || !startDate || !phone || !status) {
             return null;
