@@ -18,6 +18,12 @@ const LABELS = {
     deleteActionTitle: 'Delete'
 };
 
+const CLASSES = {
+    truncate: 'slds-truncate',
+    notes: 'company-employees__employees-table-notes slds-truncate',
+    actionsHeader: 'company-employees__employees-table-actions'
+};
+
 const PHONE_PATTERN = /^[+\s\-()0-9]+$/;
 
 export default class CompanyEmployees extends LightningElement {
@@ -68,6 +74,7 @@ export default class CompanyEmployees extends LightningElement {
 
     maxLength = MAX_LENGTHS;
     labels = LABELS;
+    classes = CLASSES;
 
     @track isFirstRender = true;
     @track employees = [];
@@ -150,6 +157,98 @@ export default class CompanyEmployees extends LightningElement {
                 value: this.shippingAddressValue
             }
         ];
+    }
+
+    get employeeTableColumns() {
+        return [
+            {
+                id: 'fullName',
+                label: this.fullNameLabel
+            },
+            {
+                id: 'roleTitle',
+                label: this.roleTitleLabel
+            },
+            {
+                id: 'department',
+                label: this.departmentLabel
+            },
+            {
+                id: 'email',
+                label: this.emailLabel
+            },
+            {
+                id: 'phone',
+                label: this.phoneLabel
+            },
+            {
+                id: 'status',
+                label: this.statusLabel
+            },
+            {
+                id: 'notes',
+                label: this.notesLabel
+            },
+            {
+                id: 'actions',
+                label: this.labels.actionsTitle,
+                headerClass: this.classes.actionsHeader
+            }
+        ];
+    }
+
+    get employeeTableRows() {
+        return this.employees.map((employee) => ({
+            id: employee.id,
+            cells: [
+                {
+                    id: `${employee.id}-fullName`,
+                    label: this.fullNameLabel,
+                    value: employee.fullName,
+                    valueClass: this.classes.truncate
+                },
+                {
+                    id: `${employee.id}-roleTitle`,
+                    label: this.roleTitleLabel,
+                    value: employee.roleTitle,
+                    valueClass: this.classes.truncate
+                },
+                {
+                    id: `${employee.id}-department`,
+                    label: this.departmentLabel,
+                    value: employee.department,
+                    valueClass: this.classes.truncate
+                },
+                {
+                    id: `${employee.id}-email`,
+                    label: this.emailLabel,
+                    value: employee.email,
+                    valueClass: this.classes.truncate
+                },
+                {
+                    id: `${employee.id}-phone`,
+                    label: this.phoneLabel,
+                    value: employee.phone,
+                    valueClass: this.classes.truncate
+                },
+                {
+                    id: `${employee.id}-status`,
+                    label: this.statusLabel,
+                    value: employee.status,
+                    valueClass: this.classes.truncate
+                },
+                {
+                    id: `${employee.id}-notes`,
+                    label: this.notesLabel,
+                    value: employee.notes,
+                    valueClass: this.classes.notes
+                }
+            ]
+        }));
+    }
+
+    get employeeTableColspan() {
+        return this.employeeTableColumns.length;
     }
 
     get isSaveDisabled() {

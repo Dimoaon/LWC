@@ -150,59 +150,24 @@
 
                 <div class="company-employees__employees-table">
                     <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_fixed-layout slds-max-medium-table_stacked-horizontal">
-                            <thead>
+                        <thead>
                                 <tr class="slds-line-height_reset">
-                                    <th scope="col">
-                                        <div class="slds-truncate" title={fullNameLabel}>{fullNameLabel}</div>
+                                    <template for:each={employeeTableColumns} for:item="column">
+                                    <th key={column.id} scope="col" class={column.headerClass}>
+                                        <div class="slds-truncate" title={column.label}>{column.label}</div>
                                     </th>
-                                    <th scope="col">
-                                        <div class="slds-truncate" title={roleTitleLabel}>{roleTitleLabel}</div>
-                                    </th>
-                                    <th scope="col">
-                                        <div class="slds-truncate" title={departmentLabel}>{departmentLabel}</div>
-                                    </th>
-                                    <th scope="col">
-                                        <div class="slds-truncate" title={emailLabel}>{emailLabel}</div>
-                                    </th>
-                                    <th scope="col">
-                                        <div class="slds-truncate" title={phoneLabel}>{phoneLabel}</div>
-                                    </th>
-                                    <th scope="col">
-                                        <div class="slds-truncate" title={statusLabel}>{statusLabel}</div>
-                                    </th>
-                                    <th scope="col">
-                                        <div class="slds-truncate" title={notesLabel}>{notesLabel}</div>
-                                    </th>
-                                    <th scope="col" class="company-employees__employees-table-actions">
-                                        <div title={labels.actionsTitle}>{labels.actionsTitle}</div>
-                                    </th>
-                                </tr>
-                            </thead>
+                                </template>
+                            </tr>
+                        </thead>
                         <tbody>
                             <template lwc:if={hasEmployees}>
-                                <template for:each={employees} for:item="employee">
-                                    <tr key={employee.id}>
-                                        <td data-label={fullNameLabel}>
-                                            <div class="slds-truncate" title={employee.fullName}>{employee.fullName}</div>
-                                        </td>
-                                        <td data-label={roleTitleLabel}>
-                                            <div class="slds-truncate" title={employee.roleTitle}>{employee.roleTitle}</div>
-                                        </td>
-                                        <td data-label={departmentLabel}>
-                                            <div class="slds-truncate" title={employee.department}>{employee.department}</div>
-                                        </td>
-                                        <td data-label={emailLabel}>
-                                            <div class="slds-truncate" title={employee.email}>{employee.email}</div>
-                                        </td>
-                                        <td data-label={phoneLabel}>
-                                            <div class="slds-truncate" title={employee.phone}>{employee.phone}</div>
-                                        </td>
-                                        <td data-label={statusLabel}>
-                                            <div class="slds-truncate" title={employee.status}>{employee.status}</div>
-                                        </td>
-                                        <td data-label={notesLabel}>
-                                            <div class="company-employees__employees-table-notes slds-truncate" title={employee.notes}>{employee.notes}</div>
-                                        </td>
+                                <template for:each={employeeTableRows} for:item="row">
+                                    <tr key={row.id}>
+                                        <template for:each={row.cells} for:item="cell">
+                                            <td key={cell.id} data-label={cell.label}>
+                                                <div class={cell.valueClass} title={cell.value}>{cell.value}</div>
+                                            </td>
+                                        </template>
                                         <td data-label={labels.actionsTitle} class="company-employees__employees-table-actions">
                                             <div class="company-employees__actions-wrapper">
                                                 <div class="company-employees__action-icon-buttons">
@@ -211,7 +176,7 @@
                                                         alternative-text={labels.editActionTitle}
                                                         title={labels.editActionTitle}
                                                         variant="border-filled"
-                                                        data-id={employee.id}
+                                                        data-id={row.id}
                                                         onclick={handleEditEmployee}
                                                     ></lightning-button-icon>
                                                     <lightning-button-icon
@@ -219,7 +184,7 @@
                                                         alternative-text={labels.deleteActionTitle}
                                                         title={labels.deleteActionTitle}
                                                         variant="border-filled"
-                                                        data-id={employee.id}
+                                                        data-id={row.id}
                                                         onclick={handleDeleteEmployee}
                                                     ></lightning-button-icon>
                                                 </div>
@@ -228,13 +193,13 @@
                                                     <lightning-button
                                                         label={labels.editActionTitle}
                                                         variant="neutral"
-                                                        data-id={employee.id}
+                                                        data-id={row.id}
                                                         onclick={handleEditEmployee}
                                                     ></lightning-button>
                                                     <lightning-button
                                                         label={labels.deleteActionTitle}
                                                         variant="destructive-text"
-                                                        data-id={employee.id}
+                                                        data-id={row.id}
                                                         onclick={handleDeleteEmployee}
                                                     ></lightning-button>
                                                 </div>
@@ -246,7 +211,7 @@
 
                             <template lwc:else>
                                 <tr class="company-employees__employees-table-empty-row">
-                                    <td colspan="8" class="company-employees__employees-table-empty-cell">
+                                    <td colspan={employeeTableColspan} class="company-employees__employees-table-empty-cell">
                                         <div class="company-employees__empty-state-message">{emptyStateTitle}</div>
                                     </td>
                                 </tr>

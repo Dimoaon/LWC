@@ -1,10 +1,22 @@
+:host {
+    --company-employees-color-surface: #ffffff;
+    --company-employees-color-surface-muted: #fafafa;
+    --company-employees-color-surface-accent: #f8fbff;
+    --company-employees-color-border-base: #d8dde6;
+    --company-employees-color-border-soft: #e5e7eb;
+    --company-employees-color-border-accent: #dbe3f0;
+    --company-employees-color-text-primary: #111827;
+    --company-employees-color-text-secondary: #5c6b7a;
+    --company-employees-color-text-muted: #6b7280;
+}
+
 .company-employees__wrapper {
     padding: 1rem;
 
-    border: 1px solid #d8dde6;
+    border: 1px solid var(--company-employees-color-border-base);
     border-radius: 0.75rem;
 
-    background: #ffffff;
+    background: var(--company-employees-color-surface);
 }
 
 .company-employees__header {
@@ -19,17 +31,17 @@
 .company-employees__description,
 .company-employees__empty-state-message {
     margin: 0;
-    color: #5c6b7a;
+    color: var(--company-employees-color-text-secondary);
 }
 
 .company-employees__company-section {
     margin-bottom: 1rem;
     padding: 1rem;
 
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--company-employees-color-border-soft);
     border-radius: 0.75rem;
 
-    background: #fafafa;
+    background: var(--company-employees-color-surface-muted);
 }
 
 .company-employees__company-section-header {
@@ -41,11 +53,11 @@
 
     font-size: 1.25rem;
     font-weight: 700;
-    color: #111827;
+    color: var(--company-employees-color-text-primary);
 }
 
 .company-employees__company-section-description {
-    color: #5c6b7a;
+    color: var(--company-employees-color-text-secondary);
     font-size: 0.95rem;
 }
 
@@ -62,25 +74,19 @@
     }
 }
 
-@media (max-width: 767.98px) {
-    .company-employees__company-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 .company-employees__company-field {
     padding: 0.9rem 1rem;
 
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--company-employees-color-border-soft);
     border-radius: 0.65rem;
 
-    background: #ffffff;
+    background: var(--company-employees-color-surface);
 }
 
 .company-employees__company-field-label {
     margin-bottom: 0.35rem;
 
-    color: #6b7280;
+    color: var(--company-employees-color-text-muted);
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.03em;
@@ -88,7 +94,7 @@
 }
 
 .company-employees__company-field-value {
-    color: #111827;
+    color: var(--company-employees-color-text-primary);
     font-size: 1rem;
     line-height: 1.4;
 }
@@ -96,7 +102,7 @@
 .company-employees__employees-toolbar-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #111827;
+    color: var(--company-employees-color-text-primary);
 }
 
 .company-employees__employees-card {
@@ -106,7 +112,7 @@
 
 .company-employees__employees-card-header {
     padding: 1rem;
-    border-bottom: 1px solid #d8dde6;
+    border-bottom: 1px solid var(--company-employees-color-border-base);
 }
 
 @media (max-width: 767.98px) {
@@ -122,10 +128,10 @@
     margin-bottom: 1rem;
     padding: 1rem;
 
-    border: 1px solid #dbe3f0;
+    border: 1px solid var(--company-employees-color-border-accent);
     border-radius: 0.75rem;
 
-    background: #f8fbff;
+    background: var(--company-employees-color-surface-accent);
 }
 
 .company-employees__employee-form-grid {
@@ -167,7 +173,7 @@
 }
 
 .company-employees__employees-table {
-    background: #ffffff;
+    background: var(--company-employees-color-surface);
 }
 
 .company-employees__employees-table th,
@@ -182,7 +188,7 @@
 }
 
 .company-employees__employees-table-empty-row {
-    background: #fafafa;
+    background: var(--company-employees-color-surface-muted);
 }
 
 .company-employees__employees-table-empty-cell {
@@ -221,31 +227,22 @@
 }
 
 @media (max-width: 767.98px) {
+    /* Stacked table shell */
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal {
-        border-top: 0;
-        border-right: 0;
-        border-bottom: 0;
-        border-left: 0;
+        border: 0;
     }
 
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody tr {
-        border-bottom: 1px solid #d8dde6;
+        border-bottom: 1px solid var(--company-employees-color-border-base);
     }
 
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody tr:last-child {
         border-bottom: 0;
     }
 
-    .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody .company-employees__employees-table-empty-row {
-        border-bottom: 0;
-    }
-
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody th,
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody td {
-        border-top: 0;
-        border-right: 0;
-        border-bottom: 0;
-        border-left: 0;
+        border: 0;
         padding-top: 0.65rem;
         padding-bottom: 0.65rem;
     }
@@ -260,11 +257,12 @@
         text-align: left;
     }
 
+    /* Empty state */
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody .company-employees__employees-table-empty-cell {
         display: table-cell;
         padding: 1.5rem 1rem;
         text-align: center;
-        background: #fafafa;
+        background: var(--company-employees-color-surface-muted);
     }
 
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody .company-employees__employees-table-empty-cell::before {
@@ -279,27 +277,24 @@
         text-align: center;
     }
 
-    .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody tr > * + * {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        border-top: 1px solid #e5e7eb;
-    }
-
-    .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody tr > :first-child {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        padding-top: 1rem;
-    }
-
+    /* Stacked row layout */
+    .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody tr > * + *,
+    .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody tr > :first-child,
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody tr > :last-child {
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
 
+    .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody tr > * + * {
+        border-top: 1px solid var(--company-employees-color-border-soft);
+    }
+
+    .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody tr > :first-child {
+        padding-top: 1rem;
+    }
+
+    .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody tr > :last-child {
         padding-bottom: 1rem;
     }
 
@@ -321,6 +316,7 @@
         margin-left: 0.35rem;
     }
 
+    /* Mobile actions */
     .company-employees__action-icon-buttons {
         display: none;
     }
