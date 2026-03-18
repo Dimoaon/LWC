@@ -261,6 +261,7 @@
     .employees-table .slds-max-medium-table_stacked-horizontal tbody tr > * + * {
         display: flex;
         align-items: center;
+        justify-content: space-between;
 
         border-top: 1px solid #e5e7eb;
     }
@@ -268,6 +269,7 @@
     .employees-table .slds-max-medium-table_stacked-horizontal tbody tr > :first-child {
         display: flex;
         align-items: center;
+        justify-content: space-between;
 
         padding-top: 1rem;
     }
@@ -275,6 +277,7 @@
     .employees-table .slds-max-medium-table_stacked-horizontal tbody tr > :last-child {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         
         padding-bottom: 1rem;
     }
