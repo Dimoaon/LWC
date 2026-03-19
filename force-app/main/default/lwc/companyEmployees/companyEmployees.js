@@ -24,6 +24,17 @@ const CLASSES = {
     actionsHeader: 'company-employees__employees-table-actions'
 };
 
+const FORM_FIELDS = {
+    phone: 'phone',
+    notes: 'notes'
+};
+
+const TOAST_ACTIONS = {
+    add: 'add',
+    edit: 'edit',
+    delete: 'delete'
+};
+
 const COMPANY_FIELD_DEFS = [
     { id: 'companyName', labelKey: 'companyNameLabel', valueKey: 'companyNameValue' },
     { id: 'industry', labelKey: 'industryLabel', valueKey: 'industryValue' },
@@ -168,10 +179,6 @@ export default class CompanyEmployees extends LightningElement {
             this.syncEmployeeTableRows();
             this.addCustomCssStyles();
         }
-
-        if (this.isAddEmployeeOpen) {
-            this.updateEmployeeFormValidity();
-        }
     }
 
     // INIT METHODS
@@ -262,7 +269,7 @@ export default class CompanyEmployees extends LightningElement {
             : [...this.employees, employee];
 
         this.syncEmployeeTableRows();
-        this.showSuccessToast(isEditing ? 'edit' : 'add');
+        this.showSuccessToast(isEditing ? TOAST_ACTIONS.edit : TOAST_ACTIONS.add);
         this.handleCloseAddEmployee();
     }
 
@@ -271,7 +278,7 @@ export default class CompanyEmployees extends LightningElement {
 
         this.employees = this.employees.filter((employee) => employee.id !== employeeId);
         this.syncEmployeeTableRows();
-        this.showSuccessToast('delete');
+        this.showSuccessToast(TOAST_ACTIONS.delete);
     }
 
     // MAIN METHODS
@@ -280,7 +287,7 @@ export default class CompanyEmployees extends LightningElement {
     }
 
     applyFieldValidity(field) {
-        if (field.name !== 'phone') {
+        if (field.name !== FORM_FIELDS.phone) {
             field.setCustomValidity('');
             return;
         }
@@ -380,7 +387,7 @@ export default class CompanyEmployees extends LightningElement {
                 id: `${employee.id}-${id}`,
                 label: this[labelKey],
                 value: employee[id],
-                valueClass: id === 'notes' ? this.classes.notes : this.classes.truncate
+                valueClass: id === FORM_FIELDS.notes ? this.classes.notes : this.classes.truncate
             }))
         };
     }

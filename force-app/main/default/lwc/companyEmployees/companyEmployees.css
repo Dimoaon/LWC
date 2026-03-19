@@ -47,7 +47,7 @@
 }
 
 .company-employees__company-section-title {
-    margin: 0 0 0.35rem;
+    margin: 0 0 0.25rem;
 
     font-size: 1.25rem;
     font-weight: 700;
@@ -56,7 +56,7 @@
 
 .company-employees__company-section-description {
     color: var(--company-employees-color-text-secondary);
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
 .company-employees__company-grid {
@@ -73,21 +73,20 @@
 }
 
 .company-employees__company-field {
-    padding: 0.9rem 1rem;
+    padding: 1rem;
 
     border: 1px solid var(--company-employees-color-border-soft);
-    border-radius: 0.65rem;
+    border-radius: 0.5rem;
 
     background: var(--company-employees-color-surface);
 }
 
 .company-employees__company-field-label {
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
 
     color: var(--company-employees-color-text-muted);
     font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.03em;
     text-transform: uppercase;
 }
 
@@ -134,7 +133,7 @@
 
 .company-employees__employee-form-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, 1fr);
 
     gap: 0.75rem;
 }
@@ -149,11 +148,11 @@
     display: flex;
     flex-direction: column;
 
-    gap: 0.35rem;
+    gap: 0.25rem;
 }
 
 .company-employees__employee-form-field--full {
-    grid-column: 1 / -1;
+    grid-column: 1 / 3;
 }
 
 .company-employees__employee-form-actions {
@@ -207,7 +206,7 @@
 }
 
 .company-employees__employees-table-actions lightning-button-icon + lightning-button-icon {
-    margin-left: 0.35rem;
+    margin-left: 0.25rem;
 }
 
 .company-employees__actions-wrapper {
@@ -241,8 +240,8 @@
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody th,
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody td {
         border: 0;
-        padding-top: 0.65rem;
-        padding-bottom: 0.65rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
     }
 
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody th::before,
@@ -311,7 +310,7 @@
     }
 
     .company-employees__employees-table .slds-max-medium-table_stacked-horizontal tbody tr > td:last-child lightning-button-icon + lightning-button-icon {
-        margin-left: 0.35rem;
+        margin-left: 0.25rem;
     }
 
     /* Mobile actions */
