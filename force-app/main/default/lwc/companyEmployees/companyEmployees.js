@@ -103,6 +103,7 @@ export default class CompanyEmployees extends LightningElement {
     @track employees = [];
     @track employeeTableRows = [];
     @track isAddEmployeeOpen = false;
+    @track isEmployeeFormValid = false;
     @track editingEmployeeId = null;
     @track employeeForm = {
         fullName: '',
@@ -155,19 +156,7 @@ export default class CompanyEmployees extends LightningElement {
     }
 
     get isSaveDisabled() {
-        return !this.hasRequiredFields;
-    }
-
-    get hasRequiredFields() {
-        return (
-            this.employeeForm.fullName.trim()
-            && this.employeeForm.email.trim()
-            && this.employeeForm.roleTitle.trim()
-            && this.employeeForm.department.trim()
-            && this.employeeForm.startDate.trim()
-            && this.employeeForm.phone.trim()
-            && this.employeeForm.status.trim()
-        );
+        return !this.isEmployeeFormValid;
     }
 
     // LIFECYCLES
@@ -176,6 +165,10 @@ export default class CompanyEmployees extends LightningElement {
             this.isFirstRender = false;
             this.syncEmployeeTableRows();
             this.addCustomCssStyles();
+        }
+
+        if (this.isAddEmployeeOpen) {
+            this.updateEmployeeFormValidity();
         }
     }
 
@@ -213,11 +206,13 @@ export default class CompanyEmployees extends LightningElement {
     handleOpenAddEmployee() {
         this.editingEmployeeId = null;
         this.resetEmployeeForm();
+        this.isEmployeeFormValid = false;
         this.isAddEmployeeOpen = true;
     }
 
     handleCloseAddEmployee() {
         this.isAddEmployeeOpen = false;
+        this.isEmployeeFormValid = false;
         this.editingEmployeeId = null;
         this.resetEmployeeForm();
     }
@@ -245,6 +240,7 @@ export default class CompanyEmployees extends LightningElement {
 
         this.applyFieldValidity(event.target);
         event.target.reportValidity();
+        this.updateEmployeeFormValidity();
     }
 
     handleAddEmployee() {
@@ -277,13 +273,7 @@ export default class CompanyEmployees extends LightningElement {
 
     // MAIN METHODS
     validateForm() {
-        let fields = this.template.querySelectorAll('lightning-input, lightning-textarea');
-
-        return [...fields].every((field) => {
-            this.applyFieldValidity(field);
-            field.reportValidity();
-            return field.checkValidity();
-        });
+        return this.getEmployeeFormValidity(true);
     }
 
     applyFieldValidity(field) {
@@ -342,6 +332,38 @@ export default class CompanyEmployees extends LightningElement {
 
     resetEmployeeForm() {
         this.employeeForm = this.createEmployeeForm();
+    }
+
+    updateEmployeeFormValidity() {
+        if (!this.isAddEmployeeOpen) {
+            this.isEmployeeFormValid = false;
+            return false;
+        }
+
+        return this.getEmployeeFormValidity(false);
+    }
+
+    getEmployeeFormValidity(shouldReportValidity) {
+        let fields = this.template.querySelectorAll('lightning-input, lightning-textarea');
+
+        if (!fields.length) {
+            this.isEmployeeFormValid = false;
+            return false;
+        }
+
+        let isFormValid = [...fields].every((field) => {
+            this.applyFieldValidity(field);
+
+            if (shouldReportValidity) {
+                field.reportValidity();
+            }
+
+            return field.checkValidity();
+        });
+
+        this.isEmployeeFormValid = isFormValid;
+
+        return isFormValid;
     }
 
     syncEmployeeTableRows() {
