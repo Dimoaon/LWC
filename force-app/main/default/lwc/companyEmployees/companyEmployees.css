@@ -144,15 +144,21 @@
     }
 }
 
+.company-employees__employee-form-field--full {
+    grid-column: 1 / 3;
+}
+
+@media (max-width: 1023.98px) {
+    .company-employees__employee-form-field--full {
+        grid-column: 1 / 2;
+    }
+}
+
 .company-employees__employee-form-field {
     display: flex;
     flex-direction: column;
 
     gap: 0.25rem;
-}
-
-.company-employees__employee-form-field--full {
-    grid-column: 1 / 3;
 }
 
 .company-employees__employee-form-actions {
