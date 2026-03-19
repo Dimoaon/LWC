@@ -151,8 +151,8 @@
                 <div class="company-employees__employees-table">
                     <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_fixed-layout slds-max-medium-table_stacked-horizontal">
                         <thead>
-                                <tr class="slds-line-height_reset">
-                                    <template for:each={employeeTableColumns} for:item="column">
+                            <tr class="slds-line-height_reset">
+                                <template for:each={employeeTableColumns} for:item="column">
                                     <th key={column.id} scope="col" class={column.headerClass}>
                                         <div class="slds-truncate" title={column.label}>{column.label}</div>
                                     </th>

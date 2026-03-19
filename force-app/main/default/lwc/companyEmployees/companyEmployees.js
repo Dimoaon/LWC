@@ -24,6 +24,29 @@ const CLASSES = {
     actionsHeader: 'company-employees__employees-table-actions'
 };
 
+const COMPANY_FIELD_DEFS = [
+    { id: 'companyName', labelKey: 'companyNameLabel', valueKey: 'companyNameValue' },
+    { id: 'industry', labelKey: 'industryLabel', valueKey: 'industryValue' },
+    { id: 'hqLocation', labelKey: 'hqLocationLabel', valueKey: 'hqLocationValue' },
+    { id: 'employeeCount', labelKey: 'employeeCountLabel', valueKey: 'employeeCount' },
+    { id: 'website', labelKey: 'websiteLabel', valueKey: 'websiteValue' },
+    { id: 'taxId', labelKey: 'taxIdLabel', valueKey: 'taxIdValue' },
+    { id: 'accountManager', labelKey: 'accountManagerLabel', valueKey: 'accountManagerValue' },
+    { id: 'companyPhone', labelKey: 'companyPhoneLabel', valueKey: 'companyPhoneValue' },
+    { id: 'billingAddress', labelKey: 'billingAddressLabel', valueKey: 'billingAddressValue' },
+    { id: 'shippingAddress', labelKey: 'shippingAddressLabel', valueKey: 'shippingAddressValue' }
+];
+
+const EMPLOYEE_TABLE_COLUMN_DEFS = [
+    { id: 'fullName', labelKey: 'fullNameLabel' },
+    { id: 'roleTitle', labelKey: 'roleTitleLabel' },
+    { id: 'department', labelKey: 'departmentLabel' },
+    { id: 'email', labelKey: 'emailLabel' },
+    { id: 'phone', labelKey: 'phoneLabel' },
+    { id: 'status', labelKey: 'statusLabel' },
+    { id: 'notes', labelKey: 'notesLabel' }
+];
+
 const PHONE_PATTERN = /^[+\s\-()0-9]+$/;
 
 export default class CompanyEmployees extends LightningElement {
@@ -78,6 +101,7 @@ export default class CompanyEmployees extends LightningElement {
 
     @track isFirstRender = true;
     @track employees = [];
+    @track employeeTableRows = [];
     @track isAddEmployeeOpen = false;
     @track editingEmployeeId = null;
     @track employeeForm = {
@@ -105,146 +129,25 @@ export default class CompanyEmployees extends LightningElement {
     }
 
     get companyFields() {
-        return [
-            {
-                id: 'companyName',
-                label: this.companyNameLabel,
-                value: this.companyNameValue
-            },
-            {
-                id: 'industry',
-                label: this.industryLabel,
-                value: this.industryValue
-            },
-            {
-                id: 'hqLocation',
-                label: this.hqLocationLabel,
-                value: this.hqLocationValue
-            },
-            {
-                id: 'employeeCount',
-                label: this.employeeCountLabel,
-                value: this.employeeCount
-            },
-            {
-                id: 'website',
-                label: this.websiteLabel,
-                value: this.websiteValue
-            },
-            {
-                id: 'taxId',
-                label: this.taxIdLabel,
-                value: this.taxIdValue
-            },
-            {
-                id: 'accountManager',
-                label: this.accountManagerLabel,
-                value: this.accountManagerValue
-            },
-            {
-                id: 'companyPhone',
-                label: this.companyPhoneLabel,
-                value: this.companyPhoneValue
-            },
-            {
-                id: 'billingAddress',
-                label: this.billingAddressLabel,
-                value: this.billingAddressValue
-            },
-            {
-                id: 'shippingAddress',
-                label: this.shippingAddressLabel,
-                value: this.shippingAddressValue
-            }
-        ];
+        return COMPANY_FIELD_DEFS.map(({ id, labelKey, valueKey }) => ({
+            id,
+            label: this[labelKey],
+            value: this[valueKey]
+        }));
     }
 
     get employeeTableColumns() {
         return [
-            {
-                id: 'fullName',
-                label: this.fullNameLabel
-            },
-            {
-                id: 'roleTitle',
-                label: this.roleTitleLabel
-            },
-            {
-                id: 'department',
-                label: this.departmentLabel
-            },
-            {
-                id: 'email',
-                label: this.emailLabel
-            },
-            {
-                id: 'phone',
-                label: this.phoneLabel
-            },
-            {
-                id: 'status',
-                label: this.statusLabel
-            },
-            {
-                id: 'notes',
-                label: this.notesLabel
-            },
+            ...EMPLOYEE_TABLE_COLUMN_DEFS.map(({ id, labelKey }) => ({
+                id,
+                label: this[labelKey]
+            })),
             {
                 id: 'actions',
                 label: this.labels.actionsTitle,
                 headerClass: this.classes.actionsHeader
             }
         ];
-    }
-
-    get employeeTableRows() {
-        return this.employees.map((employee) => ({
-            id: employee.id,
-            cells: [
-                {
-                    id: `${employee.id}-fullName`,
-                    label: this.fullNameLabel,
-                    value: employee.fullName,
-                    valueClass: this.classes.truncate
-                },
-                {
-                    id: `${employee.id}-roleTitle`,
-                    label: this.roleTitleLabel,
-                    value: employee.roleTitle,
-                    valueClass: this.classes.truncate
-                },
-                {
-                    id: `${employee.id}-department`,
-                    label: this.departmentLabel,
-                    value: employee.department,
-                    valueClass: this.classes.truncate
-                },
-                {
-                    id: `${employee.id}-email`,
-                    label: this.emailLabel,
-                    value: employee.email,
-                    valueClass: this.classes.truncate
-                },
-                {
-                    id: `${employee.id}-phone`,
-                    label: this.phoneLabel,
-                    value: employee.phone,
-                    valueClass: this.classes.truncate
-                },
-                {
-                    id: `${employee.id}-status`,
-                    label: this.statusLabel,
-                    value: employee.status,
-                    valueClass: this.classes.truncate
-                },
-                {
-                    id: `${employee.id}-notes`,
-                    label: this.notesLabel,
-                    value: employee.notes,
-                    valueClass: this.classes.notes
-                }
-            ]
-        }));
     }
 
     get employeeTableColspan() {
@@ -271,6 +174,7 @@ export default class CompanyEmployees extends LightningElement {
     renderedCallback() {
         if (this.isFirstRender) {
             this.isFirstRender = false;
+            this.syncEmployeeTableRows();
             this.addCustomCssStyles();
         }
     }
@@ -359,6 +263,7 @@ export default class CompanyEmployees extends LightningElement {
             ? this.employees.map((item) => (item.id === this.editingEmployeeId ? employee : item))
             : [...this.employees, employee];
 
+        this.syncEmployeeTableRows();
         this.showSuccessToast(isEditing);
         this.handleCloseAddEmployee();
     }
@@ -367,6 +272,7 @@ export default class CompanyEmployees extends LightningElement {
         let employeeId = event.currentTarget.dataset.id;
 
         this.employees = this.employees.filter((employee) => employee.id !== employeeId);
+        this.syncEmployeeTableRows();
     }
 
     // MAIN METHODS
@@ -436,6 +342,22 @@ export default class CompanyEmployees extends LightningElement {
 
     resetEmployeeForm() {
         this.employeeForm = this.createEmployeeForm();
+    }
+
+    syncEmployeeTableRows() {
+        this.employeeTableRows = this.employees.map((employee) => this.createEmployeeTableRow(employee));
+    }
+
+    createEmployeeTableRow(employee) {
+        return {
+            id: employee.id,
+            cells: EMPLOYEE_TABLE_COLUMN_DEFS.map(({ id, labelKey }) => ({
+                id: `${employee.id}-${id}`,
+                label: this[labelKey],
+                value: employee[id],
+                valueClass: id === 'notes' ? this.classes.notes : this.classes.truncate
+            }))
+        };
     }
 
     showSuccessToast(isEditing) {
