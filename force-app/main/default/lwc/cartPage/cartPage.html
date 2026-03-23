@@ -1,0 +1,136 @@
+<template>
+    <section class="cart-page">
+        <div class="cart-page__shell">
+            <div class="cart-page__content">
+                <div class="cart-page__main">
+                    <div class="cart-page__header">
+                        <div>
+                            <div class="cart-page__title">{cartTitle}</div>
+                        </div>
+
+                        <div class="cart-page__header-actions">
+
+                        </div>
+                    </div>
+
+                    <div class="cart-page__toolbar">
+
+                            <lightning-button
+                                label="Clear Cart"
+                                variant="destructive-text"
+                                onclick={handleClearCart}
+                            ></lightning-button>
+
+                            <lightning-button
+                                label="Add Product"
+                                variant="brand"
+                            ></lightning-button>
+
+                            <lightning-select
+                                name="sortOrder"
+                                label="Sort by"
+                                value={sortOrder}
+                                options={sortOptions}
+                                onchange={handleSortChange}
+                            ></lightning-select>
+                    </div>
+
+                    <template lwc:if={hasCartItems}>
+                        <div class="cart-page__items">
+                            <template for:each={cartItemRows} for:item="item">
+                                <div key={item.id} class="cart-item">
+                                    <div class="cart-item__media">{item.imageLabel}</div>
+
+                                    <div class="cart-item__details">
+                                        <div class="cart-item__meta">
+                                            <div class="cart-item__name">{item.name}</div>
+                                            <div class="cart-item__sku">SKU: {item.sku}</div>
+                                        </div>
+
+                                        <div class="cart-item__pricing">
+                                            <div class="cart-item__price-label">Unit price</div>
+                                            <div class="cart-item__price">{item.unitPriceFormatted}</div>
+                                        </div>
+
+                                        <div class="cart-item__quantity">
+                                            <div class="cart-item__price-label">Quantity</div>
+                                            <div class="cart-item__stepper">
+                                                <button
+                                                    class="cart-item__stepper-button"
+                                                    type="button"
+                                                    data-id={item.id}
+                                                    onclick={handleDecreaseQuantity}
+                                                >
+                                                    -
+                                                </button>
+                                                <span class="cart-item__stepper-value">{item.quantity}</span>
+                                                <button
+                                                    class="cart-item__stepper-button"
+                                                    type="button"
+                                                    data-id={item.id}
+                                                    onclick={handleIncreaseQuantity}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="cart-item__line-total">
+                                            <div class="cart-item__price-label">Line total</div>
+                                            <div class="cart-item__total">{item.lineTotalFormatted}</div>
+                                        </div>
+                                    </div>
+
+                                    <lightning-button
+                                        label="Delete"
+                                        variant="destructive-text"
+                                        data-id={item.id}
+                                        onclick={handleDeleteItem}
+                                    ></lightning-button>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                    <template lwc:else>
+                        <div class="cart-page__empty-state">
+                            <div class="cart-page__empty-title">Your cart is empty</div>
+                            <div class="cart-page__empty-text">
+                                Add a product to get started
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="cart-summary__card">
+                        <p class="cart-summary__title">Order summary</p>
+                        <h2 class="cart-summary__subtitle">Totals</h2>
+
+                        <div class="cart-summary__rows">
+                            <template for:each={summaryRows} for:item="row">
+                                <div key={row.id} class={row.className}>
+                                    <span>{row.label}</span>
+                                    <span>{row.value}</span>
+                                </div>
+                            </template>
+                        </div>
+
+                        <div class="cart-summary__actions">
+                            <lightning-button
+                                label="Proceed to Checkout"
+                                variant="brand"
+                                stretch
+                            ></lightning-button>
+                            <lightning-button
+                                label="Continue Shopping"
+                                variant="neutral"
+                                stretch
+                            ></lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>
