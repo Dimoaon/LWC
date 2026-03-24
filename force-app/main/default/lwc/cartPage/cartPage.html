@@ -24,6 +24,7 @@
                             <lightning-button
                                 label="Add Product"
                                 variant="brand"
+                                onclick={handleOpenAddProductModal}
                             ></lightning-button>
 
                             <lightning-select
@@ -132,5 +133,65 @@
                 </div>
             </div>
         </div>
+
+        <template lwc:if={isAddProductModalOpen}>
+            <section class="cart-modal">
+                <div class="cart-modal__backdrop" onclick={handleCloseAddProductModal}></div>
+
+                <div class="cart-modal__dialog">
+                    <div class="cart-modal__header">
+                        <div>
+                            <div class="cart-modal__title">Add Product</div>
+                            <div class="cart-modal__subtitle">Choose a product to add to the cart</div>
+                        </div>
+
+                        <button
+                            class="cart-modal__close"
+                            type="button"
+                            onclick={handleCloseAddProductModal}
+                        >
+                            x
+                        </button>
+                    </div>
+
+                    <div class="cart-modal__body">
+                        <lightning-input
+                            type="search"
+                            name="productSearch"
+                            label="Search products"
+                            value={productSearchTerm}
+                            onchange={handleProductSearchChange}
+                        ></lightning-input>
+
+                        <template lwc:if={hasSuggestedProducts}>
+                            <div class="cart-modal__list">
+                                <template for:each={filteredSuggestedProducts} for:item="product">
+                                    <div key={product.id} class="cart-modal__product">
+                                        <div class="cart-modal__product-media">{product.imageLabel}</div>
+
+                                        <div class="cart-modal__product-content">
+                                            <div class="cart-modal__product-name">{product.name}</div>
+                                            <div class="cart-modal__product-sku">SKU: {product.sku}</div>
+                                            <div class="cart-modal__product-price">{product.unitPriceFormatted}</div>
+                                        </div>
+
+                                        <lightning-button
+                                            label="Add to Cart"
+                                            variant="brand"
+                                            data-id={product.id}
+                                            onclick={handleAddSuggestedProduct}
+                                        ></lightning-button>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template lwc:else>
+                            <div class="cart-modal__empty">No products match your search</div>
+                        </template>
+                    </div>
+                </div>
+            </section>
+        </template>
     </section>
 </template>

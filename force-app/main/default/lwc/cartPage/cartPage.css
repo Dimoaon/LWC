@@ -5,6 +5,7 @@
     --cart-page-gray-500: #737373;
     --cart-page-gray-900: #171717;
     --cart-page-blue-500: #1b5cff;
+    --cart-page-overlay: rgba(23, 23, 23, 0.4);
 }
 
 .cart-page {
@@ -236,4 +237,111 @@
     display: grid;
     gap: 0.75rem;
     margin-top: 1.5rem;
+}
+
+.cart-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+}
+
+.cart-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: var(--cart-page-overlay);
+}
+
+.cart-modal__dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 42rem;
+    border: 1px solid var(--cart-page-gray-100);
+    border-radius: 1rem;
+    background: var(--cart-page-white);
+}
+
+.cart-modal__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--cart-page-gray-100);
+}
+
+.cart-modal__title,
+.cart-modal__product-name {
+    margin: 0;
+    color: var(--cart-page-gray-900);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.cart-modal__subtitle,
+.cart-modal__product-sku {
+    margin-top: 0.25rem;
+    color: var(--cart-page-gray-500);
+    font-size: 0.875rem;
+}
+
+.cart-modal__close {
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--cart-page-gray-100);
+    border-radius: 50%;
+    background: var(--cart-page-white);
+    color: var(--cart-page-gray-900);
+    cursor: pointer;
+}
+
+.cart-modal__body {
+    display: grid;
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+.cart-modal__list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.cart-modal__product {
+    display: grid;
+    grid-template-columns: 4rem 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid var(--cart-page-gray-100);
+    border-radius: 0.875rem;
+    background: var(--cart-page-gray-50);
+}
+
+.cart-modal__product-media {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border: 1px dashed var(--cart-page-gray-100);
+    border-radius: 0.75rem;
+    background: var(--cart-page-white);
+    color: var(--cart-page-gray-500);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.cart-modal__product-price {
+    margin-top: 0.375rem;
+    color: var(--cart-page-gray-900);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.cart-modal__empty {
+    padding: 1rem;
+    border: 1px dashed var(--cart-page-gray-100);
+    border-radius: 0.875rem;
+    color: var(--cart-page-gray-500);
+    background: var(--cart-page-gray-50);
 }

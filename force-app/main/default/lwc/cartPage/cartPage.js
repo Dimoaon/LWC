@@ -26,22 +26,55 @@ const CART_ITEMS = [
     }
 ];
 
+const SUGGESTED_PRODUCTS = [
+    {
+        id: 'product-1',
+        name: 'All Weather Parka',
+        sku: 'SKU-120',
+        unitPrice: 82.5,
+        imageLabel: 'IMG'
+    },
+    {
+        id: 'product-2',
+        name: 'Summit Training Tee',
+        sku: 'SKU-121',
+        unitPrice: 29.5,
+        imageLabel: 'IMG'
+    },
+    {
+        id: 'product-3',
+        name: 'City Commute Backpack',
+        sku: 'SKU-122',
+        unitPrice: 74,
+        imageLabel: 'IMG'
+    }
+];
+
 const SHIPPING_AMOUNT = 12;
 const TAX_AMOUNT = 18;
 const MIN_QUANTITY = 1;
 const MAX_QUANTITY = 99;
 
 export default class CartPage extends LightningElement {
+    // VARIABLES
     sortOptions = SORT_OPTIONS;
     sortOrder = 'newest';
     cartItems = CART_ITEMS;
+    suggestedProducts = SUGGESTED_PRODUCTS;
+    isAddProductModalOpen = false;
+    productSearchTerm = '';
 
+    // GETTERS
     get cartTitle() {
         return `Cart (${this.cartItems.length} items)`;
     }
 
     get hasCartItems() {
         return this.cartItems.length > 0;
+    }
+
+    get hasSuggestedProducts() {
+        return this.filteredSuggestedProducts.length > 0;
     }
 
     get cartItemRows() {
@@ -64,6 +97,27 @@ export default class CartPage extends LightningElement {
             }
 
             return secondItemDate - firstItemDate;
+        });
+
+        return rows;
+    }
+
+    get filteredSuggestedProducts() {
+        let searchTerm = this.productSearchTerm.trim().toLowerCase();
+        let rows = [];
+
+        this.suggestedProducts.forEach((product) => {
+            let matchesSearch =
+                !searchTerm ||
+                product.name.toLowerCase().includes(searchTerm) ||
+                product.sku.toLowerCase().includes(searchTerm);
+
+            if (matchesSearch) {
+                rows.push({
+                    ...product,
+                    unitPriceFormatted: this.formatCurrency(product.unitPrice)
+                });
+            }
         });
 
         return rows;
@@ -118,8 +172,73 @@ export default class CartPage extends LightningElement {
         return rows;
     }
 
+    // LIFECYCLES
+
+    // INIT METHODS
+
+    // HANDLERS
     handleSortChange(event) {
         this.sortOrder = event.detail?.value || event.target.value;
+    }
+
+    handleOpenAddProductModal() {
+        this.isAddProductModalOpen = true;
+        this.productSearchTerm = '';
+    }
+
+    handleCloseAddProductModal() {
+        this.isAddProductModalOpen = false;
+        this.productSearchTerm = '';
+    }
+
+    handleProductSearchChange(event) {
+        this.productSearchTerm = event.detail?.value || event.target.value || '';
+    }
+
+    handleAddSuggestedProduct(event) {
+        let productId = event.currentTarget.dataset.id;
+        let selectedProduct = null;
+
+        this.suggestedProducts.forEach((product) => {
+            if (product.id === productId) {
+                selectedProduct = product;
+            }
+        });
+
+        if (!selectedProduct) {
+            return;
+        }
+
+        let updatedItems = [];
+        let existingItemFound = false;
+
+        this.cartItems.forEach((item) => {
+            if (item.sku === selectedProduct.sku) {
+                existingItemFound = true;
+                updatedItems.push({
+                    ...item,
+                    quantity: item.quantity < MAX_QUANTITY ? item.quantity + 1 : item.quantity
+                });
+                return;
+            }
+
+            updatedItems.push(item);
+        });
+
+        if (!existingItemFound) {
+            updatedItems.push({
+                id: `item-${Date.now()}`,
+                name: selectedProduct.name,
+                sku: selectedProduct.sku,
+                unitPrice: selectedProduct.unitPrice,
+                quantity: 1,
+                imageLabel: selectedProduct.imageLabel,
+                createdAt: new Date().toISOString()
+            });
+        }
+
+        this.cartItems = updatedItems;
+        this.handleCloseAddProductModal();
     }
 
     handleIncreaseQuantity(event) {
@@ -177,6 +296,7 @@ export default class CartPage extends LightningElement {
         this.cartItems = [];
     }
 
+    // MAIN METHODS
     formatCurrency(value) {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
