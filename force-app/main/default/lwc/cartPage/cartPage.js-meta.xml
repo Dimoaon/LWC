@@ -7,4 +7,47 @@
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
     </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="cartTitleLabel" type="String" label="Cart Title Label" default="Cart"/>
+            <property name="cartItemsCountLabel" type="String" label="Cart Items Count Label" default="items"/>
+            <property name="clearCartButtonLabel" type="String" label="Clear Cart Button Label" default="Clear Cart"/>
+            <property name="addProductButtonLabel" type="String" label="Add Product Button Label" default="Add Product"/>
+            <property name="sortFieldLabel" type="String" label="Sort Field Label" default="Sort by"/>
+            <property name="skuLabel" type="String" label="SKU Label" default="SKU"/>
+            <property name="unitPriceLabel" type="String" label="Unit Price Label" default="Unit price"/>
+            <property name="quantityLabel" type="String" label="Quantity Label" default="Quantity"/>
+            <property name="increaseQuantityButtonLabel" type="String" label="Increase Quantity Button Label" default="Increase quantity"/>
+            <property name="decreaseQuantityButtonLabel" type="String" label="Decrease Quantity Button Label" default="Decrease quantity"/>
+            <property name="lineTotalLabel" type="String" label="Line Total Label" default="Line total"/>
+            <property name="emptyStateTitle" type="String" label="Empty State Title" default="Your cart is empty"/>
+            <property name="emptyStateText" type="String" label="Empty State Text" default="Add a product to get started"/>
+            <property name="orderSummaryTitle" type="String" label="Order Summary Title" default="Order summary"/>
+            <property name="totalsHeading" type="String" label="Totals Heading" default="Totals"/>
+            <property name="subtotalLabel" type="String" label="Subtotal Label" default="Subtotal"/>
+            <property name="shippingLabel" type="String" label="Shipping Label" default="Shipping"/>
+            <property name="taxLabel" type="String" label="Tax Label" default="Tax"/>
+            <property name="totalLabel" type="String" label="Total Label" default="Total"/>
+            <property name="proceedToCheckoutButtonLabel" type="String" label="Proceed To Checkout Button Label" default="Proceed to Checkout"/>
+            <property name="continueShoppingButtonLabel" type="String" label="Continue Shopping Button Label" default="Continue Shopping"/>
+            <property name="addProductModalTitle" type="String" label="Add Product Modal Title" default="Add Product"/>
+            <property name="addProductModalSubtitle" type="String" label="Add Product Modal Subtitle" default="Choose a product to add to the cart"/>
+            <property name="closeModalButtonLabel" type="String" label="Close Modal Button Label" default="Close dialog"/>
+            <property name="productSearchLabel" type="String" label="Product Search Label" default="Search products"/>
+            <property name="addNewItemButtonLabel" type="String" label="Add New Item Button Label" default="Add New Item"/>
+            <property name="addNewItemModalTitle" type="String" label="Add New Item Modal Title" default="Add new item to suggested list"/>
+            <property name="addNewItemModalSubtitle" type="String" label="Add New Item Modal Subtitle" default="Create a product to add into the offered list"/>
+            <property name="productNameLabel" type="String" label="Product Name Label" default="Product Name"/>
+            <property name="imageUrlLabel" type="String" label="Image URL Label" default="Image URL (Optional)"/>
+            <property name="cancelButtonLabel" type="String" label="Cancel Button Label" default="Cancel"/>
+            <property name="addToOfferedListButtonLabel" type="String" label="Add To Offered List Button Label" default="Add to offered list"/>
+            <property name="addNewItemDuplicateSkuErrorText" type="String" label="Add New Item Duplicate SKU Error Text" default="SKU already exists in suggested products."/>
+            <property name="addToCartButtonLabel" type="String" label="Add To Cart Button Label" default="Add to Cart"/>
+            <property name="noSuggestedProductsText" type="String" label="No Suggested Products Text" default="No products match your search"/>
+            <property name="deleteItemButtonLabel" type="String" label="Delete Item Button Label" default="Delete item"/>
+            <property name="imagePlaceholderLabel" type="String" label="Image Placeholder Label" default="IMG"/>
+            <property name="shippingAmount" type="Integer" label="Shipping Amount" default="12"/>
+            <property name="taxRate" type="Integer" label="Tax Rate" default="18"/>
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>
