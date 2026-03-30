@@ -15,6 +15,8 @@
             <property name="addProductButtonLabel" type="String" label="Add Product Button Label" default="Add Product"/>
             <property name="sortFieldLabel" type="String" label="Sort Field Label" default="Sort by"/>
             <property name="skuLabel" type="String" label="SKU Label" default="SKU"/>
+            <property name="sizeLabel" type="String" label="Size Label" default="Size"/>
+            <property name="colorLabel" type="String" label="Color Label" default="Color"/>
             <property name="unitPriceLabel" type="String" label="Unit Price Label" default="Unit price"/>
             <property name="quantityLabel" type="String" label="Quantity Label" default="Quantity"/>
             <property name="increaseQuantityButtonLabel" type="String" label="Increase Quantity Button Label" default="Increase quantity"/>
@@ -46,6 +48,8 @@
             <property name="noSuggestedProductsText" type="String" label="No Suggested Products Text" default="No products match your search"/>
             <property name="deleteItemButtonLabel" type="String" label="Delete Item Button Label" default="Delete item"/>
             <property name="imagePlaceholderLabel" type="String" label="Image Placeholder Label" default="IMG"/>
+            <property name="maxQuantityReachedToastTitle" type="String" label="Max Quantity Reached Toast Title" default="Maximum quantity reached"/>
+            <property name="maxQuantityReachedToastMessage" type="String" label="Max Quantity Reached Toast Message" default="This product is already at the maximum quantity in the cart."/>
             <property name="shippingAmount" type="Integer" label="Shipping Amount" default="12"/>
             <property name="taxRate" type="Integer" label="Tax Rate" default="18"/>
         </targetConfig>

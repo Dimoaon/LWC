@@ -1,10 +1,13 @@
-import { api, LightningElement, track } from 'lwc';
+import Toast from 'lightning/toast';
+import { LightningElement, api, track } from 'lwc';
 
 const CART_ITEMS = [
     {
         id: 'item-1',
         name: 'Performance Hoodie',
         sku: 'SKU-001',
+        size: 'M',
+        color: 'Black',
         unitPrice: 44.56,
         quantity: 1,
         imageLabel: 'IMG',
@@ -14,6 +17,8 @@ const CART_ITEMS = [
         id: 'item-2',
         name: 'Trail Runner Jacket',
         sku: 'SKU-014',
+        size: 'L',
+        color: 'Blue',
         unitPrice: 68,
         quantity: 98,
         imageLabel: 'IMG',
@@ -26,6 +31,9 @@ const SUGGESTED_PRODUCTS = [
         id: 'product-1',
         name: 'All Weather Parka',
         sku: 'SKU-120',
+        size: 'XL',
+        color: 'Olive',
+        quantity: 1,
         unitPrice: 82.5,
         imageLabel: 'IMG'
     },
@@ -33,6 +41,9 @@ const SUGGESTED_PRODUCTS = [
         id: 'product-2',
         name: 'Summit Training Tee',
         sku: 'SKU-121',
+        size: 'M',
+        color: 'Gray',
+        quantity: 1,
         unitPrice: 29.5,
         imageLabel: 'IMG'
     },
@@ -40,6 +51,9 @@ const SUGGESTED_PRODUCTS = [
         id: 'product-3',
         name: 'City Commute Backpack',
         sku: 'SKU-122',
+        size: 'One Size',
+        color: 'Black',
+        quantity: 1,
         unitPrice: 74,
         imageLabel: 'IMG'
     }
@@ -52,7 +66,8 @@ const DEFAULT_NEWEST_SORT_VALUE = 'newest';
 const DEFAULT_OLDEST_SORT_VALUE = 'oldest';
 const DEFAULT_MIN_QUANTITY = 1;
 const DEFAULT_MAX_QUANTITY = 99;
-const DEFAULT_MAX_UNIT_PRICE = 999999;
+const DEFAULT_MAX_UNIT_PRICE = 99999;
+const DEFAULT_MAX_TEXT_LENGTH = 255;
 const INCREASE_QUANTITY_STEP = 1;
 const DECREASE_QUANTITY_STEP = -1;
 const IMAGE_PLACEHOLDER_FALLBACK = 'IMG';
@@ -66,13 +81,36 @@ const SORT_OPTIONS = [
     { label: 'Newest to Oldest', value: DEFAULT_NEWEST_SORT_VALUE },
     { label: 'Oldest to Newest', value: DEFAULT_OLDEST_SORT_VALUE }
 ];
+const SIZE_OPTIONS = [
+    { label: 'Select size', value: '' },
+    { label: 'XS', value: 'XS' },
+    { label: 'S', value: 'S' },
+    { label: 'M', value: 'M' },
+    { label: 'L', value: 'L' },
+    { label: 'XL', value: 'XL' },
+    { label: 'One Size', value: 'One Size' }
+];
+const COLOR_OPTIONS = [
+    { label: 'Select color', value: '' },
+    { label: 'Black', value: 'Black' },
+    { label: 'Blue', value: 'Blue' },
+    { label: 'Gray', value: 'Gray' },
+    { label: 'Olive', value: 'Olive' },
+    { label: 'White', value: 'White' }
+];
 const QUANTITY_ACTIONS = {
     increase: 'increase',
     decrease: 'decrease'
 };
+const QUANTITY_LISTS = {
+    cart: 'cart',
+    suggested: 'suggested'
+};
 const SUGGESTED_ITEM_FORM_FIELDS = {
     name: 'name',
     sku: 'sku',
+    size: 'size',
+    color: 'color',
     unitPrice: 'unitPrice',
     imageUrl: 'imageUrl'
 };
@@ -85,6 +123,8 @@ const SUMMARY_ROW_IDS = {
 const DEFAULT_SUGGESTED_ITEM_FORM = {
     [SUGGESTED_ITEM_FORM_FIELDS.name]: '',
     [SUGGESTED_ITEM_FORM_FIELDS.sku]: '',
+    [SUGGESTED_ITEM_FORM_FIELDS.size]: '',
+    [SUGGESTED_ITEM_FORM_FIELDS.color]: '',
     [SUGGESTED_ITEM_FORM_FIELDS.unitPrice]: '',
     [SUGGESTED_ITEM_FORM_FIELDS.imageUrl]: ''
 };
@@ -97,6 +137,8 @@ export default class CartPage extends LightningElement {
     @api addProductButtonLabel = null;
     @api sortFieldLabel = null;
     @api skuLabel = null;
+    @api sizeLabel = null;
+    @api colorLabel = null;
     @api unitPriceLabel = null;
     @api quantityLabel = null;
     @api increaseQuantityButtonLabel = null;
@@ -130,14 +172,19 @@ export default class CartPage extends LightningElement {
     @api imagePlaceholderLabel = null;
     @api shippingAmount = null;
     @api taxRate = null;
+    @api maxQuantityReachedToastTitle = null;
+    @api maxQuantityReachedToastMessage = null;
 
     sortOptions = SORT_OPTIONS;
+    sizeOptions = SIZE_OPTIONS;
+    colorOptions = COLOR_OPTIONS;
     currencyCode = DEFAULT_CURRENCY_CODE;
     currencyDisplayAs = DEFAULT_CURRENCY_DISPLAY_AS;
     currencyFractionDigits = DEFAULT_CURRENCY_FRACTION_DIGITS;
     minQuantity = DEFAULT_MIN_QUANTITY;
     maxQuantity = DEFAULT_MAX_QUANTITY;
     maxUnitPrice = DEFAULT_MAX_UNIT_PRICE;
+    maxSuggestedItemTextLength = DEFAULT_MAX_TEXT_LENGTH;
 
     @track isFirstRender = true;
     @track sortOrder = DEFAULT_NEWEST_SORT_VALUE;
@@ -251,6 +298,8 @@ export default class CartPage extends LightningElement {
     handleAddNewSuggestedItem() {
         let productName = this.suggestedItemForm[SUGGESTED_ITEM_FORM_FIELDS.name].trim();
         let sku = this.suggestedItemForm[SUGGESTED_ITEM_FORM_FIELDS.sku].trim();
+        let size = this.suggestedItemForm[SUGGESTED_ITEM_FORM_FIELDS.size].trim();
+        let color = this.suggestedItemForm[SUGGESTED_ITEM_FORM_FIELDS.color].trim();
         let unitPrice = Number(this.suggestedItemForm[SUGGESTED_ITEM_FORM_FIELDS.unitPrice]);
 
         if (!this.validateSuggestedItemForm()) {
@@ -262,6 +311,9 @@ export default class CartPage extends LightningElement {
                 id: `${PRODUCT_ID_PREFIX}${Date.now()}`,
                 name: productName,
                 sku,
+                size,
+                color,
+                quantity: this.minQuantity,
                 unitPrice,
                 imageUrl: this.suggestedItemForm[SUGGESTED_ITEM_FORM_FIELDS.imageUrl].trim(),
                 imageLabel: this.imagePlaceholderLabel || IMAGE_PLACEHOLDER_FALLBACK
@@ -280,6 +332,8 @@ export default class CartPage extends LightningElement {
         let selectedProduct = null;
         let updatedItems = [];
         let existingItemFound = false;
+        let isMaxQuantityReached = false;
+        let quantityToAdd = 0;
 
         this.suggestedProducts.forEach((product) => {
             if (product.id === productId) {
@@ -291,12 +345,21 @@ export default class CartPage extends LightningElement {
             return;
         }
 
+        quantityToAdd = selectedProduct.quantity || this.minQuantity;
+
         this.cartItems.forEach((item) => {
             if (item.sku === selectedProduct.sku) {
+                if (item.quantity >= this.maxQuantity) {
+                    isMaxQuantityReached = true;
+                    updatedItems.push(item);
+                    return;
+                }
+
                 existingItemFound = true;
                 updatedItems.push({
                     ...item,
-                    quantity: item.quantity < this.maxQuantity ? item.quantity + INCREASE_QUANTITY_STEP : item.quantity
+                    quantity:
+                        item.quantity + quantityToAdd > this.maxQuantity ? this.maxQuantity : item.quantity + quantityToAdd
                 });
                 return;
             }
@@ -304,13 +367,20 @@ export default class CartPage extends LightningElement {
             updatedItems.push(item);
         });
 
+        if (isMaxQuantityReached) {
+            this.showErrorToast(this.maxQuantityReachedToastTitle, this.maxQuantityReachedToastMessage);
+            return;
+        }
+
         if (!existingItemFound) {
             updatedItems.push({
                 id: `${ITEM_ID_PREFIX}${Date.now()}`,
                 name: selectedProduct.name,
                 sku: selectedProduct.sku,
+                size: selectedProduct.size,
+                color: selectedProduct.color,
                 unitPrice: selectedProduct.unitPrice,
-                quantity: this.minQuantity,
+                quantity: quantityToAdd,
                 imageLabel: selectedProduct.imageLabel || this.imagePlaceholderLabel,
                 createdAt: new Date().toISOString()
             });
@@ -321,21 +391,60 @@ export default class CartPage extends LightningElement {
         this.refreshCartViewData();
     }
 
+    handleDeleteSuggestedProduct(event) {
+        let productId = event.currentTarget.dataset.id;
+        let updatedProducts = [];
+
+        this.suggestedProducts.forEach((product) => {
+            if (product.id !== productId) {
+                updatedProducts.push(product);
+            }
+        });
+
+        this.suggestedProducts = updatedProducts;
+        this.refreshSuggestedProductsViewData();
+    }
+
     handleChangeQuantity(event) {
         let itemId = event.currentTarget.dataset.id;
         let quantityAction = event.currentTarget.dataset.action;
+        let quantityList = event.currentTarget.dataset.list;
         let quantityChange = 0;
         let updatedItems = [];
 
-        if (quantityAction === QUANTITY_ACTIONS.increase) {
-            quantityChange = INCREASE_QUANTITY_STEP;
-        }
-
-        if (quantityAction === QUANTITY_ACTIONS.decrease) {
-            quantityChange = DECREASE_QUANTITY_STEP;
-        }
+        quantityChange =
+            quantityAction === QUANTITY_ACTIONS.increase
+                ? INCREASE_QUANTITY_STEP
+                : quantityAction === QUANTITY_ACTIONS.decrease
+                  ? DECREASE_QUANTITY_STEP
+                  : 0;
 
         if (!quantityChange) {
+            return;
+        }
+
+        if (quantityList === QUANTITY_LISTS.suggested) {
+            this.suggestedProducts.forEach((product) => {
+                let nextQuantity = (product.quantity || this.minQuantity) + quantityChange;
+
+                if (product.id === itemId) {
+                    updatedItems.push({
+                        ...product,
+                        quantity:
+                            nextQuantity < this.minQuantity
+                                ? this.minQuantity
+                                : nextQuantity > this.maxQuantity
+                                  ? this.maxQuantity
+                                  : nextQuantity
+                    });
+                    return;
+                }
+
+                updatedItems.push(product);
+            });
+
+            this.suggestedProducts = updatedItems;
+            this.refreshSuggestedProductsViewData();
             return;
         }
 
@@ -562,10 +671,22 @@ export default class CartPage extends LightningElement {
         SUGGESTED_PRODUCTS.forEach((product) => {
             products.push({
                 ...product,
+                quantity: product.quantity || this.minQuantity,
                 imageLabel: product.imageLabel || this.imagePlaceholderLabel || IMAGE_PLACEHOLDER_FALLBACK
             });
         });
 
         return products;
+    }
+
+    showErrorToast(label, message) {
+        Toast.show(
+            {
+                label,
+                message,
+                variant: 'error'
+            },
+            this
+        );
     }
 }

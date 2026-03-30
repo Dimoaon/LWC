@@ -13,12 +13,14 @@
                     <div class="cart-page__toolbar">
                         <div class="cart-page__toolbar-actions">
                             <lightning-button
+                                class="cart-page__button"
                                 label={clearCartButtonLabel}
                                 variant="destructive-text"
                                 onclick={handleClearCart}
                             ></lightning-button>
 
                             <lightning-button
+                                class="cart-page__button"
                                 label={addProductButtonLabel}
                                 variant="brand"
                                 onclick={handleOpenAddProductModal}
@@ -47,62 +49,72 @@
                                         <div class="cart-item__meta">
                                             <div class="cart-item__name">{item.name}</div>
                                             <div class="cart-item__sku">{skuLabel}: {item.sku}</div>
+                                            <template lwc:if={item.size}>
+                                                <div class="cart-item__attribute">{sizeLabel}: {item.size}</div>
+                                            </template>
+                                            <template lwc:if={item.color}>
+                                                <div class="cart-item__attribute">{colorLabel}: {item.color}</div>
+                                            </template>
                                         </div>
 
-                                        <div class="cart-item__pricing">
-                                            <div class="cart-item__price-label">{unitPriceLabel}</div>
-                                            <div class="cart-item__price">
-                                                <lightning-formatted-number
-                                                    value={item.unitPrice}
-                                                    format-style="currency"
-                                                    currency-code={currencyCode}
-                                                    currency-display-as={currencyDisplayAs}
-                                                    minimum-fraction-digits={currencyFractionDigits}
-                                                    maximum-fraction-digits={currencyFractionDigits}
-                                                ></lightning-formatted-number>
+                                        <div class="cart-item__metrics">
+                                            <div class="cart-item__pricing">
+                                                <div class="cart-item__price-label">{unitPriceLabel}</div>
+                                                <div class="cart-item__price">
+                                                    <lightning-formatted-number
+                                                        value={item.unitPrice}
+                                                        format-style="currency"
+                                                        currency-code={currencyCode}
+                                                        currency-display-as={currencyDisplayAs}
+                                                        minimum-fraction-digits={currencyFractionDigits}
+                                                        maximum-fraction-digits={currencyFractionDigits}
+                                                    ></lightning-formatted-number>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="cart-item__quantity">
-                                            <div class="cart-item__price-label">{quantityLabel}</div>
-                                            <div class="cart-item__stepper">
-                                                <lightning-button-icon
-                                                    class="cart-item__stepper-button"
-                                                    icon-name="utility:dash"
-                                                    size="medium"
-                                                    variant="border-filled"
-                                                    alternative-text={decreaseQuantityButtonLabel}
-                                                    data-id={item.id}
-                                                    data-action="decrease"
-                                                    onclick={handleChangeQuantity}
-                                                ></lightning-button-icon>
+                                            <div class="cart-item__quantity">
+                                                <div class="cart-item__price-label">{quantityLabel}</div>
+                                                <div class="cart-item__stepper">
+                                                    <lightning-button-icon
+                                                        class="cart-item__stepper-button"
+                                                        icon-name="utility:dash"
+                                                        size="medium"
+                                                        variant="border-filled"
+                                                        alternative-text={decreaseQuantityButtonLabel}
+                                                        data-id={item.id}
+                                                        data-action="decrease"
+                                                        data-list="cart"
+                                                        onclick={handleChangeQuantity}
+                                                    ></lightning-button-icon>
 
-                                                <div class="cart-item__stepper-value">{item.quantity}</div>
+                                                    <div class="cart-item__stepper-value">{item.quantity}</div>
 
-                                                <lightning-button-icon
-                                                    class="cart-item__stepper-button"
-                                                    icon-name="utility:add"
-                                                    size="medium"
-                                                    variant="border-filled"
-                                                    alternative-text={increaseQuantityButtonLabel}
-                                                    data-id={item.id}
-                                                    data-action="increase"
-                                                    onclick={handleChangeQuantity}
-                                                ></lightning-button-icon>
+                                                    <lightning-button-icon
+                                                        class="cart-item__stepper-button"
+                                                        icon-name="utility:add"
+                                                        size="medium"
+                                                        variant="border-filled"
+                                                        alternative-text={increaseQuantityButtonLabel}
+                                                        data-id={item.id}
+                                                        data-action="increase"
+                                                        data-list="cart"
+                                                        onclick={handleChangeQuantity}
+                                                    ></lightning-button-icon>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="cart-item__line-total">
-                                            <div class="cart-item__price-label">{lineTotalLabel}</div>
-                                            <div class="cart-item__total">
-                                                <lightning-formatted-number
-                                                    value={item.lineTotal}
-                                                    format-style="currency"
-                                                    currency-code={currencyCode}
-                                                    currency-display-as={currencyDisplayAs}
-                                                    minimum-fraction-digits={currencyFractionDigits}
-                                                    maximum-fraction-digits={currencyFractionDigits}
-                                                ></lightning-formatted-number>
+                                            <div class="cart-item__line-total">
+                                                <div class="cart-item__price-label">{lineTotalLabel}</div>
+                                                <div class="cart-item__total">
+                                                    <lightning-formatted-number
+                                                        value={item.lineTotal}
+                                                        format-style="currency"
+                                                        currency-code={currencyCode}
+                                                        currency-display-as={currencyDisplayAs}
+                                                        minimum-fraction-digits={currencyFractionDigits}
+                                                        maximum-fraction-digits={currencyFractionDigits}
+                                                    ></lightning-formatted-number>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -156,11 +168,13 @@
 
                         <div class="cart-summary__actions">
                             <lightning-button
+                                class="cart-page__button"
                                 label={proceedToCheckoutButtonLabel}
                                 variant="brand"
                                 stretch
                             ></lightning-button>
                             <lightning-button
+                                class="cart-page__button"
                                 label={continueShoppingButtonLabel}
                                 variant="neutral"
                                 stretch
@@ -200,6 +214,7 @@
                                     name="name"
                                     label={productNameLabel}
                                     value={suggestedItemForm.name}
+                                    maxlength={maxSuggestedItemTextLength}
                                     required
                                     onchange={handleSuggestedItemInputChange}
                                 ></lightning-input>
@@ -210,9 +225,28 @@
                                         name="sku"
                                         label={skuLabel}
                                         value={suggestedItemForm.sku}
+                                        maxlength={maxSuggestedItemTextLength}
                                         required
                                         onchange={handleSuggestedItemInputChange}
                                     ></lightning-input>
+
+                                    <lightning-select
+                                        name="size"
+                                        label={sizeLabel}
+                                        value={suggestedItemForm.size}
+                                        options={sizeOptions}
+                                        onchange={handleSuggestedItemInputChange}
+                                    ></lightning-select>
+                                </div>
+
+                                <div class="cart-modal__form-row">
+                                    <lightning-select
+                                        name="color"
+                                        label={colorLabel}
+                                        value={suggestedItemForm.color}
+                                        options={colorOptions}
+                                        onchange={handleSuggestedItemInputChange}
+                                    ></lightning-select>
 
                                     <lightning-input
                                         type="number"
@@ -232,6 +266,7 @@
                                     name="imageUrl"
                                     label={imageUrlLabel}
                                     value={suggestedItemForm.imageUrl}
+                                    maxlength={maxSuggestedItemTextLength}
                                     onchange={handleSuggestedItemInputChange}
                                 ></lightning-input>
                             </div>
@@ -249,6 +284,7 @@
                                 ></lightning-input>
 
                                 <lightning-button
+                                    class="cart-page__button"
                                     label={addNewItemButtonLabel}
                                     variant="neutral"
                                     onclick={handleOpenAddNewItemView}
@@ -265,6 +301,12 @@
                                             <div class="cart-modal__product-content">
                                                 <div class="cart-modal__product-name">{product.name}</div>
                                                 <div class="cart-modal__product-sku">{skuLabel}: {product.sku}</div>
+                                                <template lwc:if={product.size}>
+                                                    <div class="cart-modal__product-attribute">{sizeLabel}: {product.size}</div>
+                                                </template>
+                                                <template lwc:if={product.color}>
+                                                    <div class="cart-modal__product-attribute">{colorLabel}: {product.color}</div>
+                                                </template>
                                                 <div class="cart-modal__product-price">
                                                     <lightning-formatted-number
                                                         value={product.unitPrice}
@@ -275,14 +317,56 @@
                                                         maximum-fraction-digits={currencyFractionDigits}
                                                     ></lightning-formatted-number>
                                                 </div>
+
+                                                <div class="cart-modal__product-quantity">
+                                                    <div class="cart-item__price-label">{quantityLabel}</div>
+                                                    <div class="cart-item__stepper cart-modal__stepper-button">
+                                                        <lightning-button-icon
+                                                            class="cart-item__stepper-button"
+                                                            icon-name="utility:dash"
+                                                            size="medium"
+                                                            variant="border-filled"
+                                                            alternative-text={decreaseQuantityButtonLabel}
+                                                            data-id={product.id}
+                                                            data-action="decrease"
+                                                            data-list="suggested"
+                                                            onclick={handleChangeQuantity}
+                                                        ></lightning-button-icon>
+
+                                                        <div class="cart-item__stepper-value">{product.quantity}</div>
+
+                                                        <lightning-button-icon
+                                                            class="cart-item__stepper-button"
+                                                            icon-name="utility:add"
+                                                            size="medium"
+                                                            variant="border-filled"
+                                                            alternative-text={increaseQuantityButtonLabel}
+                                                            data-id={product.id}
+                                                            data-action="increase"
+                                                            data-list="suggested"
+                                                            onclick={handleChangeQuantity}
+                                                        ></lightning-button-icon>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <lightning-button
-                                                label={addToCartButtonLabel}
-                                                variant="brand"
-                                                data-id={product.id}
-                                                onclick={handleAddSuggestedProduct}
-                                            ></lightning-button>
+                                            <div class="cart-modal__product-actions">
+                                                <lightning-button
+                                                    class="cart-page__button"
+                                                    label={addToCartButtonLabel}
+                                                    variant="brand"
+                                                    data-id={product.id}
+                                                    onclick={handleAddSuggestedProduct}
+                                                ></lightning-button>
+
+                                                <lightning-button
+                                                    class="cart-page__button"
+                                                    label={deleteItemButtonLabel}
+                                                    variant="destructive-text"
+                                                    data-id={product.id}
+                                                    onclick={handleDeleteSuggestedProduct}
+                                                ></lightning-button>
+                                            </div>
                                         </div>
                                     </template>
                                 </div>
@@ -298,12 +382,14 @@
                         <!-- Modal Footer -->
                         <div class="slds-modal__footer cart-modal__footer">
                             <lightning-button
+                                class="cart-page__button"
                                 label={cancelButtonLabel}
                                 variant="neutral"
                                 onclick={handleCloseAddNewItemView}
                             ></lightning-button>
 
                             <lightning-button
+                                class="cart-page__button"
                                 label={addToOfferedListButtonLabel}
                                 variant="brand"
                                 onclick={handleAddNewSuggestedItem}
