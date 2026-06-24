@@ -40,6 +40,7 @@ export default class BusSeatBooking extends LightningElement {
     @track seats = [];
     @track bookings = [];
     @track isModalOpen = false;
+    @track editingBooking = null;
     @track form = {
         firstName: '',
         lastName: '',
@@ -67,12 +68,7 @@ export default class BusSeatBooking extends LightningElement {
 
     // HANDLERS
     handleBookSeat() {
-        let selected = null;
-        this.seats.forEach(s => {
-            if (!selected && s.isSelected) {
-                selected = s;
-            }
-        });
+        let selected = this.findSelectedSeat();
 
         if (!selected) {
             Toast.show({ label: this.noSeatSelectedLabel, variant: TOAST_VARIANT_WARNING }, this);
@@ -83,9 +79,16 @@ export default class BusSeatBooking extends LightningElement {
     }
 
     handleModalClose() {
-        this.isModalOpen = false;
+        if (this.editingBooking) {
+            this.bookings.push(this.editingBooking);
+            this.restoreBookedSeat(this.editingBooking.seatId);
+            this.editingBooking = null;
+        } else {
+            this.deselectCurrentSeat();
+        }
+
         this.resetForm();
-        this.deselectCurrentSeat();
+        this.isModalOpen = false;
     }
 
     handleConfirm() {
@@ -97,18 +100,17 @@ export default class BusSeatBooking extends LightningElement {
             return;
         }
 
-        let selected = null;
-        this.seats.forEach(s => {
-            if (!selected && s.isSelected) {
-                selected = s;
-            }
-        });
+        let selected = this.findSelectedSeat();
         this.bookings.push({
+            seatId: selected.id,
             seatNumber: selected.number,
             firstName: this.form.firstName,
-            lastName: this.form.lastName
+            lastName: this.form.lastName,
+            phone: this.form.phone,
+            email: this.form.email
         });
 
+        this.editingBooking = null;
         this.bookSelectedSeat();
         this.resetForm();
         this.isModalOpen = false;
@@ -117,6 +119,42 @@ export default class BusSeatBooking extends LightningElement {
 
     handleFormChange(event) {
         this.form[event.target.name] = event.target.value;
+    }
+
+    handleEditBooking(event) {
+        let seatId = event.currentTarget.dataset.id;
+        let booking = null;
+
+        if (!seatId) {
+            return;
+        }
+
+        this.bookings.forEach(b => {
+            if (!booking && b.seatId === seatId) {
+                booking = b;
+            }
+        });
+
+        if (!booking) {
+            return;
+        }
+
+        this.editingBooking = booking;
+        this.form = { firstName: booking.firstName, lastName: booking.lastName, phone: booking.phone, email: booking.email };
+        this.bookings = this.bookings.filter(b => b.seatId !== seatId);
+        this.selectSeat(seatId);
+        this.isModalOpen = true;
+    }
+
+    handleRemoveBooking(event) {
+        let seatId = event.currentTarget.dataset.id;
+
+        if (!seatId) {
+            return;
+        }
+
+        this.bookings = this.bookings.filter(b => b.seatId !== seatId);
+        this.freeSeat(seatId);
     }
 
     handleSeatClick(event) {
@@ -142,8 +180,7 @@ export default class BusSeatBooking extends LightningElement {
             seat.isFree = false;
             seat.isSelected = true;
         } else if (seat.isSelected) {
-            seat.isFree = true;
-            seat.isSelected = false;
+            this.setSeatFree(seat);
         } else if (seat.isBooked) {
             Toast.show({ label: this.seatAlreadyTakenLabel, variant: TOAST_VARIANT_ERROR }, this);
         }
@@ -180,12 +217,7 @@ export default class BusSeatBooking extends LightningElement {
     }
 
     bookSelectedSeat() {
-        let selected = null;
-        this.seats.forEach(s => {
-            if (!selected && s.isSelected) {
-                selected = s;
-            }
-        });
+        let selected = this.findSelectedSeat();
 
         if (selected) {
             selected.isSelected = false;
@@ -193,18 +225,65 @@ export default class BusSeatBooking extends LightningElement {
         }
     }
 
+    freeSeat(seatId) {
+        let seat = null;
+        this.seats.forEach(s => {
+            if (!seat && s.id === seatId) {
+                seat = s;
+            }
+        });
+
+        if (seat) {
+            this.setSeatFree(seat);
+        }
+    }
+
     deselectCurrentSeat() {
+        let selected = this.findSelectedSeat();
+
+        if (selected) {
+            this.setSeatFree(selected);
+        }
+    }
+
+    findSelectedSeat() {
         let selected = null;
         this.seats.forEach(s => {
             if (!selected && s.isSelected) {
                 selected = s;
             }
         });
+        return selected;
+    }
 
-        if (selected) {
-            selected.isFree = true;
-            selected.isSelected = false;
-        }
+    selectSeat(seatId) {
+        let done = false;
+        this.seats.forEach(s => {
+            if (!done && s.id === seatId) {
+                s.isFree = false;
+                s.isSelected = true;
+                s.isBooked = false;
+                done = true;
+            }
+        });
+    }
+
+    restoreBookedSeat(seatId) {
+        let done = false;
+        this.seats.forEach(s => {
+            if (!done && s.id === seatId) {
+                s.isFree = false;
+                s.isSelected = false;
+                s.isBooked = true;
+                done = true;
+            }
+        });
+    }
+
+    setSeatFree(seat) {
+        seat.isFree = true;
+        seat.isSelected = false;
+        seat.isBooked = false;
     }
 
 }

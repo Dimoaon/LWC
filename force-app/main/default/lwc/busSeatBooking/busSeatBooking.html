@@ -80,9 +80,20 @@
         <template lwc:if={hasBookings}>
             <div class="bookings-list">
                 <template for:each={bookings} for:item="booking">
-                    <div key={booking.seatNumber} class="booking-item">
+                    <div key={booking.seatId} class="booking-item">
                         <div class="booking-seat">{booking.seatNumber}</div>
                         <div class="booking-name">{booking.firstName} {booking.lastName}</div>
+                        <lightning-button-icon
+                            icon-name="utility:edit"
+                            data-id={booking.seatId}
+                            onclick={handleEditBooking}>
+                        </lightning-button-icon>
+                        <lightning-button-icon
+                            class="booking-remove"
+                            icon-name="utility:delete"
+                            data-id={booking.seatId}
+                            onclick={handleRemoveBooking}>
+                        </lightning-button-icon>
                     </div>
                 </template>
             </div>
@@ -101,7 +112,7 @@
                         <lightning-button-icon
                             class="slds-modal__close"
                             icon-name="utility:close"
-                            variant="bare-inverse"
+                            variant="bare"
                             onclick={handleModalClose}>
                         </lightning-button-icon>
                         <div class="slds-modal__title slds-hyphenate">{modalTitle}</div>
