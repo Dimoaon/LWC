@@ -93,14 +93,15 @@ export default class BusSeatBooking extends LightningElement {
 
     handleConfirm() {
         let inputs = [...this.template.querySelectorAll('lightning-input')];
-        inputs.forEach(input => input.reportValidity());
         let isValid = inputs.every(input => input.checkValidity());
+        let selected = this.findSelectedSeat();
+        
+        inputs.forEach(input => input.reportValidity());
 
         if (!isValid) {
             return;
         }
 
-        let selected = this.findSelectedSeat();
         this.bookings.push({
             seatId: selected.id,
             seatNumber: selected.number,
@@ -159,12 +160,12 @@ export default class BusSeatBooking extends LightningElement {
 
     handleSeatClick(event) {
         let seatId = event.currentTarget.dataset.id;
+        let seat = null;
 
         if (!seatId) {
             return;
         }
 
-        let seat = null;
         this.seats.forEach(s => {
             if (!seat && s.id === seatId) {
                 seat = s;
