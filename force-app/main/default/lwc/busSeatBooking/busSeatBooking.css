@@ -19,7 +19,7 @@
     flex-direction: column;
     gap: 1rem;
     padding: 1.5rem;
-    max-width: 40rem;
+    max-width: 60rem;
     margin: 0 auto;
 }
 
@@ -144,9 +144,9 @@
 /* FOOTER */
 .booking-footer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 0.75rem;
+    justify-content: space-between;
     padding-top: 0.5rem;
 }
 
@@ -161,46 +161,90 @@
     font-weight: 600;
 }
 
-/* MODAL FOOTER */
-.slds-modal__footer {
+/* BOOKINGS TABLE */
+.bookings-table table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.bookings-table__col-seat {
+    width: 4.5rem;
+}
+
+.bookings-table__col-actions {
+    width: 5.5rem;
+}
+
+.bookings-table__value {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.bookings-table__actions {
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
 }
 
-/* BOOKINGS LIST */
-.bookings-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.booking-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 0.75rem;
-    border: 0.0625rem solid #e0e0e0;
-    border-radius: 0.25rem;
-}
-
-.booking-seat {
-    font-weight: 700;
-    font-size: 0.875rem;
-    min-width: 1.5rem;
+.bookings-table__empty-cell {
     text-align: center;
-}
-
-.booking-name {
-    font-size: 0.875rem;
-    overflow-wrap: break-word;
-    min-width: 0;
-    flex: 1;
 }
 
 .bookings-empty {
     font-size: 0.875rem;
-    text-align: center;
     padding: 0.75rem 0;
+    color: #555;
+}
+
+/* MOBILE */
+@media (max-width: 767.98px) {
+    .bookings-table .slds-max-medium-table_stacked-horizontal {
+        border: 0;
+    }
+
+    .bookings-table .slds-max-medium-table_stacked-horizontal tbody tr {
+        border-bottom: 0.0625rem solid #e0e0e0;
+    }
+
+    .bookings-table .slds-max-medium-table_stacked-horizontal tbody tr:last-child {
+        border-bottom: 0;
+    }
+
+    .bookings-table .slds-max-medium-table_stacked-horizontal tbody td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: auto;
+        border: 0;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .bookings-table .slds-max-medium-table_stacked-horizontal tbody td[data-label]::before {
+        display: block;
+        min-width: 6rem;
+        padding-right: 0.75rem;
+        text-align: left;
+    }
+
+    .bookings-table__value {
+        text-align: right;
+    }
+
+    .bookings-table__col-actions {
+        justify-content: flex-end;
+    }
+
+    .bookings-table__empty-cell {
+        justify-content: center;
+    }
+}
+
+/* MODAL FORM */
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 

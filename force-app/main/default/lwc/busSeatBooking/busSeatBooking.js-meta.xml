@@ -11,26 +11,29 @@
     </targets>
     <targetConfigs>
         <targetConfig targets="lightningCommunity__Default,lightning__AppPage,lightning__HomePage">
-            <property name="title" type="String" label="Title" default="Bus Seat Booking"/>
-            <property name="description" type="String" label="Description" default="Select a seat and fill in your details to complete the booking."/>
-            <property name="driverLabel" type="String" label="Driver Label" default="Driver"/>
-            <property name="legendFreeLabel" type="String" label="Legend Free Label" default="Free"/>
-            <property name="legendSelectedLabel" type="String" label="Legend Selected Label" default="Selected"/>
-            <property name="legendBookedLabel" type="String" label="Legend Booked Label" default="Booked"/>
-            <property name="seatAlreadyTakenLabel" type="String" label="Seat Already Taken Label" default="Seat already taken"/>
-            <property name="noSeatSelectedLabel" type="String" label="No Seat Selected Label" default="Please select a seat first"/>
-            <property name="bookingSuccessLabel" type="String" label="Booking Success Label" default="Seat booked successfully"/>
-            <property name="bookingsEmptyLabel" type="String" label="Bookings Empty Label" default="No bookings"/>
-            <property name="firstNameLabel" type="String" label="First Name Label" default="First name"/>
-            <property name="lastNameLabel" type="String" label="Last Name Label" default="Last name"/>
-            <property name="phoneLabel" type="String" label="Phone Label" default="Phone"/>
-            <property name="emailLabel" type="String" label="Email Label" default="Email"/>
-            <property name="cancelLabel" type="String" label="Cancel Label" default="Cancel"/>
-            <property name="confirmLabel" type="String" label="Confirm Label" default="Confirm"/>
-            <property name="freeCountLabel" type="String" label="Free Count Label" default="Free"/>
-            <property name="bookedCountLabel" type="String" label="Booked Count Label" default="Booked"/>
-            <property name="bookSeatLabel" type="String" label="Book Seat Button Label" default="Book seat"/>
-            <property name="modalTitle" type="String" label="Modal Title" default="Book a seat"/>
+            <property name="title" type="String" label="'Title' Label" default="Bus Seat Booking"/>
+            <property name="description" type="String" label="'Description' Label" default="Select a seat and fill in your details to complete the booking."/>
+            <property name="driverLabel" type="String" label="'Driver' Label" default="Driver"/>
+            <property name="legendFreeLabel" type="String" label="'Legend Free' Label" default="Free"/>
+            <property name="legendSelectedLabel" type="String" label="'Legend Selected' Label" default="Selected"/>
+            <property name="legendBookedLabel" type="String" label="'Legend Booked' Label" default="Booked"/>
+            <property name="seatAlreadyTakenLabel" type="String" label="'Seat Already Taken' Label (Toast)" default="Seat already taken"/>
+            <property name="noSeatSelectedLabel" type="String" label="'No Seat Selected' Label (Toast)" default="Please select a seat first"/>
+            <property name="bookingSuccessLabel" type="String" label="'Booking Success' Label (Toast)" default="Seat booked successfully"/>
+            <property name="bookingsEmptyLabel" type="String" label="'Bookings Empty' Label" default="No bookings"/>
+            <property name="seatNumberLabel" type="String" label="'Seat Number' Column Label" default="Seat"/>
+            <property name="nameLabel" type="String" label="'Name' Column Label" default="Name"/>
+            <property name="firstNameLabel" type="String" label="'First Name' Label" default="First name"/>
+            <property name="lastNameLabel" type="String" label="'Last Name' Label" default="Last name"/>
+            <property name="phoneLabel" type="String" label="'Phone' Label" default="Phone"/>
+            <property name="emailLabel" type="String" label="'Email' Label" default="Email"/>
+            <property name="cancelLabel" type="String" label="'Cancel' Button Label" default="Cancel"/>
+            <property name="confirmLabel" type="String" label="'Confirm' Button Label" default="Confirm"/>
+            <property name="invalidPhoneLabel" type="String" label="'Invalid Phone' Label" default="Enter a valid phone number"/>
+            <property name="freeCountLabel" type="String" label="'Free Count' Label" default="Free"/>
+            <property name="bookedCountLabel" type="String" label="'Booked Count' Label" default="Booked"/>
+            <property name="bookSeatLabel" type="String" label="'Book Seat' Button Label" default="Book seat"/>
+            <property name="modalTitle" type="String" label="'Modal Title' Label" default="Book a seat"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

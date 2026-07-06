@@ -1,13 +1,19 @@
 <template>
     <div class="bus-seat-booking">
+        <div lwc:dom="manual" class="custom-css-container"></div>
 
         <!-- HEADER -->
         <div class="booking-header">
             <template lwc:if={title}>
-                <div class="booking-title">{title}</div>
+                <div class="booking-title">
+                    {title}
+                </div>
             </template>
+
             <template lwc:if={description}>
-                <div class="booking-description">{description}</div>
+                <div class="booking-description">
+                    {description}
+                </div>
             </template>
         </div>
 
@@ -18,20 +24,42 @@
             <div class="bus-body">
                 <template lwc:if={driverLabel}>
                     <div class="driver-row">
-                        <div class="driver-label">{driverLabel}</div>
+                        <div class="driver-label">
+                            {driverLabel}
+                        </div>
                     </div>
                 </template>
 
                 <div class="seat-map">
                     <template for:each={seats} for:item="seat">
                         <template lwc:if={seat.isFree}>
-                            <div key={seat.id} class="seat seat--free" data-id={seat.id} onclick={handleSeatClick}>{seat.number}</div>
+                            <div
+                                key={seat.id}
+                                class="seat seat--free"
+                                data-id={seat.id}
+                                onclick={handleSeatClick}>
+                                {seat.number}
+                            </div>
                         </template>
+
                         <template lwc:elseif={seat.isSelected}>
-                            <div key={seat.id} class="seat seat--selected" data-id={seat.id} onclick={handleSeatClick}>{seat.number}</div>
+                            <div
+                                key={seat.id}
+                                class="seat seat--selected"
+                                data-id={seat.id}
+                                onclick={handleSeatClick}>
+                                {seat.number}
+                            </div>
                         </template>
+
                         <template lwc:elseif={seat.isBooked}>
-                            <div key={seat.id} class="seat seat--booked" data-id={seat.id} onclick={handleSeatClick}>{seat.number}</div>
+                            <div
+                                key={seat.id}
+                                class="seat seat--booked"
+                                data-id={seat.id}
+                                onclick={handleSeatClick}>
+                                {seat.number}
+                            </div>
                         </template>
                     </template>
                 </div>
@@ -42,19 +70,27 @@
                 <template lwc:if={legendFreeLabel}>
                     <div class="legend-item">
                         <div class="legend-box legend-box--free"></div>
-                        <div class="legend-label">{legendFreeLabel}</div>
+                        <div class="legend-label">
+                            {legendFreeLabel}
+                        </div>
                     </div>
                 </template>
+
                 <template lwc:if={legendSelectedLabel}>
                     <div class="legend-item">
                         <div class="legend-box legend-box--selected"></div>
-                        <div class="legend-label">{legendSelectedLabel}</div>
+                        <div class="legend-label">
+                            {legendSelectedLabel}
+                        </div>
                     </div>
                 </template>
+
                 <template lwc:if={legendBookedLabel}>
                     <div class="legend-item">
                         <div class="legend-box legend-box--booked"></div>
-                        <div class="legend-label">{legendBookedLabel}</div>
+                        <div class="legend-label">
+                            {legendBookedLabel}
+                        </div>
                     </div>
                 </template>
             </div>
@@ -65,112 +101,168 @@
         <div class="booking-footer">
             <div class="booking-counters">
                 <template lwc:if={freeCountLabel}>
-                    <div class="free-count">{freeCountLabel}: {freeCount}</div>
+                    <div class="free-count">
+                        {freeCountLabel}: {freeCount}
+                    </div>
                 </template>
+
                 <template lwc:if={bookedCountLabel}>
-                    <div class="booked-count">{bookedCountLabel}: {bookedCount}</div>
+                    <div class="booked-count">
+                        {bookedCountLabel}: {bookedCount}
+                    </div>
                 </template>
             </div>
+
             <template lwc:if={bookSeatLabel}>
-                <lightning-button label={bookSeatLabel} onclick={handleBookSeat}></lightning-button>
+                <lightning-button
+                    label={bookSeatLabel}
+                    variant="brand"
+                    onclick={handleBookSeat}
+                ></lightning-button>
             </template>
         </div>
 
-        <!-- BOOKINGS LIST -->
-        <template lwc:if={hasBookings}>
-            <div class="bookings-list">
-                <template for:each={bookings} for:item="booking">
-                    <div key={booking.seatId} class="booking-item">
-                        <div class="booking-seat">{booking.seatNumber}</div>
-                        <div class="booking-name">{booking.firstName} {booking.lastName}</div>
-                        <lightning-button-icon
-                            icon-name="utility:edit"
-                            data-id={booking.seatId}
-                            onclick={handleEditBooking}>
-                        </lightning-button-icon>
-                        <lightning-button-icon
-                            class="booking-remove"
-                            icon-name="utility:delete"
-                            data-id={booking.seatId}
-                            onclick={handleRemoveBooking}>
-                        </lightning-button-icon>
-                    </div>
-                </template>
-            </div>
-        </template>
-        <template lwc:else>
-            <div class="bookings-empty">{bookingsEmptyLabel}</div>
-        </template>
+        <!-- BOOKINGS TABLE -->
+        <div class="bookings-table">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout slds-max-medium-table_stacked-horizontal">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col" class="bookings-table__col-seat">
+                            <div class="slds-truncate" title={seatNumberLabel}>
+                                {seatNumberLabel}
+                            </div>
+                        </th>
+
+                        <th scope="col">
+                            <div class="slds-truncate" title={nameLabel}>
+                                {nameLabel}
+                            </div>
+                        </th>
+
+                        <th scope="col">
+                            <div class="slds-truncate" title={phoneLabel}>
+                                {phoneLabel}
+                            </div>
+                        </th>
+
+                        <th scope="col">
+                            <div class="slds-truncate" title={emailLabel}>
+                                {emailLabel}
+                            </div>
+                        </th>
+
+                        <th scope="col" class="bookings-table__col-actions"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template lwc:if={hasBookings}>
+                        <template for:each={bookings} for:item="booking">
+                            <tr key={booking.seatId}>
+                                <td data-label={seatNumberLabel}>
+                                    <div class="slds-truncate">
+                                        {booking.seatNumber}
+                                    </div>
+                                </td>
+
+                                <td data-label={nameLabel}>
+                                    <div class="bookings-table__value">
+                                        {booking.firstName} {booking.lastName}
+                                    </div>
+                                </td>
+
+                                <td data-label={phoneLabel}>
+                                    <div class="bookings-table__value">
+                                        {booking.phone}
+                                    </div>
+                                </td>
+
+                                <td data-label={emailLabel}>
+                                    <div class="bookings-table__value">
+                                        {booking.email}
+                                    </div>
+                                </td>
+
+                                <td class="bookings-table__col-actions">
+                                    <div class="bookings-table__actions">
+                                        <lightning-button-icon
+                                            icon-name="utility:edit"
+                                            variant="bare"
+                                            data-id={booking.seatId}
+                                            onclick={handleEditBooking}
+                                        ></lightning-button-icon>
+
+                                        <lightning-button-icon
+                                            icon-name="utility:delete"
+                                            variant="bare"
+                                            data-id={booking.seatId}
+                                            onclick={handleRemoveBooking}
+                                        ></lightning-button-icon>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+
+                    <template lwc:else>
+                        <tr>
+                            <td colspan="5" class="bookings-table__empty-cell">
+                                <div class="bookings-empty">
+                                    {bookingsEmptyLabel}
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
 
         <!-- MODAL -->
-        <template lwc:if={isModalOpen}>
-            <div class="slds-modal slds-fade-in-open">
-                <div class="slds-modal__container">
+        <c-modal onclose={handleModalClose} onconfirm={handleConfirm}>
+            <div slot="content">
+                <div class="booking-form">
 
-                    <!-- MODAL HEADER -->
-                    <div class="slds-modal__header">
-                        <lightning-button-icon
-                            class="slds-modal__close"
-                            icon-name="utility:close"
-                            variant="bare"
-                            onclick={handleModalClose}>
-                        </lightning-button-icon>
-                        <div class="slds-modal__title slds-hyphenate">{modalTitle}</div>
-                    </div>
+                    <lightning-input
+                        label={firstNameLabel}
+                        name="firstName"
+                        value={form.firstName}
+                        maxlength={maxLength.firstName}
+                        onchange={handleFormChange}
+                        required
+                    ></lightning-input>
 
-                    <!-- MODAL BODY -->
-                    <div class="slds-modal__content slds-p-around_medium">
-                        <lightning-input
-                            label={firstNameLabel}
-                            name="firstName"
-                            value={form.firstName}
-                            maxlength={maxLength.firstName}
-                            onchange={handleFormChange}
-                            required>
-                        </lightning-input>
-                        <lightning-input
-                            label={lastNameLabel}
-                            name="lastName"
-                            value={form.lastName}
-                            maxlength={maxLength.lastName}
-                            onchange={handleFormChange}
-                            required>
-                        </lightning-input>
-                        <lightning-input
-                            label={phoneLabel}
-                            name="phone"
-                            value={form.phone}
-                            maxlength={maxLength.phone}
-                            onchange={handleFormChange}
-                            required>
-                        </lightning-input>
-                        <lightning-input
-                            label={emailLabel}
-                            name="email"
-                            type="email"
-                            value={form.email}
-                            maxlength={maxLength.email}
-                            onchange={handleFormChange}
-                            required>
-                        </lightning-input>
-                    </div>
+                    <lightning-input
+                        label={lastNameLabel}
+                        name="lastName"
+                        value={form.lastName}
+                        maxlength={maxLength.lastName}
+                        onchange={handleFormChange}
+                        required
+                    ></lightning-input>
 
-                    <!-- MODAL FOOTER -->
-                    <div class="slds-modal__footer">
-                        <lightning-button
-                            label={cancelLabel}
-                            onclick={handleModalClose}>
-                        </lightning-button>
-                        <lightning-button
-                            label={confirmLabel}
-                            onclick={handleConfirm}>
-                        </lightning-button>
-                    </div>
+                    <lightning-input
+                        label={phoneLabel}
+                        name="phone"
+                        value={form.phone}
+                        maxlength={maxLength.phone}
+                        pattern={phonePattern}
+                        message-when-pattern-mismatch={invalidPhoneLabel}
+                        onchange={handleFormChange}
+                        required
+                    ></lightning-input>
+
+                    <lightning-input
+                        label={emailLabel}
+                        name="email"
+                        type="email"
+                        value={form.email}
+                        maxlength={maxLength.email}
+                        onchange={handleFormChange}
+                        required
+                    ></lightning-input>
 
                 </div>
             </div>
-            <div class="slds-backdrop slds-backdrop_open"></div>
-        </template>
+        </c-modal>
 
     </div>
 </template>

@@ -11,6 +11,7 @@ const MAX_LENGTHS = {
 const TOAST_VARIANT_ERROR = 'error';
 const TOAST_VARIANT_WARNING = 'warning';
 const TOAST_VARIANT_SUCCESS = 'success';
+const PHONE_REGEXP = /[+]?[0-9 \(\)\-]{7,20}/;
 
 export default class BusSeatBooking extends LightningElement {
 
@@ -25,6 +26,8 @@ export default class BusSeatBooking extends LightningElement {
     @api noSeatSelectedLabel = null;
     @api bookingSuccessLabel = null;
     @api bookingsEmptyLabel = null;
+    @api seatNumberLabel = null;
+    @api nameLabel = null;
     @api freeCountLabel = null;
     @api bookedCountLabel = null;
     @api bookSeatLabel = null;
@@ -35,11 +38,12 @@ export default class BusSeatBooking extends LightningElement {
     @api emailLabel = null;
     @api cancelLabel = null;
     @api confirmLabel = null;
+    @api invalidPhoneLabel = null;
 
+    @track isFirstRender = true;
     @track maxLength = MAX_LENGTHS;
     @track seats = [];
     @track bookings = [];
-    @track isModalOpen = false;
     @track editingBooking = null;
     @track form = {
         firstName: '',
@@ -50,20 +54,57 @@ export default class BusSeatBooking extends LightningElement {
 
     // GETTERS
     get freeCount() {
-        return this.seats.filter(s => s.isFree).length;
+        return this.seats.filter(item => item.isFree).length;
     }
 
     get bookedCount() {
-        return this.seats.filter(s => s.isBooked).length;
+        return this.seats.filter(item => item.isBooked).length;
     }
 
     get hasBookings() {
         return this.bookings.length > 0;
     }
 
+    get phonePattern() {
+        return PHONE_REGEXP.source;
+    }
+
     // LIFECYCLES
     connectedCallback() {
         this.initSeats();
+    }
+
+    renderedCallback() {
+        if (this.isFirstRender) {
+            this.isFirstRender = false;
+            this.addCustomCssStyles();
+        }
+    }
+
+    // INIT METHODS
+    addCustomCssStyles() {
+        let customCssContainer = this.template.querySelector('.custom-css-container');
+
+        if (!customCssContainer || customCssContainer.childElementCount > 0) {
+            return;
+        }
+
+        let style = document.createElement('style');
+
+        let customCssStyles = `
+            c-bus-seat-booking lightning-input input.slds-input {
+                min-height: 3rem;
+                border-color: #D7D9D9;
+            }
+
+            c-bus-seat-booking lightning-input input.slds-input:not(:disabled):hover,
+            c-bus-seat-booking lightning-input input.slds-input:not(:disabled):focus {
+                border-color: #0064B3;
+            }
+        `;
+
+        style.innerText = customCssStyles.replace(/ +(?= )|\n/g, ' ');
+        customCssContainer.appendChild(style);
     }
 
     // HANDLERS
@@ -75,7 +116,7 @@ export default class BusSeatBooking extends LightningElement {
             return;
         }
 
-        this.isModalOpen = true;
+        this.openBookingModal();
     }
 
     handleModalClose() {
@@ -88,14 +129,13 @@ export default class BusSeatBooking extends LightningElement {
         }
 
         this.resetForm();
-        this.isModalOpen = false;
     }
 
     handleConfirm() {
         let inputs = [...this.template.querySelectorAll('lightning-input')];
         let isValid = inputs.every(input => input.checkValidity());
         let selected = this.findSelectedSeat();
-        
+
         inputs.forEach(input => input.reportValidity());
 
         if (!isValid) {
@@ -114,7 +154,7 @@ export default class BusSeatBooking extends LightningElement {
         this.editingBooking = null;
         this.bookSelectedSeat();
         this.resetForm();
-        this.isModalOpen = false;
+        this.template.querySelector('c-modal').hide();
         Toast.show({ label: this.bookingSuccessLabel, variant: TOAST_VARIANT_SUCCESS }, this);
     }
 
@@ -126,25 +166,21 @@ export default class BusSeatBooking extends LightningElement {
         let seatId = event.currentTarget.dataset.id;
         let booking = null;
 
-        if (!seatId) {
-            return;
-        }
-
-        this.bookings.forEach(b => {
-            if (!booking && b.seatId === seatId) {
-                booking = b;
+        this.bookings.forEach(item => {
+            if (item.seatId === seatId) {
+                booking = item;
             }
         });
 
-        if (!booking) {
+        if (!seatId || !booking) {
             return;
         }
 
         this.editingBooking = booking;
         this.form = { firstName: booking.firstName, lastName: booking.lastName, phone: booking.phone, email: booking.email };
-        this.bookings = this.bookings.filter(b => b.seatId !== seatId);
+        this.bookings = this.bookings.filter(item => item.seatId !== seatId);
         this.selectSeat(seatId);
-        this.isModalOpen = true;
+        this.openBookingModal();
     }
 
     handleRemoveBooking(event) {
@@ -154,32 +190,21 @@ export default class BusSeatBooking extends LightningElement {
             return;
         }
 
-        this.bookings = this.bookings.filter(b => b.seatId !== seatId);
+        this.bookings = this.bookings.filter(item => item.seatId !== seatId);
         this.freeSeat(seatId);
     }
 
     handleSeatClick(event) {
         let seatId = event.currentTarget.dataset.id;
-        let seat = null;
+        let seat = this.findSeatById(seatId);
 
-        if (!seatId) {
-            return;
-        }
-
-        this.seats.forEach(s => {
-            if (!seat && s.id === seatId) {
-                seat = s;
-            }
-        });
-
-        if (!seat) {
+        if (!seatId || !seat) {
             return;
         }
 
         if (seat.isFree) {
             this.deselectCurrentSeat();
-            seat.isFree = false;
-            seat.isSelected = true;
+            this.setSeatSelected(seat);
         } else if (seat.isSelected) {
             this.setSeatFree(seat);
         } else if (seat.isBooked) {
@@ -188,6 +213,10 @@ export default class BusSeatBooking extends LightningElement {
     }
 
     // METHODS
+    openBookingModal() {
+        this.template.querySelector('c-modal').open({ title: this.modalTitle, closeLabel: this.cancelLabel, submitLabel: this.confirmLabel });
+    }
+
     initSeats() {
         let result = [];
 
@@ -210,10 +239,10 @@ export default class BusSeatBooking extends LightningElement {
 
     resetForm() {
         this.form = {
-             firstName: '',
-             lastName: '',
-             phone: '',
-             email: ''
+            firstName: '',
+            lastName: '',
+            phone: '',
+            email: ''
         };
     }
 
@@ -221,18 +250,12 @@ export default class BusSeatBooking extends LightningElement {
         let selected = this.findSelectedSeat();
 
         if (selected) {
-            selected.isSelected = false;
-            selected.isBooked = true;
+            this.setSeatBooked(selected);
         }
     }
 
     freeSeat(seatId) {
-        let seat = null;
-        this.seats.forEach(s => {
-            if (!seat && s.id === seatId) {
-                seat = s;
-            }
-        });
+        let seat = this.findSeatById(seatId);
 
         if (seat) {
             this.setSeatFree(seat);
@@ -249,42 +272,56 @@ export default class BusSeatBooking extends LightningElement {
 
     findSelectedSeat() {
         let selected = null;
-        this.seats.forEach(s => {
-            if (!selected && s.isSelected) {
-                selected = s;
+        this.seats.forEach(item => {
+            if (item.isSelected) {
+                selected = item;
             }
         });
         return selected;
     }
 
-    selectSeat(seatId) {
-        let done = false;
-        this.seats.forEach(s => {
-            if (!done && s.id === seatId) {
-                s.isFree = false;
-                s.isSelected = true;
-                s.isBooked = false;
-                done = true;
+    findSeatById(seatId) {
+        let result = null;
+        this.seats.forEach(item => {
+            if (item.id === seatId) {
+                result = item;
             }
         });
+        return result;
+    }
+
+    selectSeat(seatId) {
+        let seat = this.findSeatById(seatId);
+
+        if (seat) {
+            this.setSeatSelected(seat);
+        }
     }
 
     restoreBookedSeat(seatId) {
-        let done = false;
-        this.seats.forEach(s => {
-            if (!done && s.id === seatId) {
-                s.isFree = false;
-                s.isSelected = false;
-                s.isBooked = true;
-                done = true;
-            }
-        });
+        let seat = this.findSeatById(seatId);
+
+        if (seat) {
+            this.setSeatBooked(seat);
+        }
     }
 
     setSeatFree(seat) {
         seat.isFree = true;
         seat.isSelected = false;
         seat.isBooked = false;
+    }
+
+    setSeatSelected(seat) {
+        seat.isFree = false;
+        seat.isSelected = true;
+        seat.isBooked = false;
+    }
+
+    setSeatBooked(seat) {
+        seat.isFree = false;
+        seat.isSelected = false;
+        seat.isBooked = true;
     }
 
 }

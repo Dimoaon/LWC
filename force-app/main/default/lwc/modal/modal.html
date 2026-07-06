@@ -1,0 +1,68 @@
+<template>
+    <template lwc:if={show}>
+        <div class="modal__wrapper">
+            <div
+                class="modal__container"
+                role="dialog"
+                tabindex="-1"
+                aria-modal="true">
+
+
+                <!-- CLOSE BUTTON -->
+                <button
+                    class="modal__button-close"
+                    aria-label="Close"
+                    onclick={handleClose}>
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M4 4L20 20M20 4L4 20"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        ></path>
+                    </svg>
+                </button>
+
+                <!-- HEADER -->
+                <template lwc:if={title}>
+                    <div class="modal__header">
+                        <div class="modal__title">
+                            {title}
+                        </div>
+                    </div>
+                </template>
+
+                <!-- BODY -->
+                <div class="modal__body">
+                    <slot name="content"></slot>
+                </div>
+
+                <!-- FOOTER -->
+                <template lwc:if={showFooter}>
+                    <div class="modal__footer">
+                        <template lwc:if={closeLabel}>
+                            <button
+                                class="slds-button slds-button_outline-brand"
+                                onclick={handleClose}>
+                                {closeLabel}
+                            </button>
+                        </template>
+
+                        <template lwc:if={submitLabel}>
+                            <button
+                                class="slds-button slds-button_brand"
+                                onclick={handleSubmit}>
+                                {submitLabel}
+                            </button>
+                        </template>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+    </template>
+</template>
