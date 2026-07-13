@@ -9,4 +9,28 @@
         <target>lightning__AppPage</target>
         <target>lightning__HomePage</target>
     </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default,lightning__AppPage,lightning__HomePage">
+            <property name="pageTitle" type="String" label="'Page Title' Label" default="Choose a movie"/>
+            <property name="durationLabel" type="String" label="'Duration' Label" default="Duration:"/>
+            <property name="backToMoviesLabel" type="String" label="'Back To Movies' Button Label" default="Back to movies"/>
+            <property name="screenLabel" type="String" label="'Screen' Label" default="SCREEN"/>
+            <property name="seatAlreadyTakenLabel" type="String" label="'Seat Already Taken' Label (Toast)" default="Seat already taken"/>
+            <property name="legendFreeLabel" type="String" label="'Legend Free' Label" default="Free"/>
+            <property name="legendBookedLabel" type="String" label="'Legend Booked' Label" default="Booked"/>
+            <property name="freeCountLabel" type="String" label="'Free Count' Label" default="Free"/>
+            <property name="bookedCountLabel" type="String" label="'Booked Count' Label" default="Booked"/>
+            <property name="yourBookingsLabel" type="String" label="'Your Bookings' Label" default="Your bookings"/>
+            <property name="modalTitle" type="String" label="'Modal Title' Label" default="Book ticket"/>
+            <property name="modalMovieLabel" type="String" label="'Modal Movie' Label" default="Movie"/>
+            <property name="cancelLabel" type="String" label="'Cancel' Button Label" default="Cancel"/>
+            <property name="confirmLabel" type="String" label="'Confirm' Button Label" default="Confirm"/>
+            <property name="firstNameLabel" type="String" label="'First Name' Label" default="First name"/>
+            <property name="lastNameLabel" type="String" label="'Last Name' Label" default="Last name"/>
+            <property name="emailLabel" type="String" label="'Email' Label" default="Email"/>
+            <property name="seatLabel" type="String" label="'Seat' Label" default="Seat"/>
+            <property name="bookLabel" type="String" label="'Book' Button Label" default="Book seat"/>
+            <property name="bookingSuccessLabel" type="String" label="'Booking Success' Label (Toast)" default="Ticket booked successfully"/>
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>

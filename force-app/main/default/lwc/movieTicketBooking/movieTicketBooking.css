@@ -1,0 +1,338 @@
+/* VARIABLES */
+:host {
+    --seat-free-bg: #e8f5e9;
+    --seat-free-border: #4caf50;
+    --seat-free-text: #2e7d32;
+
+    --seat-booked-bg: #fdecea;
+    --seat-booked-border: #e08a86;
+    --seat-booked-text: #b23b34;
+}
+
+/* WRAPPER */
+.movie-ticket-booking {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    max-width: 60rem;
+    margin: 0 auto;
+}
+
+/* PAGE TITLE */
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    overflow-wrap: break-word;
+}
+
+/* MOVIE LIST */
+.movie-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 1023.98px) {
+    .movie-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .movie-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* MOVIE CARD */
+.movie-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 0.125rem solid #ccc;
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+.movie-card:hover {
+    border-color: #0064b3;
+}
+
+.movie-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    overflow-wrap: break-word;
+}
+
+.movie-showtime {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.movie-showtime-value {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.movie-duration {
+    font-size: 0.875rem;
+    color: #555;
+}
+
+/* MOVIE BAR */
+.movie-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border: 0.125rem solid #ccc;
+    border-radius: 1rem;
+}
+
+.movie-bar-info {
+    font-size: 1rem;
+    font-weight: 600;
+    overflow-wrap: break-word;
+}
+
+.movie-bar-info-button--no-label {
+    display: none;
+}
+
+@media (max-width: 767.98px) {
+    .movie-bar-info {
+        font-size: 0.875rem;
+    }
+
+    .movie-bar-info-button--with-label {
+        display: none;
+    }
+
+    .movie-bar-info-button--no-label {
+        display: inline-flex;
+    }
+}
+
+/* SEAT HALL */
+.seat-hall {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 0.125rem solid #ccc;
+    border-radius: 1rem;
+}
+
+.screen {
+    width: 80%;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    color: #555;
+    padding-top: 0.5rem;
+    border-top: 0.25rem solid #333;
+    border-radius: 50%;
+}
+
+/* SEAT MAP */
+.seat-map {
+    display: grid;
+    grid-template-columns: repeat(10, 2.5rem);
+    gap: 0.5rem;
+}
+
+/* SEATS */
+.seat {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 0.0625rem solid #ccc;
+}
+
+.seat--free {
+    background: var(--seat-free-bg);
+    border-color: var(--seat-free-border);
+    color: var(--seat-free-text);
+}
+
+.seat--booked {
+    background: var(--seat-booked-bg);
+    border-color: var(--seat-booked-border);
+    color: var(--seat-booked-text);
+    cursor: default;
+}
+
+/* MOBILE SEAT PICKER */
+.mobile-seat-picker {
+    display: none;
+}
+
+@media (max-width: 767.98px) {
+    .seat-hall {
+        display: none;
+    }
+
+    .mobile-seat-picker {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-seat-picker lightning-button {
+        display: contents;
+    }
+}
+
+/* LEGEND */
+.seat-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.legend-box {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0.25rem;
+    border: 0.0625rem solid transparent;
+}
+
+.legend-box--free {
+    background: var(--seat-free-bg);
+    border-color: var(--seat-free-border);
+}
+
+.legend-box--booked {
+    background: var(--seat-booked-bg);
+    border-color: var(--seat-booked-border);
+}
+
+/* COUNTERS */
+.seat-counters {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 0.75rem 1rem;
+    border: 0.125rem solid #ccc;
+    border-radius: 1rem;
+}
+
+.counter-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.counter-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.counter-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+@media (max-width: 767.98px) {
+    .counter-value {
+        font-size: 1rem;
+    }
+}
+
+.counter-divider {
+    width: 0.0625rem;
+    height: 1.5rem;
+    background: #ccc;
+}
+
+/* MODAL */
+.modal-movie-info {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 0.0625rem solid #e0e0e0;
+}
+
+.modal-movie-label {
+    font-size: 0.875rem;
+    color: #555;
+}
+
+.modal-movie-value {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* YOUR BOOKINGS */
+.booking-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border: 0.0625rem solid #e0e0e0;
+    border-radius: 0.5rem;
+}
+
+.booking-summary-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.booking-row {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-top: 0.0625rem solid #e0e0e0;
+}
+
+.booking-seat {
+    width: 5rem;
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.booking-guest {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.875rem;
+    overflow-wrap: break-word;
+}
+
+.booking-email {
+    min-width: 0;
+    font-size: 0.875rem;
+    color: #555;
+    overflow-wrap: break-word;
+}

@@ -1,15 +1,251 @@
 <template>
     <div class="movie-ticket-booking">
+        <div lwc:dom="manual" class="custom-css-container"></div>
 
         <!-- PAGE 2: SEAT MAP -->
         <template lwc:if={isMovieSelected}>
+
+            <!-- MOVIE BAR -->
+            <div class="movie-bar">
+                <div class="movie-bar-info">
+                    {selectedMovie.title} | {selectedMovie.showtime} | {selectedMovie.duration}
+                </div>
+
+                <lightning-button
+                    class="movie-bar-info-button--with-label"
+                    variant="base"
+                    icon-name="utility:back"
+                    label={backToMoviesLabel}
+                    onclick={handleBackToMovies}
+                ></lightning-button>
+
+                <lightning-button
+                    class="movie-bar-info-button--no-label"
+                    variant="base"
+                    icon-name="utility:back"
+                    onclick={handleBackToMovies}
+                ></lightning-button>
+            </div>
+
+            <!-- SEAT MAP -->
+            <div class="seat-hall">
+                <template lwc:if={screenLabel}>
+                    <div class="screen">
+                        {screenLabel}
+                    </div>
+                </template>
+
+                <div class="seat-map">
+                    <template for:each={seats} for:item="seat">
+                        <template lwc:if={seat.isFree}>
+                            <div
+                                key={seat.id}
+                                class="seat seat--free"
+                                data-id={seat.id}
+                                onclick={handleSeatClick}>
+                                {seat.number}
+                            </div>
+                        </template>
+
+                        <template lwc:else>
+                            <div
+                                key={seat.id}
+                                class="seat seat--booked"
+                                data-id={seat.id}
+                                onclick={handleSeatClick}>
+                                {seat.number}
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </div>
+
+            <!-- MOBILE SEAT PICKER -->
+            <div class="mobile-seat-picker">
+                <lightning-combobox
+                    label={seatLabel}
+                    name="seat"
+                    value={form.seat}
+                    options={seatOptions}
+                    onchange={handleFormChange}
+                ></lightning-combobox>
+
+                <lightning-button
+                    label={bookLabel}
+                    variant="brand"
+                    onclick={handleMobileBook}
+                ></lightning-button>
+            </div>
+
+            <!-- LEGEND -->
+            <div class="seat-legend">
+                <template lwc:if={legendFreeLabel}>
+                    <div class="legend-item">
+                        <div class="legend-box legend-box--free"></div>
+                        <div class="legend-label">
+                            {legendFreeLabel}
+                        </div>
+                    </div>
+                </template>
+
+                <template lwc:if={legendBookedLabel}>
+                    <div class="legend-item">
+                        <div class="legend-box legend-box--booked"></div>
+                        <div class="legend-label">
+                            {legendBookedLabel}
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- YOUR BOOKINGS -->
+            <template lwc:if={hasBookings}>
+                <div class="booking-summary">
+                    <div class="booking-summary-title">
+                        {yourBookingsLabel}
+                    </div>
+
+                    <template for:each={bookings} for:item="booking">
+                        <div key={booking.id} class="booking-row">
+                            <div class="booking-seat">
+                                {seatLabel} {booking.seatNumber}
+                            </div>
+
+                            <div class="booking-guest">
+                                {booking.guestName}
+                            </div>
+
+                            <div class="booking-email">
+                                {booking.email}
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- COUNTERS -->
+            <div class="seat-counters">
+                <div class="counter-item">
+                    <div class="legend-box legend-box--free"></div>
+                    <div class="counter-label">
+                        {freeCountLabel}
+                    </div>
+                    <div class="counter-value">
+                        {freeCount}
+                    </div>
+                </div>
+
+                <div class="counter-divider"></div>
+
+                <div class="counter-item">
+                    <div class="legend-box legend-box--booked"></div>
+                    <div class="counter-label">
+                        {bookedCountLabel}
+                    </div>
+                    <div class="counter-value">
+                        {bookedCount}
+                    </div>
+                </div>
+            </div>
 
         </template>
 
         <!-- PAGE 1: MOVIE LIST -->
         <template lwc:else>
 
+            <!-- PAGE TITLE -->
+            <template lwc:if={pageTitle}>
+                <div class="page-title">
+                    {pageTitle}
+                </div>
+            </template>
+
+            <!-- MOVIE LIST -->
+            <div class="movie-list">
+                <template for:each={movies} for:item="movie">
+                    <div
+                        key={movie.id}
+                        class="movie-card"
+                        data-id={movie.id}
+                        onclick={handleSelectMovie}>
+
+                        <div class="movie-title">
+                            {movie.title}
+                        </div>
+
+                        <div class="movie-showtime">
+                            <lightning-icon
+                                icon-name="utility:clock"
+                                size="x-small">
+                            </lightning-icon>
+                            
+                            <div class="movie-showtime-value">
+                                {movie.showtime}
+                            </div>
+                        </div>
+
+                        <div class="movie-duration">
+                            {durationLabel} {movie.duration}
+                        </div>
+                    </div>
+                </template>
+            </div>
+
         </template>
+
+        <!-- BOOKING MODAL -->
+        <c-modal onclose={handleModalClose} onconfirm={handleConfirm}>
+            <div slot="content">
+                <div class="modal-movie-info">
+                    <div class="modal-movie-label">
+                        {modalMovieLabel}
+                    </div>
+
+                    <div class="modal-movie-value">
+                        {modalMovieInfo}
+                    </div>
+                </div>
+
+                <div class="modal-form">
+                    <lightning-combobox
+                        label={seatLabel}
+                        name="seat"
+                        value={form.seat}
+                        options={seatOptions}
+                        onchange={handleFormChange}
+                        required
+                    ></lightning-combobox>
+                    
+                    <lightning-input
+                        label={firstNameLabel}
+                        name="firstName"
+                        value={form.firstName}
+                        maxlength={maxLength.firstName}
+                        onchange={handleFormChange}
+                        required
+                    ></lightning-input>
+
+                    <lightning-input
+                        label={lastNameLabel}
+                        name="lastName"
+                        value={form.lastName}
+                        maxlength={maxLength.lastName}
+                        onchange={handleFormChange}
+                        required
+                    ></lightning-input>
+
+                    <lightning-input
+                        label={emailLabel}
+                        name="email"
+                        type="email"
+                        value={form.email}
+                        maxlength={maxLength.email}
+                        onchange={handleFormChange}
+                        required
+                    ></lightning-input>
+                </div>
+            </div>
+        </c-modal>
 
     </div>
 </template>
