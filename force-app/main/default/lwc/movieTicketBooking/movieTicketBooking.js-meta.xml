@@ -21,6 +21,8 @@
             <property name="freeCountLabel" type="String" label="'Free Count' Label" default="Free"/>
             <property name="bookedCountLabel" type="String" label="'Booked Count' Label" default="Booked"/>
             <property name="yourBookingsLabel" type="String" label="'Your Bookings' Label" default="Your bookings"/>
+            <property name="editLabel" type="String" label="'Edit' Button Label" default="Edit"/>
+            <property name="deleteLabel" type="String" label="'Delete' Button Label" default="Delete"/>
             <property name="modalTitle" type="String" label="'Modal Title' Label" default="Book ticket"/>
             <property name="modalMovieLabel" type="String" label="'Modal Movie' Label" default="Movie"/>
             <property name="cancelLabel" type="String" label="'Cancel' Button Label" default="Cancel"/>
@@ -29,8 +31,10 @@
             <property name="lastNameLabel" type="String" label="'Last Name' Label" default="Last name"/>
             <property name="emailLabel" type="String" label="'Email' Label" default="Email"/>
             <property name="seatLabel" type="String" label="'Seat' Label" default="Seat"/>
+            <property name="seatPlaceholderLabel" type="String" label="'Seat Placeholder' Label" default="Select a seat"/>
             <property name="bookLabel" type="String" label="'Book' Button Label" default="Book seat"/>
             <property name="bookingSuccessLabel" type="String" label="'Booking Success' Label (Toast)" default="Ticket booked successfully"/>
+            <property name="bookingDeletedLabel" type="String" label="'Booking Deleted' Label (Toast)" default="Booking deleted"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

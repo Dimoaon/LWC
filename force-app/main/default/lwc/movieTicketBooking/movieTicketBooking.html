@@ -41,7 +41,7 @@
                             <div
                                 key={seat.id}
                                 class="seat seat--free"
-                                data-id={seat.id}
+                                data-id={seat.number}
                                 onclick={handleSeatClick}>
                                 {seat.number}
                             </div>
@@ -51,7 +51,7 @@
                             <div
                                 key={seat.id}
                                 class="seat seat--booked"
-                                data-id={seat.id}
+                                data-id={seat.number}
                                 onclick={handleSeatClick}>
                                 {seat.number}
                             </div>
@@ -62,13 +62,14 @@
 
             <!-- MOBILE SEAT PICKER -->
             <div class="mobile-seat-picker">
-                <lightning-combobox
+                <lightning-select
                     label={seatLabel}
                     name="seat"
                     value={form.seat}
                     options={seatOptions}
                     onchange={handleFormChange}
-                ></lightning-combobox>
+                    required
+                ></lightning-select>
 
                 <lightning-button
                     label={bookLabel}
@@ -105,21 +106,45 @@
                         {yourBookingsLabel}
                     </div>
 
-                    <template for:each={bookings} for:item="booking">
-                        <div key={booking.id} class="booking-row">
-                            <div class="booking-seat">
-                                {seatLabel} {booking.seatNumber}
-                            </div>
+                    <div class="booking-list">
+                        <template for:each={bookings} for:item="booking">
+                            <div key={booking.id} class="booking-card">
+                                <div class="booking-card__header">
+                                    <div class="booking-seat">
+                                        {seatLabel} {booking.seatNumber}
+                                    </div>
 
-                            <div class="booking-guest">
-                                {booking.guestName}
-                            </div>
+                                    <div class="booking-card__actions">
+                                        <lightning-button-icon
+                                            icon-name="utility:edit"
+                                            variant="bare"
+                                            alternative-text={editLabel}
+                                            title={editLabel}
+                                            data-id={booking.id}
+                                            onclick={handleEditBooking}
+                                        ></lightning-button-icon>
 
-                            <div class="booking-email">
-                                {booking.email}
+                                        <lightning-button-icon
+                                            icon-name="utility:delete"
+                                            variant="bare"
+                                            alternative-text={deleteLabel}
+                                            title={deleteLabel}
+                                            data-id={booking.id}
+                                            onclick={handleRemoveBooking}
+                                        ></lightning-button-icon>
+                                    </div>
+                                </div>
+
+                                <div class="booking-guest">
+                                    {booking.firstName} {booking.lastName}
+                                </div>
+
+                                <div class="booking-email">
+                                    {booking.email}
+                                </div>
                             </div>
-                        </div>
-                    </template>
+                        </template>
+                    </div>
                 </div>
             </template>
 
@@ -207,15 +232,15 @@
                 </div>
 
                 <div class="modal-form">
-                    <lightning-combobox
+                    <lightning-select
                         label={seatLabel}
                         name="seat"
                         value={form.seat}
                         options={seatOptions}
                         onchange={handleFormChange}
                         required
-                    ></lightning-combobox>
-                    
+                    ></lightning-select>
+
                     <lightning-input
                         label={firstNameLabel}
                         name="firstName"
