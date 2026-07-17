@@ -20,9 +20,11 @@ export default class MovieTicketBooking extends LightningElement {
 
     // VARIABLES
     @api pageTitle = null;
+    @api noMoviesLabel = null;
     @api durationLabel = null;
     @api backToMoviesLabel = null;
     @api screenLabel = null;
+    @api noSeatsLabel = null;
     @api seatAlreadyTakenLabel = null;
     @api legendFreeLabel = null;
     @api legendBookedLabel = null;
@@ -62,6 +64,10 @@ export default class MovieTicketBooking extends LightningElement {
         return this.selectedMovieId !== null;
     }
 
+    get hasMovies() {
+        return this.movies.length > 0;
+    }
+
     get selectedMovie() {
         let result = null;
         this.movies.forEach(movie => {
@@ -75,6 +81,10 @@ export default class MovieTicketBooking extends LightningElement {
     get seats() {
         let movie = this.selectedMovie;
         return movie ? movie.seats : [];
+    }
+
+    get hasSeats() {
+        return this.seats.length > 0;
     }
 
     get freeCount() {
@@ -105,13 +115,13 @@ export default class MovieTicketBooking extends LightningElement {
 
     get seatOptions() {
         let editing = this.isEditMode ? this.findBooking(this.editingBookingId) : null;
-        let editingSeatNumber = editing ? editing.seatNumber : null;
+        let editingSeatId = editing ? editing.seatId : null;
         let result = [{ label: this.seatPlaceholderLabel, value: '' }];
         this.seats.forEach(seat => {
-            if (seat.isFree || seat.number === editingSeatNumber) {
+            if (seat.isFree || seat.id === editingSeatId) {
                 result.push({
                     label: `Seat ${seat.number}`,
-                    value: String(seat.number)
+                    value: seat.id
                 });
             }
         });
@@ -196,8 +206,8 @@ export default class MovieTicketBooking extends LightningElement {
     }
 
     handleSeatClick(event) {
-        let seatNumber = Number(event.currentTarget.dataset.id);
-        let seat = this.findSeatByNumber(seatNumber);
+        let seatId = event.currentTarget.dataset.id;
+        let seat = this.findSeat(seatId);
 
         if (!seat) {
             return;
@@ -208,7 +218,7 @@ export default class MovieTicketBooking extends LightningElement {
             return;
         }
 
-        this.form.seat = String(seat.number);
+        this.form.seat = seat.id;
         this.openBookingModal();
     }
 
@@ -236,12 +246,10 @@ export default class MovieTicketBooking extends LightningElement {
             return;
         }
 
-        let number = Number(this.form.seat);
-
         if (this.isEditMode) {
-            this.updateBooking(number);
+            this.updateBooking(this.form.seat);
         } else {
-            this.bookSeat(number);
+            this.bookSeat(this.form.seat);
         }
 
         this.editingBookingId = null;
@@ -263,7 +271,7 @@ export default class MovieTicketBooking extends LightningElement {
             firstName: booking.firstName,
             lastName: booking.lastName,
             email: booking.email,
-            seat: String(booking.seatNumber)
+            seat: booking.seatId
         };
         this.openBookingModal();
     }
@@ -277,7 +285,7 @@ export default class MovieTicketBooking extends LightningElement {
         }
 
         this.removeBooking(bookingId);
-        this.setSeatFree(booking.seatNumber);
+        this.setSeatFree(booking.seatId);
         Toast.show({ label: this.bookingDeletedLabel, variant: TOAST_VARIANT_SUCCESS }, this);
     }
 
@@ -332,44 +340,56 @@ export default class MovieTicketBooking extends LightningElement {
         return isValid;
     }
 
-    bookSeat(number) {
-        this.setSeatBooked(number);
+    bookSeat(seatId) {
+        let seat = this.findSeat(seatId);
 
+        if (!seat) {
+            return;
+        }
+
+        this.setSeatBooked(seatId);
         this.selectedMovie.bookings.push({
             id: this.generateId(),
-            seatNumber: number,
+            seatId: seat.id,
+            seatNumber: seat.number,
             firstName: this.form.firstName,
             lastName: this.form.lastName,
             email: this.form.email
         });
     }
 
-    updateBooking(number) {
+    updateBooking(seatId) {
         let booking = this.findBooking(this.editingBookingId);
+        let seat = this.findSeat(seatId);
 
-        if (booking.seatNumber !== number) {
-            this.setSeatFree(booking.seatNumber);
-            this.setSeatBooked(number);
+        if (!booking || !seat) {
+            return;
         }
 
-        booking.seatNumber = number;
+        if (booking.seatId !== seatId) {
+            this.setSeatFree(booking.seatId);
+            this.setSeatBooked(seatId);
+        }
+
+        booking.seatId = seat.id;
+        booking.seatNumber = seat.number;
         booking.firstName = this.form.firstName;
         booking.lastName = this.form.lastName;
         booking.email = this.form.email;
     }
 
-    findSeatByNumber(number) {
+    findSeat(seatId) {
         let result = null;
         this.seats.forEach(seat => {
-            if (seat.number === number) {
+            if (seat.id === seatId) {
                 result = seat;
             }
         });
         return result;
     }
 
-    setSeatFree(number) {
-        let seat = this.findSeatByNumber(number);
+    setSeatFree(seatId) {
+        let seat = this.findSeat(seatId);
 
         if (seat) {
             seat.isFree = true;
@@ -377,8 +397,8 @@ export default class MovieTicketBooking extends LightningElement {
         }
     }
 
-    setSeatBooked(number) {
-        let seat = this.findSeatByNumber(number);
+    setSeatBooked(seatId) {
+        let seat = this.findSeat(seatId);
 
         if (seat) {
             seat.isFree = false;

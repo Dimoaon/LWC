@@ -12,9 +12,11 @@
     <targetConfigs>
         <targetConfig targets="lightningCommunity__Default,lightning__AppPage,lightning__HomePage">
             <property name="pageTitle" type="String" label="'Page Title' Label" default="Choose a movie"/>
+            <property name="noMoviesLabel" type="String" label="'No Movies' Label" default="No movies available"/>
             <property name="durationLabel" type="String" label="'Duration' Label" default="Duration:"/>
             <property name="backToMoviesLabel" type="String" label="'Back To Movies' Button Label" default="Back to movies"/>
             <property name="screenLabel" type="String" label="'Screen' Label" default="SCREEN"/>
+            <property name="noSeatsLabel" type="String" label="'No Seats' Label" default="No seats available"/>
             <property name="seatAlreadyTakenLabel" type="String" label="'Seat Already Taken' Label (Toast)" default="Seat already taken"/>
             <property name="legendFreeLabel" type="String" label="'Legend Free' Label" default="Free"/>
             <property name="legendBookedLabel" type="String" label="'Legend Booked' Label" default="Booked"/>

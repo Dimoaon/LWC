@@ -12,7 +12,7 @@
                 </div>
 
                 <lightning-button
-                    class="movie-bar-info-button--with-label"
+                    class="movie-bar-info-button_with-label"
                     variant="base"
                     icon-name="utility:back"
                     label={backToMoviesLabel}
@@ -20,7 +20,7 @@
                 ></lightning-button>
 
                 <lightning-button
-                    class="movie-bar-info-button--no-label"
+                    class="movie-bar-info-button_no-label"
                     variant="base"
                     icon-name="utility:back"
                     onclick={handleBackToMovies}
@@ -35,29 +35,37 @@
                     </div>
                 </template>
 
-                <div class="seat-map">
-                    <template for:each={seats} for:item="seat">
-                        <template lwc:if={seat.isFree}>
-                            <div
-                                key={seat.id}
-                                class="seat seat--free"
-                                data-id={seat.number}
-                                onclick={handleSeatClick}>
-                                {seat.number}
-                            </div>
-                        </template>
+                <template lwc:if={hasSeats}>
+                    <div class="seat-map">
+                        <template for:each={seats} for:item="seat">
+                            <template lwc:if={seat.isFree}>
+                                <div
+                                    key={seat.id}
+                                    class="seat seat_free"
+                                    data-id={seat.id}
+                                    onclick={handleSeatClick}>
+                                    {seat.number}
+                                </div>
+                            </template>
 
-                        <template lwc:else>
-                            <div
-                                key={seat.id}
-                                class="seat seat--booked"
-                                data-id={seat.number}
-                                onclick={handleSeatClick}>
-                                {seat.number}
-                            </div>
+                            <template lwc:else>
+                                <div
+                                    key={seat.id}
+                                    class="seat seat_booked"
+                                    data-id={seat.id}
+                                    onclick={handleSeatClick}>
+                                    {seat.number}
+                                </div>
+                            </template>
                         </template>
-                    </template>
-                </div>
+                    </div>
+                </template>
+
+                <template lwc:else>
+                    <div class="empty-state">
+                        {noSeatsLabel}
+                    </div>
+                </template>
             </div>
 
             <!-- MOBILE SEAT PICKER -->
@@ -82,7 +90,7 @@
             <div class="seat-legend">
                 <template lwc:if={legendFreeLabel}>
                     <div class="legend-item">
-                        <div class="legend-box legend-box--free"></div>
+                        <div class="legend-box legend-box_free"></div>
                         <div class="legend-label">
                             {legendFreeLabel}
                         </div>
@@ -91,7 +99,7 @@
 
                 <template lwc:if={legendBookedLabel}>
                     <div class="legend-item">
-                        <div class="legend-box legend-box--booked"></div>
+                        <div class="legend-box legend-box_booked"></div>
                         <div class="legend-label">
                             {legendBookedLabel}
                         </div>
@@ -151,7 +159,7 @@
             <!-- COUNTERS -->
             <div class="seat-counters">
                 <div class="counter-item">
-                    <div class="legend-box legend-box--free"></div>
+                    <div class="legend-box legend-box_free"></div>
                     <div class="counter-label">
                         {freeCountLabel}
                     </div>
@@ -163,7 +171,7 @@
                 <div class="counter-divider"></div>
 
                 <div class="counter-item">
-                    <div class="legend-box legend-box--booked"></div>
+                    <div class="legend-box legend-box_booked"></div>
                     <div class="counter-label">
                         {bookedCountLabel}
                     </div>
@@ -186,35 +194,43 @@
             </template>
 
             <!-- MOVIE LIST -->
-            <div class="movie-list">
-                <template for:each={movies} for:item="movie">
-                    <div
-                        key={movie.id}
-                        class="movie-card"
-                        data-id={movie.id}
-                        onclick={handleSelectMovie}>
+            <template lwc:if={hasMovies}>
+                <div class="movie-list">
+                    <template for:each={movies} for:item="movie">
+                        <div
+                            key={movie.id}
+                            class="movie-card"
+                            data-id={movie.id}
+                            onclick={handleSelectMovie}>
 
-                        <div class="movie-title">
-                            {movie.title}
-                        </div>
+                            <div class="movie-title">
+                                {movie.title}
+                            </div>
 
-                        <div class="movie-showtime">
-                            <lightning-icon
-                                icon-name="utility:clock"
-                                size="x-small">
-                            </lightning-icon>
-                            
-                            <div class="movie-showtime-value">
-                                {movie.showtime}
+                            <div class="movie-showtime">
+                                <lightning-icon
+                                    icon-name="utility:clock"
+                                    size="x-small">
+                                </lightning-icon>
+
+                                <div class="movie-showtime-value">
+                                    {movie.showtime}
+                                </div>
+                            </div>
+
+                            <div class="movie-duration">
+                                {durationLabel} {movie.duration}
                             </div>
                         </div>
+                    </template>
+                </div>
+            </template>
 
-                        <div class="movie-duration">
-                            {durationLabel} {movie.duration}
-                        </div>
-                    </div>
-                </template>
-            </div>
+            <template lwc:else>
+                <div class="empty-state">
+                    {noMoviesLabel}
+                </div>
+            </template>
 
         </template>
 

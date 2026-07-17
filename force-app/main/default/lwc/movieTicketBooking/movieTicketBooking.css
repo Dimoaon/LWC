@@ -27,6 +27,13 @@
     overflow-wrap: break-word;
 }
 
+/* EMPTY STATE */
+.empty-state {
+    padding: 1.5rem;
+    text-align: center;
+    color: #555;
+}
+
 /* MOVIE LIST */
 .movie-list {
     display: grid;
@@ -101,7 +108,7 @@
     overflow-wrap: break-word;
 }
 
-.movie-bar-info-button--no-label {
+.movie-bar-info-button_no-label {
     display: none;
 }
 
@@ -110,11 +117,11 @@
         font-size: 0.875rem;
     }
 
-    .movie-bar-info-button--with-label {
+    .movie-bar-info-button_with-label {
         display: none;
     }
 
-    .movie-bar-info-button--no-label {
+    .movie-bar-info-button_no-label {
         display: inline-flex;
     }
 }
@@ -163,13 +170,13 @@
     border: 0.0625rem solid #ccc;
 }
 
-.seat--free {
+.seat_free {
     background: var(--seat-free-bg);
     border-color: var(--seat-free-border);
     color: var(--seat-free-text);
 }
 
-.seat--booked {
+.seat_booked {
     background: var(--seat-booked-bg);
     border-color: var(--seat-booked-border);
     color: var(--seat-booked-text);
@@ -217,12 +224,12 @@
     border: 0.0625rem solid transparent;
 }
 
-.legend-box--free {
+.legend-box_free {
     background: var(--seat-free-bg);
     border-color: var(--seat-free-border);
 }
 
-.legend-box--booked {
+.legend-box_booked {
     background: var(--seat-booked-bg);
     border-color: var(--seat-booked-border);
 }
