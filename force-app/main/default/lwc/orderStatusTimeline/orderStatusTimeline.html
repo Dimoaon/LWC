@@ -1,0 +1,120 @@
+<template>
+    <div lwc:dom="manual" class="custom-css-container"></div>
+
+    <!-- CANCELLED BANNER -->
+    <template lwc:if={isCancelled}>
+        <div class="cancel-banner">
+            <lightning-icon
+                class="cancel-banner__icon"
+                icon-name="utility:error"
+                size="x-small"
+            ></lightning-icon>
+
+            <div class="cancel-banner__content">
+                <div class="cancel-banner__title">
+                    {cancelledTitle}
+                </div>
+
+                <div class="cancel-banner__message">
+                    <div class="cancel-banner__text">
+                        {cancelledMessage}
+                    </div>
+
+                    <lightning-formatted-date-time
+                        value={cancelledDate}
+                        year="numeric"
+                        month="short"
+                        day="numeric"
+                        hour="numeric"
+                        minute="2-digit"
+                    ></lightning-formatted-date-time>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template lwc:else>
+        <div class="timeline">
+
+            <!-- PLACED -->
+            <div class={placedClass}>
+                <div class="timeline__marker">
+                    <lightning-icon
+                        icon-name="utility:check"
+                        size="x-small"
+                    ></lightning-icon>
+                </div>
+
+                <div class="timeline__label">
+                    {placedLabel}
+                </div>
+
+                <div class="timeline__sub">
+                    <lightning-formatted-date-time
+                        value={placedDate}
+                        year="numeric"
+                        month="short"
+                        day="numeric"
+                        hour="numeric"
+                        minute="2-digit"
+                    ></lightning-formatted-date-time>
+                </div>
+            </div>
+
+            <!-- PROCESSING -->
+            <div class={processingClass}>
+                <div class="timeline__marker">
+                    <lightning-icon
+                        icon-name="utility:shopping_bag"
+                        size="x-small"
+                    ></lightning-icon>
+                </div>
+
+                <div class="timeline__label">
+                    {processingLabel}
+                </div>
+
+                <div class="timeline__sub">
+                    {processingSubLabel}
+                </div>
+            </div>
+
+            <!-- SHIPPED -->
+            <div class={shippedClass}>
+                <div class="timeline__marker">
+                    <lightning-icon
+                        icon-name="utility:truck"
+                        size="x-small"
+                    ></lightning-icon>
+                </div>
+
+                <div class="timeline__label">
+                    {shippedLabel}
+                </div>
+
+                <div class="timeline__sub">
+                    {shippedSubLabel}
+                </div>
+            </div>
+
+            <!-- DELIVERED -->
+            <div class={deliveredClass}>
+                <div class="timeline__marker">
+                    <lightning-icon
+                        icon-name="utility:package"
+                        size="x-small"
+                    ></lightning-icon>
+                </div>
+
+                <div class="timeline__label">
+                    {deliveredLabel}
+                </div>
+
+                <div class="timeline__sub">
+                    {deliveredSubLabel}
+                </div>
+            </div>
+
+        </div>
+    </template>
+</template>

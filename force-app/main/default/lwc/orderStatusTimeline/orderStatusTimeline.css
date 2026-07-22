@@ -1,0 +1,111 @@
+/* VARIABLES */
+:host {
+    --color-accent: #1F4D3D;
+    --color-muted: #6B7280;
+    --color-border: #E5E7EB;
+    --color-cancel-bg: #FEF2F2;
+    --color-cancel-border: #FECACA;
+    --color-cancel-text: #991B1B;
+
+    --marker-size: 2.5rem;
+    --line-height: 0.25rem;
+}
+
+/* CANCEL BANNER */
+.cancel-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 0.0625rem solid var(--color-cancel-border);
+    border-radius: 0.75rem;
+    background: var(--color-cancel-bg);
+    color: var(--color-cancel-text);
+}
+
+.cancel-banner__title {
+    font-weight: 600;
+}
+
+.cancel-banner__message {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.125rem;
+    font-size: 0.875rem;
+}
+
+/* TIMELINE */
+.timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.timeline__step {
+    position: relative;
+    text-align: center;
+}
+
+/* CONNECTING LINE */
+.timeline__step:not(:last-child)::after {
+    position: absolute;
+    top: calc(var(--marker-size) / 2 - var(--line-height) / 2);
+    left: 50%;
+    width: 100%;
+    height: var(--line-height);
+    background: var(--color-border);
+    content: '';
+}
+
+.timeline__step_completed:not(:last-child)::after {
+    background: var(--color-accent);
+}
+
+.timeline__step_current:not(:last-child)::after {
+    background: linear-gradient(to right, var(--color-accent) 60%, var(--color-border) 60%);
+}
+
+/* MARKER */
+.timeline__marker {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--marker-size);
+    height: var(--marker-size);
+    margin: 0 auto;
+    border: calc(var(--line-height) / 2) solid var(--color-border);
+    border-radius: 50%;
+    background: #FFFFFF;
+}
+
+.timeline__step_completed .timeline__marker,
+.timeline__step_current .timeline__marker {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+}
+
+.timeline__step_current .timeline__marker {
+    box-shadow: 0 0 0 0.25rem #FFFFFF;
+}
+
+/* LABELS */
+.timeline__label {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+}
+
+.timeline__step_current .timeline__label {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.timeline__sub {
+    margin-top: 0.125rem;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+}
+
+.timeline__step_current .timeline__sub {
+    color: var(--color-accent);
+}

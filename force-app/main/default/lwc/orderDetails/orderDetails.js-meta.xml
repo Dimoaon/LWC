@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Order Details</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default,lightning__AppPage,lightning__HomePage">
+            <property name="loadingLabel" type="String" label="'Loading' Label" default="Loading order..."/>
+            <property name="backToOrdersLabel" type="String" label="'Back To Orders' Button Label" default="Back to orders"/>
+            <property name="orderLabel" type="String" label="'Order' Label" default="Order"/>
+            <property name="placedOnLabel" type="String" label="'Placed On' Label" default="Placed on"/>
+            <property name="placedStepLabel" type="String" label="'Placed Step' Label" default="Placed"/>
+            <property name="processingStepLabel" type="String" label="'Processing Step' Label" default="Processing"/>
+            <property name="shippedStepLabel" type="String" label="'Shipped Step' Label" default="Shipped"/>
+            <property name="deliveredStepLabel" type="String" label="'Delivered Step' Label" default="Delivered"/>
+            <property name="inProgressLabel" type="String" label="'In Progress' Label" default="In progress"/>
+            <property name="pendingLabel" type="String" label="'Pending' Label" default="Pending"/>
+            <property name="cancelledTitle" type="String" label="'Cancelled Title' Label" default="Order cancelled"/>
+            <property name="cancelledMessage" type="String" label="'Cancelled Message' Label" default="This order was cancelled on"/>
+            <property name="orderItemsTitle" type="String" label="'Order Items' Label" default="Order items"/>
+            <property name="skuLabel" type="String" label="'SKU' Label" default="SKU:"/>
+            <property name="quantityLabel" type="String" label="'Quantity' Column Label" default="Qty"/>
+            <property name="priceLabel" type="String" label="'Price' Column Label" default="Price"/>
+            <property name="downloadInvoiceLabel" type="String" label="'Download Invoice' Button Label" default="Download invoice"/>
+            <property name="demoVariant" type="String" label="'Demo Variant' Label" datasource="processing,cancelled" default="processing"/>
+            <property name="simulateLoading" type="Boolean" label="'Simulate Loading' Toggle" default="true"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

@@ -1,0 +1,94 @@
+<template>
+    <div class="order-details">
+        <div lwc:dom="manual" class="custom-css-container"></div>
+
+        <div class="order-card">
+
+            <!-- SPINNER -->
+            <template lwc:if={isLoading}>
+                <lightning-spinner
+                    alternative-text={loadingLabel}
+                    size="medium"
+                ></lightning-spinner>
+            </template>
+
+            <template lwc:else>
+
+                <!-- HEADER -->
+                <div class="order__header">
+                    <lightning-button
+                        variant="base"
+                        icon-name="utility:back"
+                        label={backToOrdersLabel}
+                    ></lightning-button>
+
+                    <div class="order__title">
+                        {orderTitle}
+                    </div>
+
+                    <div class="order__placed">
+                        <div class="order__placed-label">
+                            {placedOnLabel}
+                        </div>
+
+                        <lightning-formatted-date-time
+                            value={placedDate}
+                            year="numeric"
+                            month="short"
+                            day="numeric"
+                            hour="numeric"
+                            minute="2-digit"
+                        ></lightning-formatted-date-time>
+                    </div>
+                </div>
+
+                <!-- STATUS TIMELINE -->
+                <c-order-status-timeline
+                    class="order__timeline"
+                    status={status}
+                    placed-date={placedDate}
+                    placed-label={placedStepLabel}
+                    processing-label={processingStepLabel}
+                    shipped-label={shippedStepLabel}
+                    delivered-label={deliveredStepLabel}
+                    in-progress-label={inProgressLabel}
+                    pending-label={pendingLabel}
+                    cancelled-date={cancelledDate}
+                    cancelled-title={cancelledTitle}
+                    cancelled-message={cancelledMessage}
+                ></c-order-status-timeline>
+
+                <!-- ITEMS -->
+                <div class="order__items">
+                    <div class="order__items-title">
+                        {orderItemsTitle}
+                    </div>
+
+                    <template for:each={lineItems} for:item="lineItem">
+                        <c-order-line-item-card
+                            key={lineItem.id}
+                            name={lineItem.name}
+                            sku={lineItem.sku}
+                            quantity={lineItem.quantity}
+                            line-total={lineItem.lineTotal}
+                            currency-iso-code={currencyIsoCode}
+                            sku-label={skuLabel}
+                            quantity-label={quantityLabel}
+                            price-label={priceLabel}
+                        ></c-order-line-item-card>
+                    </template>
+
+                    <div class="order__invoice">
+                        <lightning-button
+                            variant="neutral"
+                            icon-name="utility:file"
+                            label={downloadInvoiceLabel}
+                        ></lightning-button>
+                    </div>
+                </div>
+
+            </template>
+
+        </div>
+    </div>
+</template>

@@ -1,0 +1,59 @@
+<template>
+    <div class="line-item">
+
+        <!-- IMAGE PLACEHOLDER -->
+        <div class="line-item__image">
+            <svg
+                class="line-item__image-icon"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"></path>
+            </svg>
+        </div>
+
+        <!-- INFO -->
+        <div class="line-item__info">
+            <div class="line-item__name">
+                {name}
+            </div>
+
+            <div class="line-item__sku">
+                <div class="line-item__sku-label">
+                    {skuLabel}
+                </div>
+
+                <div class="line-item__sku-value">
+                    {sku}
+                </div>
+            </div>
+        </div>
+
+        <!-- QUANTITY -->
+        <div class="line-item__quantity">
+            <div class="line-item__quantity-label">
+                {quantityLabel}
+            </div>
+
+            <div class="line-item__quantity-value">
+                {quantity}
+            </div>
+        </div>
+
+        <!-- PRICE -->
+        <div class="line-item__price">
+            <div class="line-item__price-label">
+                {priceLabel}
+            </div>
+
+            <div class="line-item__price-value">
+                <lightning-formatted-number
+                    value={lineTotal}
+                    format-style="currency"
+                    currency-code={currencyIsoCode}
+                ></lightning-formatted-number>
+            </div>
+        </div>
+
+    </div>
+</template>

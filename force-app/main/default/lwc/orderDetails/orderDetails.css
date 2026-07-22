@@ -1,0 +1,68 @@
+:host {
+    --color-bg: #f4f1ea;
+    --color-accent: #1f4d3d;
+    --color-muted: #6b7280;
+    --color-border: #e5e7eb;
+}
+
+.order-details {
+    display: block;
+    padding: 2rem;
+    background: var(--color-bg);
+    color: #1f2937;
+}
+
+/* CARD */
+.order-card {
+    position: relative;
+    max-width: 64rem;
+    min-height: 12rem;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 1.25rem;
+    box-shadow: 0 0.5rem 2rem rgba(31, 77, 61, 0.08);
+}
+
+/* HEADER */
+.order__header {
+    margin-bottom: 1.5rem;
+}
+
+.order__title {
+    margin-top: 0.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* ITEMS */
+.order__items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 0.0625rem solid var(--color-border);
+}
+
+.order__items-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.order__invoice {
+    margin-top: 0.75rem;
+}
+
+.order__timeline {
+    display: block;
+    margin-top: 2rem;
+}
+
+.order__placed {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+    color: var(--color-muted);
+    font-size: 1rem;
+}
