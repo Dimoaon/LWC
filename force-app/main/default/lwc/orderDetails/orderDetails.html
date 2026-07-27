@@ -13,82 +13,171 @@
             </template>
 
             <template lwc:else>
+                <div class="order__body">
 
-                <!-- HEADER -->
-                <div class="order__header">
-                    <lightning-button
-                        variant="base"
-                        icon-name="utility:back"
-                        label={backToOrdersLabel}
-                    ></lightning-button>
+                    <div class="order__main">
 
-                    <div class="order__title">
-                        {orderTitle}
-                    </div>
+                        <!-- HEADER -->
+                        <div class="order__header">
+                            <lightning-button
+                                variant="base"
+                                icon-name="utility:back"
+                                label={backToOrdersLabel}
+                            ></lightning-button>
 
-                    <div class="order__placed">
-                        <div class="order__placed-label">
-                            {placedOnLabel}
+                            <div class="order__title">
+                                {orderTitle}
+                            </div>
+
+                            <div class="order__placed">
+                                <div class="order__placed-label">
+                                    {placedOnLabel}
+                                </div>
+
+                                <lightning-formatted-date-time
+                                    value={placedDate}
+                                    year="numeric"
+                                    month="short"
+                                    day="numeric"
+                                    hour="numeric"
+                                    minute="2-digit"
+                                ></lightning-formatted-date-time>
+                            </div>
                         </div>
 
-                        <lightning-formatted-date-time
-                            value={placedDate}
-                            year="numeric"
-                            month="short"
-                            day="numeric"
-                            hour="numeric"
-                            minute="2-digit"
-                        ></lightning-formatted-date-time>
+                        <!-- STATUS TIMELINE -->
+                        <c-order-status-timeline
+                            class="order__timeline"
+                            status={status}
+                            placed-date={placedDate}
+                            placed-label={placedStepLabel}
+                            processing-label={processingStepLabel}
+                            shipped-label={shippedStepLabel}
+                            delivered-label={deliveredStepLabel}
+                            in-progress-label={inProgressLabel}
+                            pending-label={pendingLabel}
+                            cancelled-date={cancelledDate}
+                            cancelled-title={cancelledTitle}
+                            cancelled-message={cancelledMessage}
+                        ></c-order-status-timeline>
+
+                        <!-- ITEMS -->
+                        <div class="order__items">
+                            <div class="order__items-title">
+                                {orderItemsTitle}
+                            </div>
+
+                            <template for:each={lineItems} for:item="lineItem">
+                                <c-order-line-item-card
+                                    key={lineItem.id}
+                                    name={lineItem.name}
+                                    sku={lineItem.sku}
+                                    quantity={lineItem.quantity}
+                                    line-total={lineItem.lineTotal}
+                                    currency-iso-code={currencyIsoCode}
+                                    sku-label={skuLabel}
+                                    quantity-label={quantityLabel}
+                                    price-label={priceLabel}
+                                ></c-order-line-item-card>
+                            </template>
+
+                            <div class="order__invoice">
+                                <lightning-button
+                                    variant="neutral"
+                                    icon-name="utility:file"
+                                    label={downloadInvoiceLabel}
+                                ></lightning-button>
+                            </div>
+                        </div>
+
                     </div>
+
+                    <!-- SUMMARY -->
+                    <c-order-summary-panel
+                        class="order__summary"
+                        oneditaddress={handleEditAddress}
+                        subtotal={subtotal}
+                        shipping={shipping}
+                        tax={tax}
+                        tax-rate={taxRate}
+                        total={total}
+                        currency-iso-code={currencyIsoCode}
+                        summary-title={orderSummaryTitle}
+                        subtotal-label={subtotalLabel}
+                        shipping-label={shippingLabel}
+                        tax-label={taxLabel}
+                        total-label={totalLabel}
+                        address={address}
+                        shipping-address-label={shippingAddressLabel}
+                        edit-label={editLabel}
+                        payment={payment}
+                        payment-brand={paymentBrand}
+                        card-text={cardText}
+                        expires-text={expiresText}
+                        paid-date={paidDate}
+                        payment-method-label={paymentMethodLabel}
+                        paid-label={paidLabel}
+                        view-payment-details-label={viewPaymentDetailsLabel}
+                        paid-in-full-label={paidInFullLabel}
+                    ></c-order-summary-panel>
+
                 </div>
-
-                <!-- STATUS TIMELINE -->
-                <c-order-status-timeline
-                    class="order__timeline"
-                    status={status}
-                    placed-date={placedDate}
-                    placed-label={placedStepLabel}
-                    processing-label={processingStepLabel}
-                    shipped-label={shippedStepLabel}
-                    delivered-label={deliveredStepLabel}
-                    in-progress-label={inProgressLabel}
-                    pending-label={pendingLabel}
-                    cancelled-date={cancelledDate}
-                    cancelled-title={cancelledTitle}
-                    cancelled-message={cancelledMessage}
-                ></c-order-status-timeline>
-
-                <!-- ITEMS -->
-                <div class="order__items">
-                    <div class="order__items-title">
-                        {orderItemsTitle}
-                    </div>
-
-                    <template for:each={lineItems} for:item="lineItem">
-                        <c-order-line-item-card
-                            key={lineItem.id}
-                            name={lineItem.name}
-                            sku={lineItem.sku}
-                            quantity={lineItem.quantity}
-                            line-total={lineItem.lineTotal}
-                            currency-iso-code={currencyIsoCode}
-                            sku-label={skuLabel}
-                            quantity-label={quantityLabel}
-                            price-label={priceLabel}
-                        ></c-order-line-item-card>
-                    </template>
-
-                    <div class="order__invoice">
-                        <lightning-button
-                            variant="neutral"
-                            icon-name="utility:file"
-                            label={downloadInvoiceLabel}
-                        ></lightning-button>
-                    </div>
-                </div>
-
             </template>
 
         </div>
+
+        <!-- EDIT ADDRESS MODAL -->
+        <c-modal onclose={handleModalClose} onconfirm={handleSaveAddress}>
+            <div slot="content">
+                <div class="address-form">
+                    <lightning-input
+                        label={addressNameLabel}
+                        name="name"
+                        value={addressForm.name}
+                        maxlength={maxLength.name}
+                        required
+                        onchange={handleFormChange}
+                    ></lightning-input>
+
+                    <lightning-input
+                        label={addressStreetLabel}
+                        name="street"
+                        value={addressForm.street}
+                        maxlength={maxLength.street}
+                        required
+                        onchange={handleFormChange}
+                    ></lightning-input>
+
+                    <lightning-input
+                        label={addressCityLabel}
+                        name="city"
+                        value={addressForm.city}
+                        maxlength={maxLength.city}
+                        required
+                        onchange={handleFormChange}
+                    ></lightning-input>
+
+                    <lightning-input
+                        label={addressCountryLabel}
+                        name="country"
+                        value={addressForm.country}
+                        maxlength={maxLength.country}
+                        required
+                        onchange={handleFormChange}
+                    ></lightning-input>
+
+                    <lightning-input
+                        label={addressPhoneLabel}
+                        name="phone"
+                        value={addressForm.phone}
+                        maxlength={maxLength.phone}
+                        pattern={phonePattern}
+                        message-when-pattern-mismatch={phoneValidationMessage}
+                        required
+                        onchange={handleFormChange}
+                    ></lightning-input>
+                </div>
+            </div>
+        </c-modal>
     </div>
 </template>

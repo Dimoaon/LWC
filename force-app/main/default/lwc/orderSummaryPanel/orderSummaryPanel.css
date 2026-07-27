@@ -1,0 +1,166 @@
+/* VARIABLES */
+:host {
+    --color-accent: #1F4D3D;
+    --color-secondary: #D97757;
+    --color-muted: #6B7280;
+    --color-border: #E5E7EB;
+}
+
+/* PANEL */
+.summary {
+    padding: 1.5rem;
+    border: 0.0625rem solid var(--color-border);
+    border-radius: 0.75rem;
+    box-shadow: 0 0.125rem 0.5rem rgba(31, 77, 61, 0.06);
+}
+
+.summary__title {
+    margin-bottom: 1.25rem;
+    color: var(--color-accent);
+    font-size: 1.375rem;
+    font-weight: 600;
+}
+
+/* TOTALS */
+.summary__totals {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 0.0625rem solid var(--color-border);
+}
+
+.summary__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.summary__row-label {
+    display: flex;
+    gap: 0.25rem;
+    color: var(--color-muted);
+}
+
+/* TOTAL */
+.summary__total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-bottom: 0.0625rem solid var(--color-border);
+}
+
+.summary__total-label {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.summary__total-value {
+    color: var(--color-secondary);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* SHIPPING ADDRESS */
+.summary__address {
+    padding: 1.25rem 0;
+    border-bottom: 0.0625rem solid var(--color-border);
+}
+
+.summary__section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.summary__section-title {
+    color: var(--color-accent);
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.summary__action {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--color-secondary);
+    cursor: pointer;
+}
+
+.summary__action-label {
+    font-size: 0.875rem;
+}
+
+.summary__address-line {
+    margin-top: 0.25rem;
+}
+
+/* PAYMENT METHOD */
+.summary__payment {
+    padding-top: 1.25rem;
+}
+
+.summary__card {
+    margin-top: 0.75rem;
+    border: 0.0625rem solid var(--color-border);
+    border-radius: 0.5rem;
+}
+
+.summary__card-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-bottom: 0.0625rem solid var(--color-border);
+}
+
+.summary__card-brand {
+    display: flex;
+    align-items: center;
+}
+
+.summary__card-logo {
+    width: 3.25rem;
+    height: 2.25rem;
+}
+
+.summary__card-info {
+    min-width: 0;
+}
+
+.summary__card-expires {
+    margin-top: 0.125rem;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+}
+
+.summary__card-badge {
+    padding: 0.125rem 0.625rem;
+    border-radius: 0.75rem;
+    background: #e8f3ee;
+    color: var(--color-accent);
+    font-size: 0.875rem;
+}
+
+.summary__card-link {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.75rem;
+    color: var(--color-secondary);
+    cursor: pointer;
+}
+
+.summary__paid-note {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 1rem;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+}

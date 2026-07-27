@@ -28,6 +28,29 @@
             <property name="quantityLabel" type="String" label="'Quantity' Column Label" default="Qty"/>
             <property name="priceLabel" type="String" label="'Price' Column Label" default="Price"/>
             <property name="downloadInvoiceLabel" type="String" label="'Download Invoice' Button Label" default="Download invoice"/>
+            <property name="orderSummaryTitle" type="String" label="'Order Summary' Label" default="Order summary"/>
+            <property name="subtotalLabel" type="String" label="'Subtotal' Label" default="Subtotal"/>
+            <property name="shippingLabel" type="String" label="'Shipping' Label" default="Shipping"/>
+            <property name="taxLabel" type="String" label="'Tax' Label" default="Tax"/>
+            <property name="totalLabel" type="String" label="'Total' Label" default="Total"/>
+            <property name="shippingAddressLabel" type="String" label="'Shipping Address' Label" default="Shipping address"/>
+            <property name="editLabel" type="String" label="'Edit' Button Label" default="Edit"/>
+            <property name="editAddressTitle" type="String" label="'Edit Address' Modal Title" default="Edit shipping address"/>
+            <property name="addressNameLabel" type="String" label="'Address Name' Label" default="Name"/>
+            <property name="addressStreetLabel" type="String" label="'Address Street' Label" default="Street"/>
+            <property name="addressCityLabel" type="String" label="'Address City' Label" default="City"/>
+            <property name="addressCountryLabel" type="String" label="'Address Country' Label" default="Country"/>
+            <property name="addressPhoneLabel" type="String" label="'Address Phone' Label" default="Phone"/>
+            <property name="saveLabel" type="String" label="'Save' Button Label" default="Save"/>
+            <property name="cancelLabel" type="String" label="'Cancel' Button Label" default="Cancel"/>
+            <property name="phoneValidationMessage" type="String" label="'Phone Validation' Message" default="Phone can contain only +, spaces, -, (), and digits."/>
+            <property name="addressSavedMessage" type="String" label="'Address Saved' Message" default="Shipping address updated"/>
+            <property name="paymentMethodLabel" type="String" label="'Payment Method' Label" default="Payment method"/>
+            <property name="paidLabel" type="String" label="'Paid' Label" default="Paid"/>
+            <property name="viewPaymentDetailsLabel" type="String" label="'View Payment Details' Button Label" default="View payment details"/>
+            <property name="paidInFullLabel" type="String" label="'Paid In Full' Label" default="This order was paid in full on"/>
+            <property name="cardEndingLabel" type="String" label="'Card Ending' Label" default="ending in"/>
+            <property name="expiresPrefixLabel" type="String" label="'Expires' Label" default="Expires"/>
             <property name="demoVariant" type="String" label="'Demo Variant' Label" datasource="processing,cancelled" default="processing"/>
             <property name="simulateLoading" type="Boolean" label="'Simulate Loading' Toggle" default="true"/>
         </targetConfig>

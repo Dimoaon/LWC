@@ -1,4 +1,7 @@
 import { LightningElement, api, track } from 'lwc';
+import Toast from 'lightning/toast';
+
+const TOAST_VARIANT_SUCCESS = 'success';
 
 const LOADING_DELAY = 1200;
 
@@ -6,8 +9,26 @@ const CANCELLED_VARIANT = 'cancelled';
 
 const CURRENCY_ISO_CODE = 'USD';
 
-const TAX_RATE_MIN = 0.05;
-const TAX_RATE_MAX = 0.12;
+const QUANTITY_MAX = 100;
+const UNIT_PRICE_MAX = 150;
+
+const MAX_LENGTHS = {
+    name: 80,
+    street: 120,
+    city: 60,
+    country: 60,
+    phone: 20
+};
+
+const PHONE_PATTERN = /^[+\s\-\(\)0-9]+$/;
+
+const CARD_BRANDS = [
+    { code: 'visa', name: 'Visa' },
+    { code: 'mastercard', name: 'Mastercard' },
+    { code: 'amex', name: 'Amex' },
+    { code: 'jcb', name: 'JCB' },
+    { code: 'diners', name: 'Diners Club' }
+];
 
 const PROCESSING_ORDER = {
     orderNumber: 'SO-10482',
@@ -21,29 +42,21 @@ const PROCESSING_ORDER = {
         phone: '(406) 555-0186'
     },
     payment: {
-        brand: 'Visa',
-        lastDigits: '4242',
         expires: '04/27',
         isPaid: true
     },
     lineItems: [
         {
             name: 'TrailPro Insulated Bottle 24oz — Pine',
-            sku: 'TPB24-PINE',
-            quantity: 2,
-            lineTotal: 39.98
+            sku: 'TPB24-PINE'
         },
         {
             name: 'Summit Daypack — Tan',
-            sku: 'SDP-TAN',
-            quantity: 1,
-            lineTotal: 79.99
+            sku: 'SDP-TAN'
         },
         {
             name: 'Wilder Camp Mug 12oz — Forest Green',
-            sku: 'WCM12-FG',
-            quantity: 4,
-            lineTotal: 15.00
+            sku: 'WCM12-FG'
         }
     ]
 };
@@ -60,23 +73,17 @@ const CANCELLED_ORDER = {
         phone: '(406) 555-0186'
     },
     payment: {
-        brand: 'Visa',
-        lastDigits: '4242',
         expires: '04/27',
         isPaid: false
     },
     lineItems: [
         {
             name: 'TrailPro Insulated Bottle 24oz — Pine',
-            sku: 'TPB24-PINE',
-            quantity: 2,
-            lineTotal: 39.98
+            sku: 'TPB24-PINE'
         },
         {
             name: 'Summit Daypack — Tan',
-            sku: 'SDP-TAN',
-            quantity: 1,
-            lineTotal: 79.99
+            sku: 'SDP-TAN'
         }
     ]
 };
@@ -101,6 +108,29 @@ export default class OrderDetails extends LightningElement {
     @api quantityLabel = null;
     @api priceLabel = null;
     @api downloadInvoiceLabel = null;
+    @api orderSummaryTitle = null;
+    @api subtotalLabel = null;
+    @api shippingLabel = null;
+    @api taxLabel = null;
+    @api totalLabel = null;
+    @api shippingAddressLabel = null;
+    @api editLabel = null;
+    @api paymentMethodLabel = null;
+    @api paidLabel = null;
+    @api viewPaymentDetailsLabel = null;
+    @api paidInFullLabel = null;
+    @api cardEndingLabel = null;
+    @api expiresPrefixLabel = null;
+    @api editAddressTitle = null;
+    @api addressNameLabel = null;
+    @api addressStreetLabel = null;
+    @api addressCityLabel = null;
+    @api addressCountryLabel = null;
+    @api addressPhoneLabel = null;
+    @api saveLabel = null;
+    @api cancelLabel = null;
+    @api phoneValidationMessage = null;
+    @api addressSavedMessage = null;
     @api demoVariant = null;
     @api simulateLoading = false;
 
@@ -119,6 +149,18 @@ export default class OrderDetails extends LightningElement {
     @track total = null;
     @track address = null;
     @track payment = null;
+    @track paidDate = null;
+    @track paymentBrand = null;
+    @track cardText = '';
+    @track expiresText = '';
+    @track addressForm = {};
+
+    maxLength = MAX_LENGTHS;
+
+    // GETTERS
+    get phonePattern() {
+        return PHONE_PATTERN.source;
+    }
 
     // LIFECYCLES
     connectedCallback() {
@@ -156,10 +198,47 @@ export default class OrderDetails extends LightningElement {
                 color: #1F4D3D;
                 border-color: #1F4D3D;
             }
+
+            c-order-details .address-form lightning-input input.slds-input {
+                min-height: 3rem;
+                border-color: #E5E7EB;
+            }
+
+            c-order-details .address-form lightning-input input.slds-input:focus {
+                border-color: #1F4D3D;
+            }
         `;
 
         style.innerText = customCssStyles.replace(/ +(?= )|\n/g, ' ');
         customCssContainer.appendChild(style);
+    }
+
+    // HANDLERS
+    handleEditAddress() {
+        this.addressForm = { ...this.address };
+        this.template.querySelector('c-modal').open({
+            title: this.editAddressTitle,
+            closeLabel: this.cancelLabel,
+            submitLabel: this.saveLabel
+        });
+    }
+
+    handleFormChange(event) {
+        this.addressForm = { ...this.addressForm, [event.target.name]: event.target.value };
+    }
+
+    handleSaveAddress() {
+        if (!this.validateForm()) {
+            return;
+        }
+
+        this.address = { ...this.addressForm };
+        this.template.querySelector('c-modal').hide();
+        Toast.show({ label: this.addressSavedMessage, variant: TOAST_VARIANT_SUCCESS }, this);
+    }
+
+    handleModalClose() {
+        this.addressForm = {};
     }
 
     // MAIN METHODS
@@ -171,18 +250,21 @@ export default class OrderDetails extends LightningElement {
         let subtotal = 0;
 
         order.lineItems.forEach(lineItem => {
+            let quantity = Math.floor(Math.random() * (QUANTITY_MAX + 1));
+            let lineTotal = quantity * Math.random() * UNIT_PRICE_MAX;
+
             lineItems.push({
                 id: this.generateId(),
                 name: lineItem.name,
                 sku: lineItem.sku,
-                quantity: lineItem.quantity,
-                lineTotal: lineItem.lineTotal
+                quantity: quantity,
+                lineTotal: lineTotal
             });
 
-            subtotal += lineItem.lineTotal;
+            subtotal += lineTotal;
         });
 
-        let taxRate = Math.random() * (TAX_RATE_MAX - TAX_RATE_MIN) + TAX_RATE_MIN;
+        let taxRate = Math.random();
         let tax = subtotal * taxRate;
 
         this.orderTitle = `${this.orderLabel} #${order.orderNumber}`;
@@ -196,7 +278,14 @@ export default class OrderDetails extends LightningElement {
         this.taxRate = taxRate;
         this.total = subtotal + order.shipping + tax;
         this.address = order.address;
+        let brand = CARD_BRANDS[Math.floor(Math.random() * CARD_BRANDS.length)];
+        let lastDigits = String(Math.floor(1000 + Math.random() * 9000));
+
         this.payment = order.payment;
+        this.paidDate = order.payment.isPaid ? new Date() : null;
+        this.paymentBrand = brand.code;
+        this.cardText = `${brand.name} ${this.cardEndingLabel} ${lastDigits}`;
+        this.expiresText = `${this.expiresPrefixLabel} ${order.payment.expires}`;
 
         setTimeout(() => {
             this.isLoading = false;
@@ -205,5 +294,19 @@ export default class OrderDetails extends LightningElement {
 
     generateId() {
         return Math.random().toString(36).substring(2, 9);
+    }
+
+    validateForm() {
+        let inputs = [...this.template.querySelectorAll('.address-form lightning-input')];
+        let isValid = true;
+
+        inputs.forEach(input => {
+            input.reportValidity();
+            if (!input.checkValidity()) {
+                isValid = false;
+            }
+        });
+
+        return isValid;
     }
 }

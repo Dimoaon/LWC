@@ -15,7 +15,7 @@
 /* CARD */
 .order-card {
     position: relative;
-    max-width: 64rem;
+    max-width: 72rem;
     min-height: 12rem;
     margin: 0 auto;
     padding: 2rem;
@@ -33,6 +33,21 @@
     margin-top: 0.5rem;
     font-size: 2rem;
     font-weight: 700;
+}
+
+/* BODY */
+.order__body {
+    display: grid;
+    grid-template-columns: 1fr 22rem;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* TABLET */
+@media (max-width: 1023.98px) {
+    .order__body {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ITEMS */
