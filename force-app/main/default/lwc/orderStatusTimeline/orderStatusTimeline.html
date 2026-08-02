@@ -45,19 +45,21 @@
                     ></lightning-icon>
                 </div>
 
-                <div class="timeline__label">
-                    {placedLabel}
-                </div>
+                <div class="timeline__text">
+                    <div class="timeline__label">
+                        {placedLabel}
+                    </div>
 
-                <div class="timeline__sub">
-                    <lightning-formatted-date-time
-                        value={placedDate}
-                        year="numeric"
-                        month="short"
-                        day="numeric"
-                        hour="numeric"
-                        minute="2-digit"
-                    ></lightning-formatted-date-time>
+                    <div class="timeline__sub">
+                        <lightning-formatted-date-time
+                            value={placedDate}
+                            year="numeric"
+                            month="short"
+                            day="numeric"
+                            hour="numeric"
+                            minute="2-digit"
+                        ></lightning-formatted-date-time>
+                    </div>
                 </div>
             </div>
 
@@ -70,12 +72,14 @@
                     ></lightning-icon>
                 </div>
 
-                <div class="timeline__label">
-                    {processingLabel}
-                </div>
+                <div class="timeline__text">
+                    <div class="timeline__label">
+                        {processingLabel}
+                    </div>
 
-                <div class="timeline__sub">
-                    {processingSubLabel}
+                    <div class="timeline__sub">
+                        {processingSubLabel}
+                    </div>
                 </div>
             </div>
 
@@ -88,12 +92,14 @@
                     ></lightning-icon>
                 </div>
 
-                <div class="timeline__label">
-                    {shippedLabel}
-                </div>
+                <div class="timeline__text">
+                    <div class="timeline__label">
+                        {shippedLabel}
+                    </div>
 
-                <div class="timeline__sub">
-                    {shippedSubLabel}
+                    <div class="timeline__sub">
+                        {shippedSubLabel}
+                    </div>
                 </div>
             </div>
 
@@ -106,12 +112,14 @@
                     ></lightning-icon>
                 </div>
 
-                <div class="timeline__label">
-                    {deliveredLabel}
-                </div>
+                <div class="timeline__text">
+                    <div class="timeline__label">
+                        {deliveredLabel}
+                    </div>
 
-                <div class="timeline__sub">
-                    {deliveredSubLabel}
+                    <div class="timeline__sub">
+                        {deliveredSubLabel}
+                    </div>
                 </div>
             </div>
 

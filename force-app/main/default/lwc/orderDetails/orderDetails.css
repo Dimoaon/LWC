@@ -3,6 +3,8 @@
     --color-accent: #1f4d3d;
     --color-muted: #6b7280;
     --color-border: #e5e7eb;
+
+    overflow-wrap: anywhere;
 }
 
 .order-details {
@@ -15,7 +17,7 @@
 /* CARD */
 .order-card {
     position: relative;
-    max-width: 72rem;
+    max-width: 85rem;
     min-height: 12rem;
     margin: 0 auto;
     padding: 2rem;
@@ -43,11 +45,38 @@
     align-items: start;
 }
 
+.order__main {
+    min-width: 0;
+}
+
 /* TABLET */
 @media (max-width: 1023.98px) {
     .order__body {
         grid-template-columns: 1fr;
     }
+}
+
+/* PAYMENT FORM */
+.modal-form lightning-select {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.payment-form__amount {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.payment-form__amount-label {
+    color: var(--color-muted);
+}
+
+.payment-form__amount-value {
+    color: var(--color-secondary);
+    font-size: 1.25rem;
+    font-weight: 700;
 }
 
 /* ITEMS */

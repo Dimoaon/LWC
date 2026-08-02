@@ -101,7 +101,7 @@
             </div>
 
             <div class="summary__address-line">
-                {address.city}
+                {cityLine}
             </div>
 
             <div class="summary__address-line">
@@ -160,7 +160,7 @@
                     </template>
                 </div>
 
-                <div class="summary__card-link">
+                <div class="summary__card-link" onclick={handleViewPaymentClick}>
                     <div class="summary__action-label">
                         {viewPaymentDetailsLabel}
                     </div>

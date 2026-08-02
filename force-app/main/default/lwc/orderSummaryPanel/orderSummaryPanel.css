@@ -4,6 +4,8 @@
     --color-secondary: #D97757;
     --color-muted: #6B7280;
     --color-border: #E5E7EB;
+
+    overflow-wrap: anywhere;
 }
 
 /* PANEL */

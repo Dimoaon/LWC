@@ -16,11 +16,19 @@ const MAX_LENGTHS = {
     name: 80,
     street: 120,
     city: 60,
+    state: 60,
+    postalCode: 10,
     country: 60,
-    phone: 20
+    phone: 20,
+    cardNumber: 16
 };
 
 const PHONE_PATTERN = /^[+\s\-\(\)0-9]+$/;
+const POSTAL_PATTERN = /^[0-9]{4,10}$/;
+const CARD_NUMBER_PATTERN = /^[0-9]{16}$/;
+
+const PAID_STATUS = 'paid';
+const UNPAID_STATUS = 'unpaid';
 
 const CARD_BRANDS = [
     { code: 'visa', name: 'Visa' },
@@ -30,6 +38,34 @@ const CARD_BRANDS = [
     { code: 'diners', name: 'Diners Club' }
 ];
 
+//TEST
+for (let i = 1; i <= 20; i++) {
+    CARD_BRANDS.push({ code: `card${i}`, name: `Card ${i}` });
+}
+
+const COUNTRY_OPTIONS = [
+    { label: 'United States', value: 'United States' },
+    { label: 'Canada', value: 'Canada' },
+    { label: 'United Kingdom', value: 'United Kingdom' }
+];
+
+const PROVINCE_MAP = {
+    'United States': [
+        { label: 'California', value: 'CA' },
+        { label: 'Montana', value: 'MT' },
+        { label: 'New York', value: 'NY' },
+        { label: 'Texas', value: 'TX' },
+        { label: 'Washington', value: 'WA' }
+    ],
+    'Canada': [
+        { label: 'Alberta', value: 'AB' },
+        { label: 'British Columbia', value: 'BC' },
+        { label: 'Ontario', value: 'ON' },
+        { label: 'Quebec', value: 'QC' }
+    ],
+    'United Kingdom': []
+};
+
 const PROCESSING_ORDER = {
     orderNumber: 'SO-10482',
     status: 'Processing',
@@ -37,7 +73,9 @@ const PROCESSING_ORDER = {
     address: {
         name: 'Acme Outdoors — Receiving',
         street: '500 Timberline Rd',
-        city: 'Bozeman, MT 59715',
+        city: 'Bozeman',
+        state: 'MT',
+        postalCode: '59715',
         country: 'United States',
         phone: '(406) 555-0186'
     },
@@ -68,7 +106,9 @@ const CANCELLED_ORDER = {
     address: {
         name: 'Acme Outdoors — Receiving',
         street: '500 Timberline Rd',
-        city: 'Bozeman, MT 59715',
+        city: 'Bozeman',
+        state: 'MT',
+        postalCode: '59715',
         country: 'United States',
         phone: '(406) 555-0186'
     },
@@ -125,12 +165,27 @@ export default class OrderDetails extends LightningElement {
     @api addressNameLabel = null;
     @api addressStreetLabel = null;
     @api addressCityLabel = null;
+    @api addressStateLabel = null;
+    @api addressPostalCodeLabel = null;
     @api addressCountryLabel = null;
     @api addressPhoneLabel = null;
     @api saveLabel = null;
     @api cancelLabel = null;
+    @api closeLabel = null;
     @api phoneValidationMessage = null;
+    @api postalCodeValidationMessage = null;
     @api addressSavedMessage = null;
+    @api paymentDetailsTitle = null;
+    @api cardLabel = null;
+    @api cardTypeLabel = null;
+    @api cardNumberLabel = null;
+    @api amountLabel = null;
+    @api transactionIdLabel = null;
+    @api statusLabel = null;
+    @api statusPlaceholderLabel = null;
+    @api unpaidLabel = null;
+    @api cardNumberValidationMessage = null;
+    @api paymentSavedMessage = null;
     @api demoVariant = null;
     @api simulateLoading = false;
 
@@ -151,15 +206,50 @@ export default class OrderDetails extends LightningElement {
     @track payment = null;
     @track paidDate = null;
     @track paymentBrand = null;
+    @track cardNumber = '';
+    @track transactionId = '';
+    @track showAddressForm = false;
+    @track showPaymentDetails = false;
     @track cardText = '';
     @track expiresText = '';
     @track addressForm = {};
+    @track paymentForm = {};
 
     maxLength = MAX_LENGTHS;
 
     // GETTERS
     get phonePattern() {
         return PHONE_PATTERN.source;
+    }
+
+    get cardNumberPattern() {
+        return CARD_NUMBER_PATTERN.source;
+    }
+
+    get brandOptions() {
+        let result = [];
+
+        CARD_BRANDS.forEach(item => {
+            result.push({ label: item.name, value: item.code });
+        });
+
+        return result;
+    }
+
+    get statusOptions() {
+        return [
+            { label: this.statusPlaceholderLabel, value: '' },
+            { label: this.paidLabel, value: PAID_STATUS },
+            { label: this.unpaidLabel, value: UNPAID_STATUS }
+        ];
+    }
+
+    get countryOptions() {
+        return COUNTRY_OPTIONS;
+    }
+
+    get provinceOptions() {
+        return PROVINCE_MAP[this.addressForm.country] || [];
     }
 
     // LIFECYCLES
@@ -185,27 +275,82 @@ export default class OrderDetails extends LightningElement {
         let style = document.createElement('style');
 
         let customCssStyles = `
-            c-order-details .order__header lightning-button button,
-            c-order-details .order__header lightning-button button:hover,
-            c-order-details .order__header lightning-button button:focus {
-                color: #1F4D3D;
+            c-order-details .order__header lightning-button button {
+                color: #1F4D3D !important;
             }
 
             c-order-details .order__invoice lightning-button button,
-            c-order-details .order__invoice lightning-button button:hover,
-            c-order-details .order__invoice lightning-button button:focus {
-                padding: 0.25rem 0.75rem;
-                color: #1F4D3D;
-                border-color: #1F4D3D;
+            c-order-details c-modal .modal__footer .slds-button_outline-brand {
+                color: #1F4D3D !important;
+                border-color: #1F4D3D !important;
             }
 
-            c-order-details .address-form lightning-input input.slds-input {
+            c-order-details .order__invoice lightning-button button {
+                padding: 0.25rem 0.75rem;
+                background-color: #FFFFFF !important;
+            }
+
+            c-order-details c-modal .modal__footer .slds-button_brand {
+                color: #FFFFFF !important;
+                border-color: #1F4D3D !important;
+                background-color: #1F4D3D !important;
+            }
+
+            c-order-details .order__header lightning-button button:hover,
+            c-order-details .order__header lightning-button button:focus {
+                color: #16382C !important;
+            }
+
+            c-order-details c-modal .modal__footer .slds-button_brand:hover,
+            c-order-details c-modal .modal__footer .slds-button_brand:focus {
+                border-color: #16382C !important;
+                background-color: #16382C !important;
+            }
+
+            c-order-details .order__invoice lightning-button button:hover,
+            c-order-details .order__invoice lightning-button button:focus,
+            c-order-details c-modal .modal__footer .slds-button_outline-brand:hover,
+            c-order-details c-modal .modal__footer .slds-button_outline-brand:focus {
+                background-color: #E8F3EE !important;
+            }
+
+            c-order-details .modal-form lightning-input input.slds-input,
+            c-order-details .modal-form lightning-input-address input.slds-input,
+            c-order-details .modal-form lightning-select select.slds-select,
+            c-order-details .modal-form lightning-input-address select.slds-select,
+            c-order-details .modal-form lightning-input-address .slds-combobox__input,
+            c-order-details .modal-form lightning-input-address textarea.slds-textarea {
                 min-height: 3rem;
                 border-color: #E5E7EB;
+                background-color: #FFFFFF !important;
             }
 
-            c-order-details .address-form lightning-input input.slds-input:focus {
+            c-order-details .modal-form lightning-input input.slds-input:focus,
+            c-order-details .modal-form lightning-input-address input.slds-input:focus,
+            c-order-details .modal-form lightning-select select.slds-select:focus,
+            c-order-details .modal-form lightning-input-address select.slds-select:focus,
+            c-order-details .modal-form lightning-input-address .slds-combobox__input:focus,
+            c-order-details .modal-form lightning-input-address textarea.slds-textarea:focus {
                 border-color: #1F4D3D;
+            }
+
+            c-order-details .modal-form lightning-input-address textarea.slds-textarea {
+                height: 3rem;
+                resize: none;
+            }
+
+            c-order-details .modal-form lightning-input-address,
+            c-order-details .modal-form lightning-input-address fieldset.slds-form-element,
+            c-order-details .modal-form lightning-input-address lightning-picklist.slds-form-element {
+                margin-bottom: 0;
+            }
+
+            c-order-details .modal-form lightning-input-address .slds-dropdown {
+                background-color: #FFFFFF !important;
+            }
+
+            c-order-details .modal-form lightning-input-address .slds-combobox__input {
+                padding-left: 0.75rem !important;
             }
         `;
 
@@ -215,9 +360,27 @@ export default class OrderDetails extends LightningElement {
 
     // HANDLERS
     handleEditAddress() {
+        this.showAddressForm = true;
+        this.showPaymentDetails = false;
         this.addressForm = { ...this.address };
         this.template.querySelector('c-modal').open({
             title: this.editAddressTitle,
+            closeLabel: this.cancelLabel,
+            submitLabel: this.saveLabel
+        });
+    }
+
+    handleViewPayment() {
+        this.showPaymentDetails = true;
+        this.showAddressForm = false;
+        this.paymentForm = {
+            brand: this.paymentBrand,
+            cardNumber: this.cardNumber,
+            transactionId: this.transactionId,
+            status: this.payment.isPaid ? PAID_STATUS : UNPAID_STATUS
+        };
+        this.template.querySelector('c-modal').open({
+            title: this.paymentDetailsTitle,
             closeLabel: this.cancelLabel,
             submitLabel: this.saveLabel
         });
@@ -227,18 +390,37 @@ export default class OrderDetails extends LightningElement {
         this.addressForm = { ...this.addressForm, [event.target.name]: event.target.value };
     }
 
-    handleSaveAddress() {
-        if (!this.validateForm()) {
-            return;
-        }
+    handleAddressChange(event) {
+        let address = event.detail;
+        let isCountryChanged = address.country !== this.addressForm.country;
 
-        this.address = { ...this.addressForm };
-        this.template.querySelector('c-modal').hide();
-        Toast.show({ label: this.addressSavedMessage, variant: TOAST_VARIANT_SUCCESS }, this);
+        this.addressForm = {
+            ...this.addressForm,
+            street: address.street,
+            city: address.city,
+            state: isCountryChanged ? '' : address.province,
+            country: address.country,
+            postalCode: address.postalCode
+        };
+    }
+
+    handlePaymentFormChange(event) {
+        this.paymentForm = { ...this.paymentForm, [event.target.name]: event.target.value };
+    }
+
+    handleConfirm() {
+        if (this.showPaymentDetails) {
+            this.savePayment();
+        } else {
+            this.saveAddress();
+        }
     }
 
     handleModalClose() {
+        this.showAddressForm = false;
+        this.showPaymentDetails = false;
         this.addressForm = {};
+        this.paymentForm = {};
     }
 
     // MAIN METHODS
@@ -248,9 +430,11 @@ export default class OrderDetails extends LightningElement {
         let order = isCancelled ? CANCELLED_ORDER : PROCESSING_ORDER;
         let lineItems = [];
         let subtotal = 0;
+        let brand = CARD_BRANDS[Math.floor(Math.random() * CARD_BRANDS.length)];
+        let cardNumber = this.generateCardNumber();
 
         order.lineItems.forEach(lineItem => {
-            let quantity = Math.floor(Math.random() * (QUANTITY_MAX + 1));
+            let quantity = Math.floor(Math.random() * QUANTITY_MAX) + 1;
             let lineTotal = quantity * Math.random() * UNIT_PRICE_MAX;
 
             lineItems.push({
@@ -278,35 +462,96 @@ export default class OrderDetails extends LightningElement {
         this.taxRate = taxRate;
         this.total = subtotal + order.shipping + tax;
         this.address = order.address;
-        let brand = CARD_BRANDS[Math.floor(Math.random() * CARD_BRANDS.length)];
-        let lastDigits = String(Math.floor(1000 + Math.random() * 9000));
 
         this.payment = order.payment;
         this.paidDate = order.payment.isPaid ? new Date() : null;
         this.paymentBrand = brand.code;
-        this.cardText = `${brand.name} ${this.cardEndingLabel} ${lastDigits}`;
+        this.cardNumber = cardNumber;
+        this.cardText = `${brand.name} ${this.cardEndingLabel} ${cardNumber.slice(-4)}`;
         this.expiresText = `${this.expiresPrefixLabel} ${order.payment.expires}`;
+        this.transactionId = `TXN-${this.generateId().toUpperCase()}`;
 
         setTimeout(() => {
             this.isLoading = false;
         }, loadingDelay);
     }
 
+    generateCardNumber() {
+        let result = '';
+
+        for (let i = 0; i < 16; i++) {
+            result += Math.floor(Math.random() * 10);
+        }
+
+        return result;
+    }
+
     generateId() {
         return Math.random().toString(36).substring(2, 9);
     }
 
+    saveAddress() {
+        if (!this.validateForm()) {
+            return;
+        }
+
+        this.address = { ...this.addressForm };
+        this.template.querySelector('c-modal').hide();
+        Toast.show({ label: this.addressSavedMessage, variant: TOAST_VARIANT_SUCCESS }, this);
+    }
+
+    savePayment() {
+        let isPaid = this.paymentForm.status === PAID_STATUS;
+        let cardNumber = this.paymentForm.cardNumber;
+        let brandName = '';
+
+        if (!this.validateForm()) {
+            return;
+        }
+
+        CARD_BRANDS.forEach(item => {
+            if (item.code === this.paymentForm.brand) {
+                brandName = item.name;
+            }
+        });
+
+        this.paymentBrand = this.paymentForm.brand;
+        this.cardNumber = cardNumber;
+        this.transactionId = this.paymentForm.transactionId;
+        this.cardText = `${brandName} ${this.cardEndingLabel} ${cardNumber.slice(-4)}`;
+        this.payment = { ...this.payment, isPaid: isPaid };
+        this.paidDate = isPaid ? new Date() : null;
+
+        this.template.querySelector('c-modal').hide();
+        Toast.show({ label: this.paymentSavedMessage, variant: TOAST_VARIANT_SUCCESS }, this);
+    }
+
     validateForm() {
-        let inputs = [...this.template.querySelectorAll('.address-form lightning-input')];
+        this.validatePostalCode();
+
+        let fields = [...this.template.querySelectorAll('.modal-form lightning-input, .modal-form lightning-select, .modal-form lightning-input-address')];
         let isValid = true;
 
-        inputs.forEach(input => {
-            input.reportValidity();
-            if (!input.checkValidity()) {
+        fields.forEach(field => {
+            field.reportValidity();
+            if (!field.checkValidity()) {
                 isValid = false;
             }
         });
 
         return isValid;
+    }
+
+    validatePostalCode() {
+        let addressField = this.template.querySelector('.modal-form lightning-input-address');
+
+        if (!addressField) {
+            return;
+        }
+
+        let postalCode = this.addressForm.postalCode;
+        let message = postalCode && !POSTAL_PATTERN.test(postalCode) ? this.postalCodeValidationMessage : '';
+
+        addressField.setCustomValidityForField(message, 'postalCode');
     }
 }

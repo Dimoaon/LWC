@@ -1,6 +1,7 @@
 import { LightningElement, api, track } from 'lwc';
 
 const EDIT_ADDRESS_EVENT = 'editaddress';
+const VIEW_PAYMENT_EVENT = 'viewpayment';
 
 export default class OrderSummaryPanel extends LightningElement {
 
@@ -52,6 +53,15 @@ export default class OrderSummaryPanel extends LightningElement {
         return this.paymentBrand === 'diners';
     }
 
+    get cityLine() {
+        if (!this.address) {
+            return '';
+        }
+
+        let state = this.address.state ? `, ${this.address.state}` : '';
+        return `${this.address.city}${state} ${this.address.postalCode}`;
+    }
+
     // LIFECYCLES
     renderedCallback() {
         if (this.isFirstRender) {
@@ -83,5 +93,9 @@ export default class OrderSummaryPanel extends LightningElement {
     // HANDLERS
     handleEditClick() {
         this.dispatchEvent(new CustomEvent(EDIT_ADDRESS_EVENT));
+    }
+
+    handleViewPaymentClick() {
+        this.dispatchEvent(new CustomEvent(VIEW_PAYMENT_EVENT));
     }
 }

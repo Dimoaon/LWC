@@ -29,29 +29,30 @@
             </div>
         </div>
 
-        <!-- QUANTITY -->
-        <div class="line-item__quantity">
-            <div class="line-item__quantity-label">
-                {quantityLabel}
+        <!-- QUANTITY AND PRICE -->
+        <div class="line-item__wrapper">
+            <div class="line-item__quantity">
+                <div class="line-item__quantity-label">
+                    {quantityLabel}
+                </div>
+
+                <div class="line-item__quantity-value">
+                    {quantity}
+                </div>
             </div>
 
-            <div class="line-item__quantity-value">
-                {quantity}
-            </div>
-        </div>
+            <div class="line-item__price">
+                <div class="line-item__price-label">
+                    {priceLabel}
+                </div>
 
-        <!-- PRICE -->
-        <div class="line-item__price">
-            <div class="line-item__price-label">
-                {priceLabel}
-            </div>
-
-            <div class="line-item__price-value">
-                <lightning-formatted-number
-                    value={lineTotal}
-                    format-style="currency"
-                    currency-code={currencyIsoCode}
-                ></lightning-formatted-number>
+                <div class="line-item__price-value">
+                    <lightning-formatted-number
+                        value={lineTotal}
+                        format-style="currency"
+                        currency-code={currencyIsoCode}
+                    ></lightning-formatted-number>
+                </div>
             </div>
         </div>
 

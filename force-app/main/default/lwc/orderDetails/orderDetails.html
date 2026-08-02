@@ -96,6 +96,7 @@
                     <c-order-summary-panel
                         class="order__summary"
                         oneditaddress={handleEditAddress}
+                        onviewpayment={handleViewPayment}
                         subtotal={subtotal}
                         shipping={shipping}
                         tax={tax}
@@ -126,10 +127,69 @@
 
         </div>
 
-        <!-- EDIT ADDRESS MODAL -->
-        <c-modal onclose={handleModalClose} onconfirm={handleSaveAddress}>
+        <!-- MODAL -->
+        <c-modal onclose={handleModalClose} onconfirm={handleConfirm}>
             <div slot="content">
-                <div class="address-form">
+
+                <!-- PAYMENT DETAILS FORM -->
+                <template lwc:if={showPaymentDetails}>
+                    <div class="payment-form modal-form">
+                        <lightning-select
+                            label={cardTypeLabel}
+                            name="brand"
+                            value={paymentForm.brand}
+                            options={brandOptions}
+                            required
+                            onchange={handlePaymentFormChange}
+                        ></lightning-select>
+
+                        <lightning-input
+                            label={cardNumberLabel}
+                            name="cardNumber"
+                            value={paymentForm.cardNumber}
+                            maxlength={maxLength.cardNumber}
+                            pattern={cardNumberPattern}
+                            message-when-pattern-mismatch={cardNumberValidationMessage}
+                            required
+                            onchange={handlePaymentFormChange}
+                        ></lightning-input>
+
+                        <lightning-select
+                            label={statusLabel}
+                            name="status"
+                            value={paymentForm.status}
+                            options={statusOptions}
+                            required
+                            onchange={handlePaymentFormChange}
+                        ></lightning-select>
+
+                        <lightning-input
+                            label={transactionIdLabel}
+                            name="transactionId"
+                            value={paymentForm.transactionId}
+                            required
+                            onchange={handlePaymentFormChange}
+                        ></lightning-input>
+
+                        <div class="payment-form__amount">
+                            <div class="payment-form__amount-label">
+                                {amountLabel}
+                            </div>
+
+                            <div class="payment-form__amount-value">
+                                <lightning-formatted-number
+                                    value={total}
+                                    format-style="currency"
+                                    currency-code={currencyIsoCode}
+                                ></lightning-formatted-number>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- EDIT ADDRESS FORM -->
+                <template lwc:if={showAddressForm}>
+                <div class="address-form modal-form">
                     <lightning-input
                         label={addressNameLabel}
                         name="name"
@@ -139,32 +199,22 @@
                         onchange={handleFormChange}
                     ></lightning-input>
 
-                    <lightning-input
-                        label={addressStreetLabel}
-                        name="street"
-                        value={addressForm.street}
-                        maxlength={maxLength.street}
+                    <lightning-input-address
+                        street-label={addressStreetLabel}
+                        city-label={addressCityLabel}
+                        province-label={addressStateLabel}
+                        country-label={addressCountryLabel}
+                        postal-code-label={addressPostalCodeLabel}
+                        street={addressForm.street}
+                        city={addressForm.city}
+                        province={addressForm.state}
+                        country={addressForm.country}
+                        postal-code={addressForm.postalCode}
+                        country-options={countryOptions}
+                        province-options={provinceOptions}
                         required
-                        onchange={handleFormChange}
-                    ></lightning-input>
-
-                    <lightning-input
-                        label={addressCityLabel}
-                        name="city"
-                        value={addressForm.city}
-                        maxlength={maxLength.city}
-                        required
-                        onchange={handleFormChange}
-                    ></lightning-input>
-
-                    <lightning-input
-                        label={addressCountryLabel}
-                        name="country"
-                        value={addressForm.country}
-                        maxlength={maxLength.country}
-                        required
-                        onchange={handleFormChange}
-                    ></lightning-input>
+                        onchange={handleAddressChange}
+                    ></lightning-input-address>
 
                     <lightning-input
                         label={addressPhoneLabel}
@@ -177,6 +227,8 @@
                         onchange={handleFormChange}
                     ></lightning-input>
                 </div>
+                </template>
+
             </div>
         </c-modal>
     </div>
