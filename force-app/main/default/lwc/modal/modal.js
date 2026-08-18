@@ -44,6 +44,29 @@ export default class Modal extends LightningElement {
             this._keyupHandler = this.handleKeyup.bind(this);
             window.addEventListener('keyup', this._keyupHandler);
         }
+
+        this.addCustomCssStyles();
+    }
+
+    // INIT METHODS
+    addCustomCssStyles() {
+        let customCssContainer = this.template.querySelector('.custom-css-container');
+
+        if (!customCssContainer || customCssContainer.childElementCount > 0) {
+            return;
+        }
+
+        let style = document.createElement('style');
+
+        let customCssStyles = `
+            c-modal .modal__body .slds-form-element__label {
+                max-width: 100%;
+                overflow-wrap: anywhere;
+            }
+        `;
+
+        style.innerText = customCssStyles.replace(/ +(?= )|\n/g, ' ');
+        customCssContainer.appendChild(style);
     }
 
     disconnectedCallback() {

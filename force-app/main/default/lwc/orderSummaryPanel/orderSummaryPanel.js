@@ -13,6 +13,7 @@ export default class OrderSummaryPanel extends LightningElement {
     @api total = null;
     @api currencyIsoCode = null;
     @api address = null;
+    @api countryName = null;
     @api summaryTitle = null;
     @api subtotalLabel = null;
     @api shippingLabel = null;
@@ -58,7 +59,7 @@ export default class OrderSummaryPanel extends LightningElement {
             return '';
         }
 
-        let state = this.address.state ? `, ${this.address.state}` : '';
+        let state = this.address.stateCode ? `, ${this.address.stateCode}` : '';
         return `${this.address.city}${state} ${this.address.postalCode}`;
     }
 

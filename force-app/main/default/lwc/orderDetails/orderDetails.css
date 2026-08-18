@@ -51,9 +51,55 @@
 
 /* TABLET */
 @media (max-width: 1023.98px) {
+    .order-details {
+        padding: 1.5rem;
+    }
+
+    .order-card {
+        padding: 1.5rem;
+    }
+
     .order__body {
         grid-template-columns: 1fr;
     }
+
+    .order__title {
+        font-size: 1.75rem;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 767.98px) {
+    .order-details {
+        padding: 1rem;
+    }
+
+    .order-card {
+        padding: 1.25rem;
+        border-radius: 1rem;
+    }
+
+    .order__title {
+        font-size: 1.5rem;
+    }
+
+    .order__items-title {
+        font-size: 1.25rem;
+    }
+
+    .order__placed {
+        font-size: 0.875rem;
+    }
+}
+
+/* ADDRESS FORM */
+.address-form__search {
+    margin-bottom: 1rem;
+}
+
+.address-form__error {
+    color: #c23934;
+    font-size: 0.75rem;
 }
 
 /* PAYMENT FORM */
@@ -104,9 +150,16 @@
 }
 
 .order__placed {
-    display: flex;
-    gap: 0.25rem;
     margin-top: 0.25rem;
     color: var(--color-muted);
     font-size: 1rem;
+}
+
+.order__placed-label {
+    display: inline;
+    margin-right: 0.25rem;
+}
+
+.order__placed lightning-formatted-date-time {
+    display: inline;
 }

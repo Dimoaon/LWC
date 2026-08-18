@@ -24,7 +24,7 @@ const MAX_LENGTHS = {
 };
 
 const PHONE_PATTERN = /^[+\s\-\(\)0-9]+$/;
-const POSTAL_PATTERN = /^[0-9]{4,10}$/;
+const POSTAL_PATTERN = /^[0-9\-]{4,10}$/;
 const CARD_NUMBER_PATTERN = /^[0-9]{16}$/;
 
 const PAID_STATUS = 'paid';
@@ -44,26 +44,28 @@ for (let i = 1; i <= 20; i++) {
 }
 
 const COUNTRY_OPTIONS = [
-    { label: 'United States', value: 'United States' },
-    { label: 'Canada', value: 'Canada' },
-    { label: 'United Kingdom', value: 'United Kingdom' }
+    { label: 'United States', value: 'US' },
+    { label: 'Canada', value: 'CA' },
+    { label: 'Poland', value: 'PL' },
+    { label: 'Belarus', value: 'BY' }
 ];
 
-const PROVINCE_MAP = {
-    'United States': [
+const STATE_MAP = {
+    US: [
         { label: 'California', value: 'CA' },
+        { label: 'Florida', value: 'FL' },
         { label: 'Montana', value: 'MT' },
-        { label: 'New York', value: 'NY' },
-        { label: 'Texas', value: 'TX' },
-        { label: 'Washington', value: 'WA' }
+        { label: 'Nevada', value: 'NV' },
+        { label: 'Texas', value: 'TX' }
     ],
-    'Canada': [
+    CA: [
         { label: 'Alberta', value: 'AB' },
         { label: 'British Columbia', value: 'BC' },
         { label: 'Ontario', value: 'ON' },
         { label: 'Quebec', value: 'QC' }
     ],
-    'United Kingdom': []
+    PL: [],
+    BY: []
 };
 
 const PROCESSING_ORDER = {
@@ -74,9 +76,9 @@ const PROCESSING_ORDER = {
         name: 'Acme Outdoors — Receiving',
         street: '500 Timberline Rd',
         city: 'Bozeman',
-        state: 'MT',
+        stateCode: 'MT',
         postalCode: '59715',
-        country: 'United States',
+        countryCode: 'US',
         phone: '(406) 555-0186'
     },
     payment: {
@@ -107,9 +109,9 @@ const CANCELLED_ORDER = {
         name: 'Acme Outdoors — Receiving',
         street: '500 Timberline Rd',
         city: 'Bozeman',
-        state: 'MT',
+        stateCode: 'MT',
         postalCode: '59715',
-        country: 'United States',
+        countryCode: 'US',
         phone: '(406) 555-0186'
     },
     payment: {
@@ -174,6 +176,9 @@ export default class OrderDetails extends LightningElement {
     @api closeLabel = null;
     @api phoneValidationMessage = null;
     @api postalCodeValidationMessage = null;
+    @api addressRequiredMessage = null;
+    @api addressSearchLabel = null;
+    @api countryErrorMessage = null;
     @api addressSavedMessage = null;
     @api paymentDetailsTitle = null;
     @api cardLabel = null;
@@ -210,6 +215,7 @@ export default class OrderDetails extends LightningElement {
     @track transactionId = '';
     @track showAddressForm = false;
     @track showPaymentDetails = false;
+    @track showCountryError = false;
     @track cardText = '';
     @track expiresText = '';
     @track addressForm = {};
@@ -222,8 +228,42 @@ export default class OrderDetails extends LightningElement {
         return PHONE_PATTERN.source;
     }
 
+    get postalCodePattern() {
+        return POSTAL_PATTERN.source;
+    }
+
     get cardNumberPattern() {
         return CARD_NUMBER_PATTERN.source;
+    }
+
+    get countryOptions() {
+        return COUNTRY_OPTIONS;
+    }
+
+    get stateOptions() {
+        return STATE_MAP[this.addressForm.countryCode] || [];
+    }
+
+    get stateRequired() {
+        return this.stateOptions.length > 0;
+    }
+
+    get stateDisabled() {
+        return this.stateOptions.length === 0;
+    }
+
+    get countryName() {
+        let result = '';
+
+        if (this.address) {
+            COUNTRY_OPTIONS.forEach(item => {
+                if (item.value === this.address.countryCode) {
+                    result = item.label;
+                }
+            });
+        }
+
+        return result;
     }
 
     get brandOptions() {
@@ -242,14 +282,6 @@ export default class OrderDetails extends LightningElement {
             { label: this.paidLabel, value: PAID_STATUS },
             { label: this.unpaidLabel, value: UNPAID_STATUS }
         ];
-    }
-
-    get countryOptions() {
-        return COUNTRY_OPTIONS;
-    }
-
-    get provinceOptions() {
-        return PROVINCE_MAP[this.addressForm.country] || [];
     }
 
     // LIFECYCLES
@@ -341,7 +373,8 @@ export default class OrderDetails extends LightningElement {
 
             c-order-details .modal-form lightning-input-address,
             c-order-details .modal-form lightning-input-address fieldset.slds-form-element,
-            c-order-details .modal-form lightning-input-address lightning-picklist.slds-form-element {
+            c-order-details .modal-form lightning-input-address lightning-picklist.slds-form-element,
+            c-order-details .modal-form lightning-input-address lightning-lookup-address.slds-form-element {
                 margin-bottom: 0;
             }
 
@@ -351,6 +384,18 @@ export default class OrderDetails extends LightningElement {
 
             c-order-details .modal-form lightning-input-address .slds-combobox__input {
                 padding-left: 0.75rem !important;
+            }
+
+            c-order-details .modal-form lightning-input-address .slds-form-element__row {
+                display: none !important;
+            }
+
+            c-order-details .modal-form lightning-input-address .slds-form-element__row.slds-grow {
+                display: flex !important;
+            }
+
+            c-order-details .modal-form lightning-input-address legend.slds-form-element__label {
+                display: none !important;
             }
         `;
 
@@ -362,6 +407,7 @@ export default class OrderDetails extends LightningElement {
     handleEditAddress() {
         this.showAddressForm = true;
         this.showPaymentDetails = false;
+        this.showCountryError = false;
         this.addressForm = { ...this.address };
         this.template.querySelector('c-modal').open({
             title: this.editAddressTitle,
@@ -387,21 +433,58 @@ export default class OrderDetails extends LightningElement {
     }
 
     handleFormChange(event) {
-        this.addressForm = { ...this.addressForm, [event.target.name]: event.target.value };
+        this.showCountryError = false;
+
+        let name = event.target.name;
+        let form = { ...this.addressForm, [name]: event.target.value };
+
+        if (name === 'countryCode') {
+            form.stateCode = '';
+        }
+
+        this.addressForm = form;
     }
 
     handleAddressChange(event) {
-        let address = event.detail;
-        let isCountryChanged = address.country !== this.addressForm.country;
+        let detail = event.detail;
+        let countryCode = '';
+
+        COUNTRY_OPTIONS.forEach(item => {
+            if (item.label === detail.country) {
+                countryCode = item.value;
+            }
+        });
+
+        if (!countryCode) {
+            this.showCountryError = true;
+            return;
+        }
+
+        this.showCountryError = false;
+
+        let stateCode = '';
+
+        (STATE_MAP[countryCode] || []).forEach(item => {
+            if (item.value === detail.province) {
+                stateCode = item.value;
+            }
+        });
 
         this.addressForm = {
             ...this.addressForm,
-            street: address.street,
-            city: address.city,
-            state: isCountryChanged ? '' : address.province,
-            country: address.country,
-            postalCode: address.postalCode
+            street: detail.street,
+            city: detail.city,
+            stateCode: stateCode,
+            postalCode: detail.postalCode,
+            countryCode: countryCode
         };
+
+        setTimeout(() => {
+            let fields = [...this.template.querySelectorAll('.modal-form lightning-input, .modal-form lightning-select')];
+            fields.forEach(field => {
+                field.reportValidity();
+            });
+        }, 0);
     }
 
     handlePaymentFormChange(event) {
@@ -527,9 +610,7 @@ export default class OrderDetails extends LightningElement {
     }
 
     validateForm() {
-        this.validatePostalCode();
-
-        let fields = [...this.template.querySelectorAll('.modal-form lightning-input, .modal-form lightning-select, .modal-form lightning-input-address')];
+        let fields = [...this.template.querySelectorAll('.modal-form lightning-input, .modal-form lightning-select')];
         let isValid = true;
 
         fields.forEach(field => {
@@ -540,18 +621,5 @@ export default class OrderDetails extends LightningElement {
         });
 
         return isValid;
-    }
-
-    validatePostalCode() {
-        let addressField = this.template.querySelector('.modal-form lightning-input-address');
-
-        if (!addressField) {
-            return;
-        }
-
-        let postalCode = this.addressForm.postalCode;
-        let message = postalCode && !POSTAL_PATTERN.test(postalCode) ? this.postalCodeValidationMessage : '';
-
-        addressField.setCustomValidityForField(message, 'postalCode');
     }
 }

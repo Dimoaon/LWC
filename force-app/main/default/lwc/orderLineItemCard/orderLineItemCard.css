@@ -11,7 +11,7 @@
 .line-item {
     display: grid;
     grid-template-columns: 5.5rem 1fr auto;
-    align-items: center;
+    align-items: start;
     gap: 1.5rem;
     padding: 1.25rem;
     border: 0.0625rem solid var(--color-border);
@@ -62,17 +62,24 @@
 }
 
 .line-item__sku {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: start;
     gap: 0.25rem;
     margin-top: 0.375rem;
     color: var(--color-muted);
     font-size: 0.875rem;
 }
 
+.line-item__sku-label,
+.line-item__sku-value {
+    min-width: 2rem;
+}
+
 /* QUANTITY AND PRICE */
 .line-item__wrapper {
     display: flex;
-    align-items: center;
+    align-items: start;
     gap: 1.5rem;
 }
 
@@ -88,11 +95,13 @@
 
 .line-item__quantity {
     min-width: 4rem;
+    max-width: 5rem;
     text-align: center;
 }
 
 .line-item__price {
     min-width: 6rem;
+    max-width: 8rem;
     text-align: center;
 }
 

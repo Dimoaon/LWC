@@ -25,6 +25,14 @@
     color: var(--color-cancel-text);
 }
 
+.cancel-banner__icon {
+    flex-shrink: 0;
+}
+
+.cancel-banner__content {
+    min-width: 0;
+}
+
 .cancel-banner__title {
     font-weight: 600;
 }

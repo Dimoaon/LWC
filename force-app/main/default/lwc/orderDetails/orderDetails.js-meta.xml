@@ -46,7 +46,10 @@
             <property name="saveLabel" type="String" label="'Save' Button Label" default="Save"/>
             <property name="cancelLabel" type="String" label="'Cancel' Button Label" default="Cancel"/>
             <property name="phoneValidationMessage" type="String" label="'Phone Validation' Message" default="Phone can contain only +, spaces, -, (), and digits."/>
-            <property name="postalCodeValidationMessage" type="String" label="'Postal Code Validation' Message" default="Postal code can contain digits only."/>
+            <property name="postalCodeValidationMessage" type="String" label="'Postal Code Validation' Message" default="Postal code can contain digits and hyphens only."/>
+            <property name="addressRequiredMessage" type="String" label="'Address Required Field' Message" default="Complete this field."/>
+            <property name="addressSearchLabel" type="String" label="'Address Search' Placeholder" default="Start typing an address..."/>
+            <property name="countryErrorMessage" type="String" label="'Country Not Supported' Message" default="We can't ship to the selected country."/>
             <property name="addressSavedMessage" type="String" label="'Address Saved' Message" default="Shipping address updated"/>
             <property name="paymentMethodLabel" type="String" label="'Payment Method' Label" default="Payment method"/>
             <property name="paidLabel" type="String" label="'Paid' Label" default="Paid"/>

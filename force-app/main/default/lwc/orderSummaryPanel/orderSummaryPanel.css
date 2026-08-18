@@ -16,6 +16,16 @@
     box-shadow: 0 0.125rem 0.5rem rgba(31, 77, 61, 0.06);
 }
 
+@media (max-width: 767.98px) {
+    .summary {
+        padding: 1.25rem;
+    }
+
+    .summary__title {
+        font-size: 1.25rem;
+    }
+}
+
 .summary__title {
     margin-bottom: 1.25rem;
     color: var(--color-accent);
@@ -40,9 +50,19 @@
 }
 
 .summary__row-label {
-    display: flex;
-    gap: 0.25rem;
     color: var(--color-muted);
+    min-width: 0;
+}
+
+.summary__tax-rate {
+    display: inline;
+    margin-left: 0.25rem;
+}
+
+.summary__row lightning-formatted-number,
+.summary__total-value {
+    min-width: 6rem;
+    max-width: 9rem;
 }
 
 /* TOTAL */
@@ -56,6 +76,7 @@
 }
 
 .summary__total-label {
+    min-width: 0;
     font-size: 1.25rem;
     font-weight: 600;
 }
@@ -81,6 +102,7 @@
 }
 
 .summary__section-title {
+    min-width: 0;
     color: var(--color-accent);
     font-size: 1.125rem;
     font-weight: 600;
@@ -90,12 +112,19 @@
     display: flex;
     align-items: center;
     gap: 0.25rem;
+    min-width: 4rem;
     color: var(--color-secondary);
     cursor: pointer;
 }
 
 .summary__action-label {
+    min-width: 0;
     font-size: 0.875rem;
+    max-width: 9rem;
+}
+
+.summary__action-icon {
+    flex-shrink: 0;
 }
 
 .summary__address-line {
@@ -115,7 +144,7 @@
 
 .summary__card-row {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 2fr 1fr;
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem;
@@ -143,6 +172,7 @@
 }
 
 .summary__card-badge {
+    justify-self: end;
     padding: 0.125rem 0.625rem;
     border-radius: 0.75rem;
     background: #e8f3ee;
@@ -160,9 +190,16 @@
 }
 
 .summary__paid-note {
-    display: flex;
-    gap: 0.25rem;
     margin-top: 1rem;
     color: var(--color-muted);
     font-size: 0.875rem;
+}
+
+.summary__paid-note-text {
+    display: inline;
+    margin-right: 0.25rem;
+}
+
+.summary__paid-note lightning-formatted-date-time {
+    display: inline;
 }

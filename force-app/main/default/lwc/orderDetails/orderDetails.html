@@ -109,6 +109,7 @@
                         tax-label={taxLabel}
                         total-label={totalLabel}
                         address={address}
+                        country-name={countryName}
                         shipping-address-label={shippingAddressLabel}
                         edit-label={editLabel}
                         payment={payment}
@@ -196,25 +197,77 @@
                         value={addressForm.name}
                         maxlength={maxLength.name}
                         required
+                        message-when-value-missing={addressRequiredMessage}
                         onchange={handleFormChange}
                     ></lightning-input>
 
-                    <lightning-input-address
-                        street-label={addressStreetLabel}
-                        city-label={addressCityLabel}
-                        province-label={addressStateLabel}
-                        country-label={addressCountryLabel}
-                        postal-code-label={addressPostalCodeLabel}
-                        street={addressForm.street}
-                        city={addressForm.city}
-                        province={addressForm.state}
-                        country={addressForm.country}
-                        postal-code={addressForm.postalCode}
-                        country-options={countryOptions}
-                        province-options={provinceOptions}
+                    <!-- ADDRESS SEARCH -->
+                    <div class="address-form__search">
+                        <lightning-input-address
+                            address-lookup-placeholder={addressSearchLabel}
+                            show-address-lookup
+                            onchange={handleAddressChange}
+                        ></lightning-input-address>
+
+                        <template lwc:if={showCountryError}>
+                            <div class="address-form__error">
+                                {countryErrorMessage}
+                            </div>
+                        </template>
+                    </div>
+
+                    <lightning-input
+                        label={addressStreetLabel}
+                        name="street"
+                        value={addressForm.street}
+                        maxlength={maxLength.street}
                         required
-                        onchange={handleAddressChange}
-                    ></lightning-input-address>
+                        message-when-value-missing={addressRequiredMessage}
+                        onchange={handleFormChange}
+                    ></lightning-input>
+
+                    <lightning-input
+                        label={addressCityLabel}
+                        name="city"
+                        value={addressForm.city}
+                        maxlength={maxLength.city}
+                        required
+                        message-when-value-missing={addressRequiredMessage}
+                        onchange={handleFormChange}
+                    ></lightning-input>
+
+                    <lightning-select
+                        label={addressCountryLabel}
+                        name="countryCode"
+                        value={addressForm.countryCode}
+                        options={countryOptions}
+                        required
+                        message-when-value-missing={addressRequiredMessage}
+                        onchange={handleFormChange}
+                    ></lightning-select>
+
+                    <lightning-select
+                        label={addressStateLabel}
+                        name="stateCode"
+                        value={addressForm.stateCode}
+                        options={stateOptions}
+                        required={stateRequired}
+                        disabled={stateDisabled}
+                        message-when-value-missing={addressRequiredMessage}
+                        onchange={handleFormChange}
+                    ></lightning-select>
+
+                    <lightning-input
+                        label={addressPostalCodeLabel}
+                        name="postalCode"
+                        value={addressForm.postalCode}
+                        maxlength={maxLength.postalCode}
+                        pattern={postalCodePattern}
+                        message-when-pattern-mismatch={postalCodeValidationMessage}
+                        required
+                        message-when-value-missing={addressRequiredMessage}
+                        onchange={handleFormChange}
+                    ></lightning-input>
 
                     <lightning-input
                         label={addressPhoneLabel}
@@ -224,6 +277,7 @@
                         pattern={phonePattern}
                         message-when-pattern-mismatch={phoneValidationMessage}
                         required
+                        message-when-value-missing={addressRequiredMessage}
                         onchange={handleFormChange}
                     ></lightning-input>
                 </div>
