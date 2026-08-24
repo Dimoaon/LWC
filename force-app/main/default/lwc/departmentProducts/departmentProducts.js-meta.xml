@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Department Products</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default,lightning__AppPage,lightning__HomePage">
+            <property name="brandLabel" type="String" label="'Atelier Mart' Label" default="ATELIER MART"/>
+            <property name="heading" type="String" label="'Departments &amp; Products' Label" default="Departments &amp; products"/>
+            <property name="description" type="String" label="'Store Inventory' Label" default="Store inventory by department"/>
+            <property name="departmentGroupLabel" type="String" label="'Department / Product' Column Label" default="DEPARTMENT / PRODUCT"/>
+            <property name="pricingGroupLabel" type="String" label="'Pricing' Column Label" default="PRICING"/>
+            <property name="stockGroupLabel" type="String" label="'Stock' Column Label" default="STOCK"/>
+            <property name="statusGroupLabel" type="String" label="'Status' Column Label" default="STATUS"/>
+            <property name="nameLabel" type="String" label="'Name' Column Label" default="Name"/>
+            <property name="skuLabel" type="String" label="'SKU' Column Label" default="SKU"/>
+            <property name="retailLabel" type="String" label="'Retail' Column Label" default="Retail"/>
+            <property name="costLabel" type="String" label="'Cost' Column Label" default="Cost"/>
+            <property name="stockOnHandLabel" type="String" label="'On Hand' Column Label" default="On hand"/>
+            <property name="reservedLabel" type="String" label="'Reserved' Column Label" default="Reserved"/>
+            <property name="statusLabel" type="String" label="'Status' Column Label" default="Status"/>
+            <property name="departmentPrefixLabel" type="String" label="'Department' Label (Row)" default="DEPARTMENT"/>
+            <property name="categoryPrefixLabel" type="String" label="'Category' Label (Row)" default="CATEGORY"/>
+            <property name="expandLabel" type="String" label="'Expand' Button Label" default="Expand"/>
+            <property name="collapseLabel" type="String" label="'Collapse' Button Label" default="Collapse"/>
+            <property name="averagePrefixLabel" type="String" label="'Average Price' Label" default="avg"/>
+            <property name="unitsLabel" type="String" label="'Units' Label" default="units"/>
+            <property name="activeBadgeLabel" type="String" label="'Active' Label (Badge)" default="Active"/>
+            <property name="healthyBadgeLabel" type="String" label="'Healthy' Label (Badge)" default="Healthy"/>
+            <property name="watchBadgeLabel" type="String" label="'Watch' Label (Badge)" default="Watch"/>
+            <property name="lowStockBadgeLabel" type="String" label="'Low Stock' Label (Badge)" default="Low stock"/>
+            <property name="currencyIsoCode" type="String" label="'Currency ISO Code' Label" default="EUR"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

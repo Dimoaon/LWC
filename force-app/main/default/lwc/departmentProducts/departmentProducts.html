@@ -1,0 +1,261 @@
+<template>
+    <div class="department-products">
+        <div class="department-products__card">
+
+            <!-- HEADER -->
+            <div class="department-products__header">
+                <div class="department-products__brand">
+                    {brandLabel}
+                </div>
+
+                <div class="department-products__heading">
+                    {heading}
+                </div>
+
+                <div class="department-products__description">
+                    {description}
+                </div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="department-products__table-wrapper">
+                <table class="department-products__table slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_fixed-layout slds-max-medium-table_stacked-horizontal">
+                    <thead>
+                        <tr class="department-products__group-row">
+                            <th class="department-products__toggle-header" rowspan="2"></th>
+
+                            <th class="department-products__group-header" colspan="2">
+                                {departmentGroupLabel}
+                            </th>
+
+                            <th class="department-products__group-header" colspan="2">
+                                {pricingGroupLabel}
+                            </th>
+
+                            <th class="department-products__group-header" colspan="2">
+                                {stockGroupLabel}
+                            </th>
+
+                            <th class="department-products__group-header">
+                                {statusGroupLabel}
+                            </th>
+                        </tr>
+
+                        <tr class="department-products__column-row">
+                            <th class="department-products__column-header">
+                                {nameLabel}
+                            </th>
+
+                            <th class="department-products__column-header">
+                                {skuLabel}
+                            </th>
+
+                            <th class="department-products__column-header">
+                                {retailLabel}
+                            </th>
+
+                            <th class="department-products__column-header">
+                                {costLabel}
+                            </th>
+
+                            <th class="department-products__column-header">
+                                {stockOnHandLabel}
+                            </th>
+
+                            <th class="department-products__column-header">
+                                {reservedLabel}
+                            </th>
+
+                            <th class="department-products__column-header">
+                                {statusLabel}
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <template for:each={departments} for:item="department">
+
+                            <!-- DEPARTMENT ROW -->
+                            <tr key={department.id} class="department-products__row department-products__row_department">
+                                <td class="department-products__toggle-cell">
+                                    <template lwc:if={department.hasContent}>
+                                        <lightning-button-icon
+                                            class="department-products__toggle"
+                                            icon-name={department.iconName}
+                                            variant="bare"
+                                            alternative-text={department.toggleLabel}
+                                            title={department.toggleLabel}
+                                            data-id={department.id}
+                                            onclick={handleToggleSection}>
+                                        </lightning-button-icon>
+                                    </template>
+                                </td>
+
+                                <td class="department-products__name-cell" colspan="2">
+                                    <div class="department-products__name">
+                                        <div class="department-products__row-prefix">
+                                            {departmentPrefixLabel}
+                                        </div>
+
+                                        <div class="department-products__row-title">
+                                            {department.title}
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="department-products__value-cell" colspan="2" data-label={pricingGroupLabel}>
+                                    <div class="department-products__summary">
+                                        <div class="department-products__average-prefix">
+                                            {averagePrefixLabel}
+                                        </div>
+
+                                        <lightning-formatted-number
+                                            value={department.averageRetail}
+                                            format-style="currency"
+                                            currency-code={currencyIsoCode}>
+                                        </lightning-formatted-number>
+                                    </div>
+                                </td>
+
+                                <td class="department-products__value-cell" colspan="2" data-label={stockGroupLabel}>
+                                    <div class="department-products__summary">
+                                        <lightning-formatted-number value={department.onHandTotal}></lightning-formatted-number>
+
+                                        <div class="department-products__units-label">
+                                            {unitsLabel}
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="department-products__value-cell" data-label={statusGroupLabel}>
+                                    <div class={department.statusClass}>
+                                        {department.statusLabel}
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <template lwc:if={department.isContentVisible}>
+                                <template for:each={department.categories} for:item="category">
+
+                                    <!-- CATEGORY ROW -->
+                                    <tr key={category.id} class="department-products__row department-products__row_category">
+                                        <td class="department-products__toggle-cell department-products__toggle-cell_category">
+                                            <template lwc:if={category.hasContent}>
+                                                <lightning-button-icon
+                                                    class="department-products__toggle"
+                                                    icon-name={category.iconName}
+                                                    variant="bare"
+                                                    alternative-text={category.toggleLabel}
+                                                    title={category.toggleLabel}
+                                                    data-id={category.id}
+                                                    onclick={handleToggleSection}>
+                                                </lightning-button-icon>
+                                            </template>
+                                        </td>
+
+                                        <td class="department-products__name-cell department-products__name-cell_category" colspan="2">
+                                            <div class="department-products__name">
+                                                <div class="department-products__row-prefix">
+                                                    {categoryPrefixLabel}
+                                                </div>
+
+                                                <div class="department-products__row-title">
+                                                    {category.title}
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td class="department-products__value-cell" colspan="2" data-label={pricingGroupLabel}>
+                                            <div class="department-products__summary">
+                                                <lightning-formatted-number
+                                                    value={category.minRetail}
+                                                    format-style="currency"
+                                                    currency-code={currencyIsoCode}>
+                                                </lightning-formatted-number>
+
+                                                <div class="department-products__range-dash">–</div>
+
+                                                <lightning-formatted-number
+                                                    value={category.maxRetail}
+                                                    format-style="currency"
+                                                    currency-code={currencyIsoCode}>
+                                                </lightning-formatted-number>
+                                            </div>
+                                        </td>
+
+                                        <td class="department-products__value-cell" colspan="2" data-label={stockGroupLabel}>
+                                            <div class="department-products__summary">
+                                                <lightning-formatted-number value={category.onHandTotal}></lightning-formatted-number>
+
+                                                <div class="department-products__units-label">
+                                                    {unitsLabel}
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td class="department-products__value-cell" data-label={statusGroupLabel}>
+                                            <div class={category.statusClass}>
+                                                {category.statusLabel}
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <template lwc:if={category.isContentVisible}>
+                                        <template for:each={category.products} for:item="product">
+
+                                            <!-- PRODUCT ROW -->
+                                            <tr key={product.id} class="department-products__row department-products__row_product">
+                                                <td class="department-products__toggle-cell"></td>
+
+                                                <td class="department-products__name-cell department-products__name-cell_product" data-label={nameLabel}>
+                                                    <div class="department-products__row-title">
+                                                        {product.title}
+                                                    </div>
+                                                </td>
+
+                                                <td class="department-products__value-cell" data-label={skuLabel}>
+                                                    {product.sku}
+                                                </td>
+
+                                                <td class="department-products__value-cell" data-label={retailLabel}>
+                                                    <lightning-formatted-number
+                                                        value={product.retail}
+                                                        format-style="currency"
+                                                        currency-code={currencyIsoCode}>
+                                                    </lightning-formatted-number>
+                                                </td>
+
+                                                <td class="department-products__value-cell" data-label={costLabel}>
+                                                    <lightning-formatted-number
+                                                        value={product.cost}
+                                                        format-style="currency"
+                                                        currency-code={currencyIsoCode}>
+                                                    </lightning-formatted-number>
+                                                </td>
+
+                                                <td class="department-products__value-cell" data-label={stockOnHandLabel}>
+                                                    <lightning-formatted-number value={product.onHand}></lightning-formatted-number>
+                                                </td>
+
+                                                <td class="department-products__value-cell" data-label={reservedLabel}>
+                                                    <lightning-formatted-number value={product.reserved}></lightning-formatted-number>
+                                                </td>
+
+                                                <td class="department-products__value-cell" data-label={statusLabel}>
+                                                    <div class={product.statusClass}>
+                                                        {product.statusLabel}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </template>
+                                </template>
+                            </template>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</template>

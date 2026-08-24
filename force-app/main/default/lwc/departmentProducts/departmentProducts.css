@@ -1,0 +1,305 @@
+:host {
+    --color-bg: #FBF7EF;
+    --color-card: #FFFDF9;
+    --color-text: #12305C;
+    --color-muted: #5C7A9E;
+    --color-border: #EAE3D6;
+    --color-group-header: #F7F0E4;
+    --color-department-row: #FBF0E4;
+    --color-category-row: #FDF7F0;
+    --color-product-row: #FFFFFF;
+    --color-badge-green-bg: #E3F2E9;
+    --color-badge-green-text: #2F7D5D;
+    --color-badge-blue-bg: #DCEBF7;
+    --color-badge-blue-text: #2A5D8F;
+    --color-badge-amber-bg: #FBE7C6;
+    --color-badge-amber-text: #9A5B12;
+
+    overflow-wrap: anywhere;
+}
+
+.department-products {
+    padding: 2rem;
+    background: var(--color-bg);
+    color: var(--color-text);
+}
+
+/* CARD */
+.department-products__card {
+    max-width: 85rem;
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--color-card);
+    border-radius: 1.25rem;
+    box-shadow: 0 0.5rem 2rem rgba(18, 48, 92, 0.08);
+}
+
+/* HEADER */
+.department-products__header {
+    margin-bottom: 1.5rem;
+}
+
+.department-products__brand {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.15rem;
+}
+
+.department-products__heading {
+    margin-top: 0.75rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.department-products__description {
+    margin-top: 0.25rem;
+    color: var(--color-muted);
+    font-size: 1.125rem;
+}
+
+/* TABLE */
+.department-products__table-wrapper {
+    border: 0.0625rem solid var(--color-border);
+    border-radius: 0.25rem;
+}
+
+.department-products__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+}
+
+.department-products__table th,
+.department-products__table td {
+    padding: 0.625rem 0.75rem;
+    border-right: 0.0625rem solid var(--color-border);
+    border-bottom: 0.0625rem solid var(--color-border);
+    text-align: center;
+    vertical-align: middle;
+    white-space: normal;
+}
+
+.department-products__table th:last-child,
+.department-products__table td:last-child {
+    border-right: none;
+}
+
+.department-products__table tr:last-child td {
+    border-bottom: none;
+}
+
+/* TABLE HEADER */
+.department-products__group-row th,
+.department-products__column-row th {
+    background: var(--color-group-header);
+}
+
+.department-products__group-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.075rem;
+}
+
+.department-products__column-header {
+    font-weight: 500;
+}
+
+.department-products__toggle-header {
+    width: 3.5rem;
+}
+
+/* ROWS */
+.department-products__row_department {
+    background: var(--color-department-row);
+    font-weight: 600;
+}
+
+.department-products__row_category {
+    background: var(--color-category-row);
+}
+
+.department-products__row_product {
+    background: var(--color-product-row);
+}
+
+td.department-products__toggle-cell_category {
+    padding-left: 1.5rem;
+}
+
+td.department-products__name-cell {
+    text-align: left;
+}
+
+td.department-products__name-cell_category {
+    padding-left: 1.5rem;
+}
+
+td.department-products__name-cell_product {
+    padding-left: 3rem;
+}
+
+.department-products__name {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.department-products__row-prefix {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.075rem;
+}
+
+.department-products__row-title {
+    font-weight: 600;
+}
+
+.department-products__row_product .department-products__row-title {
+    font-weight: 400;
+}
+
+.department-products__value-cell {
+    font-weight: 400;
+}
+
+/* SUMMARY CELLS */
+.department-products__summary {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+/* BADGES */
+.department-products__badge {
+    display: inline-block;
+    padding: 0.125rem 0.625rem;
+    border-radius: 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.department-products__badge_active,
+.department-products__badge_healthy {
+    background: var(--color-badge-green-bg);
+    color: var(--color-badge-green-text);
+}
+
+.department-products__badge_watch {
+    background: var(--color-badge-blue-bg);
+    color: var(--color-badge-blue-text);
+}
+
+.department-products__badge_low-stock {
+    background: var(--color-badge-amber-bg);
+    color: var(--color-badge-amber-text);
+}
+
+/* TABLET */
+@media (max-width: 1023.98px) {
+    .department-products {
+        padding: 1.5rem;
+    }
+
+    .department-products__card {
+        padding: 1.5rem;
+    }
+
+    .department-products__heading {
+        font-size: 2rem;
+    }
+
+    .department-products__table {
+        font-size: 0.8125rem;
+    }
+
+    .department-products__table th,
+    .department-products__table td {
+        padding: 0.5rem 0.375rem;
+    }
+
+    td.department-products__toggle-cell_category {
+        padding-left: 0.75rem;
+    }
+
+    td.department-products__name-cell_category {
+        padding-left: 1rem;
+    }
+
+    td.department-products__name-cell_product {
+        padding-left: 1.75rem;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 767.98px) {
+    .department-products {
+        padding: 1rem;
+    }
+
+    .department-products__card {
+        padding: 1.25rem;
+        border-radius: 1rem;
+    }
+
+    .department-products__heading {
+        font-size: 1.5rem;
+    }
+
+    .department-products__description {
+        font-size: 1rem;
+    }
+
+    /* TABLE */
+    .department-products__table-wrapper {
+        border: none;
+    }
+
+    .department-products__table {
+        font-size: 0.875rem;
+    }
+
+    .department-products__row {
+        border-bottom: 0.0625rem solid var(--color-border);
+    }
+
+    .department-products__row:last-child {
+        border-bottom: none;
+    }
+
+    .department-products__table td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border: none;
+        text-align: right;
+    }
+
+    .department-products__table td::before {
+        min-width: 7rem;
+        text-align: left;
+        font-weight: 500;
+    }
+
+    .department-products__table td:not([data-label])::before {
+        content: none;
+    }
+
+    .department-products__row_product .department-products__toggle-cell {
+        display: none;
+    }
+
+    .department-products__row_category {
+        padding-left: 0.75rem;
+    }
+
+    .department-products__row_product {
+        padding-left: 1.5rem;
+    }
+
+    .department-products__summary {
+        justify-content: flex-end;
+    }
+}
