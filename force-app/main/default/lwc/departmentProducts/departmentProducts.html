@@ -78,7 +78,7 @@
                             <!-- DEPARTMENT ROW -->
                             <tr key={department.id} class="department-products__row department-products__row_department">
                                 <td class="department-products__toggle-cell">
-                                    <template lwc:if={department.hasContent}>
+                                    <template lwc:if={department.categories.length}>
                                         <lightning-button-icon
                                             class="department-products__toggle"
                                             icon-name={department.iconName}
@@ -140,7 +140,7 @@
                                     <!-- CATEGORY ROW -->
                                     <tr key={category.id} class="department-products__row department-products__row_category">
                                         <td class="department-products__toggle-cell department-products__toggle-cell_category">
-                                            <template lwc:if={category.hasContent}>
+                                            <template lwc:if={category.products.length}>
                                                 <lightning-button-icon
                                                     class="department-products__toggle"
                                                     icon-name={category.iconName}

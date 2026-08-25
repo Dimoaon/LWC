@@ -155,16 +155,16 @@ export default class DepartmentProducts extends LightningElement {
 
         this.departments.forEach((department) => {
             if (department.id === sectionId) {
-                this.toggleSection(department);
+                this.toggleSection(department, department.categories);
             }
 
-            if (!department.hasContent) {
+            if (!department.isContentVisible) {
                 return;
             }
 
             department.categories.forEach((category) => {
                 if (category.id === sectionId) {
-                    this.toggleSection(category);
+                    this.toggleSection(category, category.products);
                 }
             });
         });
@@ -174,57 +174,53 @@ export default class DepartmentProducts extends LightningElement {
     initDepartments() {
         let departments = [];
 
-        DEPARTMENT_DEFS.forEach((departmentDef) => {
+        DEPARTMENT_DEFS.forEach((department) => {
             let categories = [];
-            let categoryDefs = departmentDef.categories ? departmentDef.categories : [];
+            let departmentCategories = department.categories ? department.categories : [];
 
-            categoryDefs.forEach((categoryDef) => {
+            departmentCategories.forEach((category) => {
                 let products = [];
-                let productDefs = categoryDef.products ? categoryDef.products : [];
+                let categoryProducts = category.products ? category.products : [];
 
-                productDefs.forEach((productDef) => {
+                categoryProducts.forEach((product) => {
                     products.push({
                         id: this.generateId(),
-                        title: productDef.name,
-                        sku: productDef.sku,
-                        retail: productDef.retail,
-                        cost: productDef.cost,
-                        onHand: productDef.onHand,
-                        reserved: productDef.reserved,
-                        statusLabel: this[STATUS_DEFS[productDef.status].labelKey],
-                        statusClass: STATUS_DEFS[productDef.status].badgeClass
+                        title: product.name,
+                        sku: product.sku,
+                        retail: product.retail,
+                        cost: product.cost,
+                        onHand: product.onHand,
+                        reserved: product.reserved,
+                        statusLabel: this[STATUS_DEFS[product.status].labelKey],
+                        statusClass: STATUS_DEFS[product.status].badgeClass
                     });
                 });
 
                 categories.push({
                     id: this.generateId(),
-                    title: categoryDef.name,
-                    isExpanded: true,
-                    hasContent: products.length > 0,
+                    title: category.name,
                     isContentVisible: products.length > 0,
                     iconName: CHEVRON_ICONS.expanded,
                     toggleLabel: this.collapseLabel,
-                    minRetail: categoryDef.minRetail,
-                    maxRetail: categoryDef.maxRetail,
-                    onHandTotal: categoryDef.onHandTotal,
-                    statusLabel: this[STATUS_DEFS[categoryDef.status].labelKey],
-                    statusClass: STATUS_DEFS[categoryDef.status].badgeClass,
+                    minRetail: category.minRetail,
+                    maxRetail: category.maxRetail,
+                    onHandTotal: category.onHandTotal,
+                    statusLabel: this[STATUS_DEFS[category.status].labelKey],
+                    statusClass: STATUS_DEFS[category.status].badgeClass,
                     products: products
                 });
             });
 
             departments.push({
                 id: this.generateId(),
-                title: `${departmentDef.name} · ${departmentDef.floor}`,
-                isExpanded: true,
-                hasContent: categories.length > 0,
+                title: `${department.name} · ${department.floor}`,
                 isContentVisible: categories.length > 0,
                 iconName: CHEVRON_ICONS.expanded,
                 toggleLabel: this.collapseLabel,
-                averageRetail: departmentDef.averageRetail,
-                onHandTotal: departmentDef.onHandTotal,
-                statusLabel: this[STATUS_DEFS[departmentDef.status].labelKey],
-                statusClass: STATUS_DEFS[departmentDef.status].badgeClass,
+                averageRetail: department.averageRetail,
+                onHandTotal: department.onHandTotal,
+                statusLabel: this[STATUS_DEFS[department.status].labelKey],
+                statusClass: STATUS_DEFS[department.status].badgeClass,
                 categories: categories
             });
         });
@@ -232,11 +228,10 @@ export default class DepartmentProducts extends LightningElement {
         this.departments = departments;
     }
 
-    toggleSection(section) {
-        section.isExpanded = !section.isExpanded;
-        section.iconName = section.isExpanded ? CHEVRON_ICONS.expanded : CHEVRON_ICONS.collapsed;
-        section.toggleLabel = section.isExpanded ? this.collapseLabel : this.expandLabel;
-        section.isContentVisible = section.isExpanded && section.hasContent;
+    toggleSection(section, content) {
+        section.isContentVisible = !section.isContentVisible && content.length > 0;
+        section.iconName = section.isContentVisible ? CHEVRON_ICONS.expanded : CHEVRON_ICONS.collapsed;
+        section.toggleLabel = section.isContentVisible ? this.collapseLabel : this.expandLabel;
     }
 
     generateId() {
